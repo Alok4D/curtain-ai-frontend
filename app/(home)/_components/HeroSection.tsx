@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 export default function HeroSection() {
+    
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleBoxClick = () => {
@@ -21,15 +22,14 @@ export default function HeroSection() {
           
           {/* Left Column: Content & Upload CTA (1:1 identical to curtainz.ai) */}
           <div className="w-full md:w-1/2 text-left">
-            {/* Sub-header badge / label */}
             <p className="text-xs md:text-sm font-semibold tracking-widest text-[#004642] uppercase">
-              Free AI Visualizer · Dubai
+              Free AI Visualizer · Bangladesh
             </p>
 
             {/* H1 Heading with lime underline */}
             <h1
               id="hero-heading"
-              className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004642] mt-3 leading-tight"
+              className="text-3xl md:text-4xl lg:text-[44px] font-bold text-[#004642] mt-3 leading-tight"
             >
               See new curtains on{" "}
               <span className="underline decoration-[#d3c518] decoration-4 underline-offset-4">
