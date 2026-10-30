@@ -6,14 +6,30 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { name: "About Us", href: "#about-us" },
-  { name: "AI Visualizer", href: "#ai-visualizer" },
-  { name: "FAQ", href: "#faq" },
-  { name: "Services", href: "#services" },
+  { name: "About Us", href: "/#about-us" },
+  { name: "AI Visualizer", href: "/#ai-visualizer" },
+  { name: "FAQ", href: "/#faq" },
+  { name: "Services", href: "/#services" },
 ];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    setIsOpen(false);
+    if (href.startsWith("/#") || href.startsWith("#")) {
+      const targetId = href.replace(/^\/?#/, "");
+      const elem = document.getElementById(targetId);
+      if (elem) {
+        e.preventDefault();
+        elem.scrollIntoView({ behavior: "smooth" });
+        window.history.pushState(null, "", `#${targetId}`);
+      }
+    }
+  };
 
   return (
     <header className="fixed inset-x-0 top-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full bg-[#004642] font-['Urbanist',sans-serif]">
@@ -42,7 +58,8 @@ export default function Navbar() {
           <div className="md:ps-3">
             <Link
               className="group inline-flex items-center gap-x-2 text-xs md:text-base py-2 px-3.5 bg-white font-semibold whitespace-nowrap text-neutral-800 rounded-sm focus:outline-none uppercase hover:bg-neutral-100 transition-colors shadow-sm"
-              href="#book-visit"
+              href="/#book-visit"
+              onClick={(e) => handleNavClick(e, "/#book-visit")}
             >
               Book a free visit
             </Link>
@@ -52,7 +69,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className="size-9 flex justify-center items-center text-sm font-semibold rounded-full bg-neutral-800 text-white"
+              className="size-9 flex justify-center items-center text-sm font-semibold rounded-full bg-neutral-800 text-white cursor-pointer"
               aria-label="Toggle navigation menu"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -71,8 +88,8 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="pe-3 ps-px py-2 sm:px-3 md:py-4 text-base text-white hover:text-neutral-300 font-medium transition-colors"
+                onClick={(e) => handleNavClick(e, link.href)}
+                className="pe-3 ps-px py-2 sm:px-3 md:py-4 text-base text-white hover:text-neutral-300 font-medium transition-colors cursor-pointer"
               >
                 {link.name}
               </Link>

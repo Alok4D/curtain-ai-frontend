@@ -8,7 +8,10 @@ const Footer = () => {
       {/* Main Container */}
       <div className="w-full max-w-[1340px] mx-auto px-6 sm:px-10 lg:px-14 flex flex-col justify-center pt-20 sm:pt-28 pb-10">
         {/* ==================== CALL TO ACTION SECTION ==================== */}
-        <section className="text-center flex flex-col items-center justify-center mb-20 sm:mb-28">
+        <section
+          id="book-visit"
+          className="text-center flex flex-col items-center justify-center mb-20 sm:mb-28 scroll-mt-20 md:scroll-mt-24"
+        >
           {/* Main Heading (exact spec: 36px/40px, bold 700, #FFF) */}
           <h2 className="text-[32px] sm:text-[36px] font-bold text-white leading-[1.18] sm:leading-[40px] tracking-tight mb-4">
             Ready to see your room transformed?
@@ -114,7 +117,7 @@ const Footer = () => {
               <ul className="space-y-2.5 text-[14px]">
                 <li>
                   <Link
-                    href="#visualizer"
+                    href="/#ai-visualizer"
                     className="text-[#cadbd8] hover:text-white transition-colors inline-block"
                   >
                     AI Curtain Visualizer
@@ -122,7 +125,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    href="#styles"
+                    href="/#services"
                     className="text-[#cadbd8] hover:text-white transition-colors inline-block"
                   >
                     Curtain Styles
@@ -130,7 +133,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    href="#book"
+                    href="/#book-visit"
                     className="text-[#cadbd8] hover:text-white transition-colors inline-block"
                   >
                     Book a Free Home Visit
@@ -138,7 +141,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    href="#faqs"
+                    href="/#faq"
                     className="text-[#cadbd8] hover:text-white transition-colors inline-block"
                   >
                     FAQs

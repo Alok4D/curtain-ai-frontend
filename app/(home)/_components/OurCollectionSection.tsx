@@ -75,7 +75,7 @@ export default function OurCollectionSection() {
     <section
       id="services"
       aria-labelledby="services-heading"
-      className="w-full bg-white font-['Urbanist',sans-serif]"
+      className="w-full bg-white scroll-mt-20 md:scroll-mt-24 font-['Urbanist',sans-serif]"
     >
       <div className="max-w-[1387px] mx-auto px-2 sm:px-4 lg:px-4 py-12 md:py-16">
         
@@ -92,7 +92,7 @@ export default function OurCollectionSection() {
           </h2>
         </div>
 
-        {/* Tab List */}
+        {/* Tab List */} 
         <div className="w-full mt-8">
           <div
             className="flex justify-center border-b border-gray-200 mb-6"
