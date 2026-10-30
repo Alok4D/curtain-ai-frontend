@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Check, Download, RotateCcw, Calendar, MessageSquare } from "lucide-react";
 
-const GENERATION_STEPS = [
+const STEPS = [
   "Analyzing your room…",
   "Measuring your windows…",
   "Matching your fabric…",
@@ -17,6 +17,7 @@ const GENERATION_STEPS = [
 
 export default function GenerateImagePage() {
   const router = useRouter();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [roomImage, setRoomImage] = useState<string>("/before_image.png");
   const [curtainName, setCurtainName] = useState<string>("Blue Lenin");
@@ -27,8 +28,11 @@ export default function GenerateImagePage() {
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [showConfetti, setShowConfetti] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [remainingImages, setRemainingImages] = useState<number>(5);
+
+  const stepIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Read selections from sessionStorage
@@ -41,88 +45,162 @@ export default function GenerateImagePage() {
     if (storedCurtainName) setCurtainName(storedCurtainName);
     if (storedCurtainImg) setCurtainImage(storedCurtainImg);
     if (storedGenerated) setGeneratedImage(storedGenerated);
+
+    return () => {
+      if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+    };
   }, []);
+
+  // Realistic confetti burst
+  const triggerConfetti = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ["#004642", "#d3c518", "#0e7367", "#10b981", "#fbbf24", "#60a5fa"];
+    const particles: Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      color: string;
+      rotation: number;
+      vRot: number;
+      opacity: number;
+    }> = [];
+
+    // Left & Right cannon bursts
+    for (let i = 0; i < 70; i++) {
+      particles.push({
+        x: window.innerWidth * 0.25,
+        y: window.innerHeight * 0.6,
+        vx: (Math.random() - 0.2) * 14,
+        vy: -(Math.random() * 16 + 8),
+        size: Math.random() * 8 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * 360,
+        vRot: (Math.random() - 0.5) * 12,
+        opacity: 1,
+      });
+      particles.push({
+        x: window.innerWidth * 0.75,
+        y: window.innerHeight * 0.6,
+        vx: (Math.random() - 0.8) * 14,
+        vy: -(Math.random() * 16 + 8),
+        size: Math.random() * 8 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * 360,
+        vRot: (Math.random() - 0.5) * 12,
+        opacity: 1,
+      });
+    }
+
+    let animId: number;
+    const render = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let active = false;
+
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.38; // gravity
+        p.vx *= 0.985; // drag
+        p.rotation += p.vRot;
+        p.opacity -= 0.007;
+
+        if (p.opacity > 0 && p.y < canvas.height + 20) {
+          active = true;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.globalAlpha = Math.max(0, p.opacity);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.65);
+          ctx.restore();
+        }
+      });
+
+      if (active) {
+        animId = requestAnimationFrame(render);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    };
+
+    animId = requestAnimationFrame(render);
+  };
 
   const handleGenerate = () => {
     if (isGenerating) return;
 
     setIsGenerating(true);
     setProgress(0);
-    setCurrentStepIndex(0);
+    setStepIndex(0);
 
-    const totalDuration = 7000; // 7 seconds simulation
-    const intervalTime = 100;
-    const increment = 100 / (totalDuration / intervalTime);
+    // Step message cycle interval (2800ms)
+    stepIntervalRef.current = setInterval(() => {
+      setStepIndex((prev) => (prev + 1) % STEPS.length);
+    }, 2800);
 
-    const stepInterval = totalDuration / GENERATION_STEPS.length;
+    // Smooth asymptotic progress towards 90% (every 250ms)
+    progressIntervalRef.current = setInterval(() => {
+      setProgress((prev) => Math.min(90, prev + (90 - prev) * 0.045 + 0.2));
+    }, 250);
 
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        const next = prev + increment;
-        if (next >= 100) {
-          clearInterval(timer);
-          return 100;
-        }
-        return next;
-      });
-    }, intervalTime);
-
-    const stepTimer = setInterval(() => {
-      setCurrentStepIndex((prev) => {
-        if (prev < GENERATION_STEPS.length - 1) {
-          return prev + 1;
-        }
-        clearInterval(stepTimer);
-        return prev;
-      });
-    }, stepInterval);
-
+    // Simulated authentic generation duration (approx 6-7 seconds)
     setTimeout(() => {
-      // Use authentic realistic generated transformation
+      if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+
+      setProgress(100);
       const finalImage = "/after_image.png";
       setGeneratedImage(finalImage);
       sessionStorage.setItem("generatedImageUrl", finalImage);
+      setRemainingImages((prev) => Math.max(0, prev - 1));
       setIsGenerating(false);
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 5000);
-    }, totalDuration);
+
+      // Trigger Confetti Celebration!
+      triggerConfetti();
+    }, 6500);
   };
 
-  const handleDownload = () => {
-    const link = document.createElement("a");
-    link.href = generatedImage || roomImage;
-    link.download = `curtain-room-preview-${curtainName.toLowerCase().replace(/\s+/g, "-")}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleDownload = async () => {
+    if (!generatedImage) return;
+    try {
+      const response = await fetch(generatedImage);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+      link.download = `curtain-ai-image-${timestamp}.png`;
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch {
+      // Fallback direct link download
+      const link = document.createElement("a");
+      link.href = generatedImage;
+      link.download = `curtain-room-preview.png`;
+      link.click();
+    }
   };
 
   return (
     <main className="min-h-screen bg-gray-50 pt-24 md:pt-28 pb-16 font-['Urbanist',sans-serif]">
-      {/* Simple Canvas Confetti Effect */}
-      {showConfetti && (
-        <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-          {Array.from({ length: 40 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-2.5 h-2.5 rounded-full animate-bounce"
-              style={{
-                top: `${Math.random() * 80}%`,
-                left: `${Math.random() * 100}%`,
-                backgroundColor: [
-                  "#d3c518",
-                  "#004642",
-                  "#0e7367",
-                  "#f59e0b",
-                  "#3b82f6",
-                ][i % 5],
-                animationDuration: `${1 + Math.random() * 2}s`,
-                opacity: 0.85,
-              }}
-            />
-          ))}
-        </div>
-      )}
+      {/* Invisible Canvas for Confetti */}
+      <canvas
+        ref={canvasRef}
+        className="fixed inset-0 pointer-events-none z-50 w-full h-full"
+      />
 
       <div className="container mx-auto px-4 py-4 md:py-6">
         <div className="max-w-6xl mx-auto">
@@ -181,13 +259,15 @@ export default function GenerateImagePage() {
             </ol>
           </nav>
 
-          {/* Heading */}
+          {/* Heading & Subtitle */}
           <div className="text-center mb-4 md:mb-6">
             <h1 className="text-xl md:text-2xl font-bold text-[#004642]">
               See your room transformed
             </h1>
             <p className="text-gray-500 text-sm mt-1">
-              One click and our AI drapes your selected curtain right into your room
+              {generatedImage && !isGenerating
+                ? "Here is your AI curtain visualization"
+                : "One click and our AI drapes your selected curtain right into your room"}
             </p>
           </div>
 
@@ -196,89 +276,99 @@ export default function GenerateImagePage() {
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_20rem] gap-5 md:gap-6 items-start">
               
               {/* Left Column: Big Image Preview & Scanning Overlay */}
-              <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-gray-100 rounded-xl overflow-hidden shadow-inner">
-                <Image
-                  src={generatedImage || roomImage}
-                  alt="Room preview"
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 750px"
-                  className="object-cover"
-                />
+              <div
+                className={`relative rounded-xl overflow-hidden bg-gray-100 transition-all duration-300 ${
+                  isGenerating ? "ai-generating-frame" : ""
+                }`}
+              >
+                <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] overflow-hidden">
+                  <Image
+                    src={generatedImage || roomImage}
+                    alt="Room preview"
+                    id="generated-image"
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 750px"
+                    className="object-cover"
+                  />
 
-                {/* AI Generated Badge (visible after generation) */}
-                {generatedImage && !isGenerating && (
-                  <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-white/95 backdrop-blur text-[#004642] px-3 py-1.5 rounded-full text-xs font-semibold shadow select-none">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      width="13"
-                      height="13"
-                      fill="#004642"
-                    >
-                      <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" />
-                    </svg>
-                    <span>AI Generated</span>
-                  </div>
-                )}
-
-                {/* AI Scanning / Processing Overlay (identical to curtainz.ai) */}
-                {isGenerating && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-brightness-90 z-20">
-                    {/* Sweeping scan beam */}
-                    <div className="ai-scan-beam" />
-
-                    {/* Twinkling sparkles */}
-                    <div
-                      className="ai-sparkle"
-                      style={{ top: "18%", left: "14%", animationDelay: "0s" }}
-                    />
-                    <div
-                      className="ai-sparkle"
-                      style={{ top: "30%", right: "18%", animationDelay: "0.7s" }}
-                    />
-                    <div
-                      className="ai-sparkle"
-                      style={{ bottom: "26%", left: "26%", animationDelay: "1.3s" }}
-                    />
-                    <div
-                      className="ai-sparkle"
-                      style={{ bottom: "16%", right: "30%", animationDelay: "1.9s" }}
-                    />
-
-                    {/* Centered Orb & Status Text */}
-                    <div className="relative z-10 flex flex-col items-center gap-4 px-6 text-center">
-                      <div className="ai-orb">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          width="26"
-                          height="26"
-                          fill="white"
-                        >
-                          <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" />
-                        </svg>
-                      </div>
-
-                      {/* Cycling Step Text */}
-                      <p className="ai-step-text text-white text-sm md:text-base font-semibold drop-shadow">
-                        {GENERATION_STEPS[currentStepIndex]}
-                      </p>
-
-                      {/* Progress bar */}
-                      <div className="w-56 md:w-72 h-1.5 bg-white/25 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-white rounded-full transition-all duration-300 ease-out"
-                          style={{ width: `${progress}%` }}
-                        />
-                      </div>
-
-                      <p className="text-white/80 text-xs">
-                        This usually takes 15–30 seconds
-                      </p>
+                  {/* AI Generated Badge (visible after generation) */}
+                  {generatedImage && !isGenerating && (
+                    <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-white/90 backdrop-blur text-[#004642] px-3 py-1.5 rounded-full text-xs font-semibold shadow select-none z-10">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="13"
+                        height="13"
+                        fill="currentColor"
+                      >
+                        <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" />
+                      </svg>
+                      <span>AI Generated</span>
                     </div>
-                  </div>
-                )}
+                  )}
+
+                  {/* AI Scanning / Processing Overlay (identical to curtainz.ai) */}
+                  {isGenerating && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/35 backdrop-brightness-90 z-20">
+                      {/* Sweeping scan beam */}
+                      <div className="ai-scan-beam" />
+
+                      {/* Twinkling sparkles */}
+                      <div
+                        className="ai-sparkle"
+                        style={{ top: "18%", left: "14%", animationDelay: "0s" }}
+                      />
+                      <div
+                        className="ai-sparkle"
+                        style={{ top: "30%", right: "18%", animationDelay: "0.7s" }}
+                      />
+                      <div
+                        className="ai-sparkle"
+                        style={{ bottom: "26%", left: "26%", animationDelay: "1.3s" }}
+                      />
+                      <div
+                        className="ai-sparkle"
+                        style={{ bottom: "16%", right: "30%", animationDelay: "1.9s" }}
+                      />
+
+                      {/* Centered Orb & Status Text */}
+                      <div className="relative z-10 flex flex-col items-center gap-4 px-6 text-center">
+                        <div className="ai-orb">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            width="26"
+                            height="26"
+                            fill="white"
+                          >
+                            <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" />
+                          </svg>
+                        </div>
+
+                        {/* Cycling Step Text */}
+                        <p
+                          key={stepIndex}
+                          className="ai-step-text text-white text-sm md:text-base font-medium drop-shadow"
+                        >
+                          {STEPS[stepIndex]}
+                        </p>
+
+                        {/* Progress bar */}
+                        <div className="w-56 md:w-72 h-1.5 bg-white/25 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-white rounded-full transition-all duration-300 ease-out"
+                            style={{ width: `${progress}%` }}
+                          />
+                        </div>
+
+                        <p className="text-white/80 text-xs">
+                          This usually takes 15–30 seconds
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Right Column: Comparison Thumbnails & Actions */}
@@ -321,26 +411,74 @@ export default function GenerateImagePage() {
                 </div>
 
                 {/* Primary Action Button */}
-                {!generatedImage ? (
-                  <button
-                    type="button"
-                    onClick={handleGenerate}
-                    disabled={isGenerating}
-                    className="w-full py-3.5 px-4 bg-[#004642] hover:bg-[#003431] text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer disabled:opacity-75"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      width="16"
-                      height="16"
-                      fill="#d3c518"
-                    >
-                      <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" />
-                    </svg>
-                    <span>Generate AI Image</span>
-                  </button>
-                ) : (
-                  <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={handleGenerate}
+                  disabled={isGenerating}
+                  className="w-full py-3.5 px-4 bg-[#004642] hover:bg-[#003431] text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer disabled:opacity-75"
+                >
+                  {isGenerating ? (
+                    <span className="inline-flex items-center gap-2">
+                      <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        />
+                      </svg>
+                      <span>Generating…</span>
+                    </span>
+                  ) : generatedImage ? (
+                    <span className="inline-flex items-center gap-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="16"
+                        height="16"
+                        fill="#d3c518"
+                      >
+                        <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" />
+                      </svg>
+                      <span>Regenerate AI Image</span>
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="16"
+                        height="16"
+                        fill="#d3c518"
+                      >
+                        <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" />
+                      </svg>
+                      <span>Generate AI Image</span>
+                    </span>
+                  )}
+                </button>
+
+                {/* Free quota indicator */}
+                <p className="text-[11px] text-gray-400 text-center -mt-2">
+                  {remainingImages < 5
+                    ? `${remainingImages} of 5 free images remaining`
+                    : "Up to 5 free AI images — no sign-up needed"}
+                </p>
+
+                {/* Secondary Actions (Download & Try Another) when generated */}
+                {generatedImage && !isGenerating && (
+                  <div className="grid grid-cols-2 gap-2 mt-0.5">
                     <button
                       type="button"
                       onClick={handleDownload}
@@ -359,14 +497,12 @@ export default function GenerateImagePage() {
                   </div>
                 )}
 
-                <p className="text-[11px] text-gray-400 text-center -mt-2">
-                  Up to 5 free AI images — no sign-up needed
-                </p>
-
                 {/* Consultation & Booking Section */}
                 <div className="border-t border-gray-100 pt-4">
                   <p className="text-xs font-semibold text-gray-700 mb-2.5 text-center">
-                    Need help deciding?
+                    {generatedImage && !isGenerating
+                      ? "Love the look? Let's make it real"
+                      : "Need help deciding?"}
                   </p>
                   <div className="flex flex-col gap-2">
                     <a
