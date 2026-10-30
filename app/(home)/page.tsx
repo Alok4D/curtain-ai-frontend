@@ -5,6 +5,9 @@ import GetStarted from "./_components/GetStarted";
 import PricingSection from "./_components/PricingSection";
 import Footer from "./_components/Footer";
 import FaqSection from "./_components/FaqSection";
+import TestimonialsSection from "./_components/TestimonialsSection";
+import WhyCurtainzSection from "./_components/WhyCurtainzSection";
+import OurCollectionSection from "./_components/OurCollectionSection";
 
 export default function page() {
   return (
@@ -22,6 +25,9 @@ export default function page() {
         <PricingSection />
        
       </div>
+      <OurCollectionSection />
+      <WhyCurtainzSection />
+      <TestimonialsSection />
       <FaqSection />
        <Footer />
     </main>
