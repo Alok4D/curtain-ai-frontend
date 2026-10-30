@@ -21,12 +21,12 @@ export default function page() {
    
 
       {/* Other Sections */}
-      <div className="relative z-5 flex flex-col gap-10">
+  
         <FeaturesSection />
         <GetStarted />
         <PricingSection />
        
-      </div>
+
       <HowItWorksSection />
       <BeforeAfterSection />
       <OurCollectionSection />

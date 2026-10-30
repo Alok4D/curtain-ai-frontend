@@ -2,148 +2,99 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
 import Image from "next/image";
+import { Menu, X } from "lucide-react";
 
-const Navbar = () => {
+const navLinks = [
+  { name: "About Us", href: "#about" },
+  { name: "AI Visualizer", href: "#visualizer" },
+  { name: "FAQ", href: "#faq" },
+  { name: "Services", href: "#services" },
+];
+
+export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    // If the link is an anchor on the current page
-    if (href.startsWith("/#") && window.location.pathname === "/") {
-      const id = href.replace("/#", "");
-      const element = document.getElementById(id);
-      if (element) {
-        e.preventDefault();
-        element.scrollIntoView({ behavior: "smooth" });
-        setIsOpen(false);
-      }
-    }
-  };
-
-  const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "How it works", href: "/#how-it-works" },
-    { name: "Pricing", href: "/#pricing" },
-  ];
 
   return (
-    <nav className="fixed left-0 right-0 z-50 px-4 md:px-0">
-      <div className="mx-auto max-w-[1200px]">
-        {/* Main Navbar Container */}
-        <div className="relative flex h-20 items-center justify-between rounded-2xl border border-white/10 bg-[#1A1C1E]/80 px-6 backdrop-blur-xl lg:px-10">
+    <header className="w-full bg-[#004642] sticky top-0 z-50 font-['Urbanist',sans-serif]">
+      <div className="max-w-[1387px] mx-auto px-4 md:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-[72px]">
+          
+          {/* Logo */}
+          <Link href="/" className="inline-flex items-center transition-opacity hover:opacity-90">
+            <Image
+              src="https://curtainz.ai/_app/immutable/assets/curtainzLogoWhite.DNEf-IQo.svg"
+              alt="Curtainz Logo"
+              width={140}
+              height={36}
+              priority
+              className="h-8 md:h-9 w-auto object-contain"
+            />
+          </Link>
 
-          {/* Logo Section */}
-          <div className="flex shrink-0 items-center">
-            <Link href="/" className="flex flex-col items-center">
-              <Image src="/footer-image/Group 1171275819.svg" alt="Footer Logo" width={100} height={100} className="w-[55px] h-[42px]" />
+          {/* Desktop Navigation Links & Action */}
+          <div className="hidden md:flex items-center gap-8 lg:gap-10">
+            <nav className="flex items-center gap-6 lg:gap-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="text-[16px] leading-[24px] font-normal text-[#D4D4D4] hover:text-white transition-colors duration-150"
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </nav>
+
+            <Link
+              href="#book-visit"
+              className="bg-white hover:bg-neutral-100 text-[#004642] text-[13.5px] font-bold tracking-[0.06em] uppercase px-5 py-2.5 rounded-sm transition-colors duration-150 shadow-sm"
+            >
+              BOOK A FREE VISIT
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden items-center gap-10 md:flex font-montserrat">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={(e) => scrollToSection(e, link.href)}
-                style={{
-                  color: '#FFF',
-                  fontFamily: 'var(--text-style-text-style, Montserrat), sans-serif',
-                  fontSize: '16px',
-                  fontWeight: 500,
-                  lineHeight: '24px'
-                }}
-                className="transition-colors hover:text-[#00FFA3]"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-
-          {/* Log In Button (Desktop) */}
-          <div className="hidden md:block">
-            <Link href="/login">
-              <button
-                style={{
-                  display: 'flex',
-                  padding: 'var(--space-padding-8-px, 8px) var(--space-padding-space-between-desktop, 24px)',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: '10px',
-                  borderRadius: 'var(--button-radius, 10px)',
-                  background: 'var(--button-primary, #0F8)',
-                  color: 'var(--button-text, #0B0F14)',
-                  fontFamily: 'var(--text-style-text-style, Montserrat), sans-serif',
-                  fontSize: 'var(--typography-scale-body-small, 14px)',
-                  fontWeight: 500,
-                  lineHeight: '24px'
-                }}
-                className="transition-all hover:opacity-90 active:scale-95 shadow-[0_0_15px_rgba(0,255,163,0.3)]"
-              >
-                Log In
-              </button>
-            </Link>
-          </div>
-
-          {/* Mobile Menu Toggle */}
-          <div className="flex md:hidden">
+          {/* Mobile Menu Hamburger Button */}
+          <div className="flex md:hidden items-center">
             <button
+              type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className="text-white focus:outline-none"
+              className="p-2 text-[#D4D4D4] hover:text-white focus:outline-none"
+              aria-label="Toggle navigation menu"
             >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
-        </div>
 
-        {/* Mobile Menu Dropdown */}
-        {isOpen && (
-          <div className="mt-2 flex flex-col gap-4 rounded-2xl border border-white/10 bg-[#1A1C1E] p-6 shadow-2xl md:hidden">
+        </div>
+      </div>
+
+      {/* Mobile Dropdown Drawer */}
+      {isOpen && (
+        <div className="md:hidden bg-[#003835] border-t border-[#005a55] px-6 py-5">
+          <nav className="flex flex-col space-y-4">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
-                onClick={(e) => scrollToSection(e, link.href)}
-                style={{
-                  color: '#FFF',
-                  fontFamily: 'var(--text-style-text-style, Montserrat), sans-serif',
-                  fontSize: '18px',
-                  fontWeight: 400,
-                  lineHeight: '28px'
-                }}
-                className="hover:text-[#00FFA3]"
+                onClick={() => setIsOpen(false)}
+                className="text-[16px] font-medium text-[#D4D4D4] hover:text-white py-1 transition-colors"
               >
                 {link.name}
               </Link>
             ))}
-            <hr className="border-white/10" />
-          <Link href={"/login"}>
-            <button
-              style={{
-                display: 'flex',
-                width: '100%',
-                padding: '16px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: '10px',
-                borderRadius: 'var(--button-radius, 10px)',
-                background: 'var(--button-primary, #0F8)',
-                color: 'var(--button-text, #0B0F14)',
-                fontFamily: 'var(--text-style-text-style, Montserrat), sans-serif',
-                fontSize: '18px',
-                fontWeight: 500,
-                lineHeight: '28px'
-              }}
-              className="active:scale-95 transition-all"
-            >
-              Log In
-            </button>
-    </Link>
-          </div>
-        )}
-      </div>
-    </nav>
+            <div className="pt-2">
+              <Link
+                href="#book-visit"
+                onClick={() => setIsOpen(false)}
+                className="block text-center w-full bg-white hover:bg-neutral-100 text-[#004642] text-[13.5px] font-bold tracking-[0.06em] uppercase py-3 rounded-sm transition-colors"
+              >
+                BOOK A FREE VISIT
+              </Link>
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
   );
-};
-
-export default Navbar;
+}
