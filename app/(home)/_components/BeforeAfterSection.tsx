@@ -1,133 +1,200 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import { useState, useRef, useCallback } from "react";
-import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function BeforeAfterSection() {
   const [sliderPosition, setSliderPosition] = useState<number>(50);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const handleMove = useCallback((clientX: number) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const percentage = Math.min(Math.max((x / rect.width) * 100, 0), 100);
-    setSliderPosition(percentage);
-  }, []);
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    handleMove(e.touches[0].clientX);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    handleMove(e.clientX);
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    handleMove(e.clientX);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
 
   return (
-    <section className="w-full bg-[#F9FAFB] py-16 md:py-24 font-['Urbanist',sans-serif]">
-      <div className="max-w-[1387px] mx-auto px-2 md:px-2 lg:px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+    <section
+      id="ai-visualizer"
+      aria-labelledby="compare-heading"
+      className="w-full bg-[#F9FAFB] py-12 md:py-16 font-['Urbanist',sans-serif]"
+    >
+      <div className="max-w-[1387px] mx-auto px-2 sm:px-4 lg:px-4">
+        <div className="flex flex-col md:flex-row gap-10 items-center">
           
-          {/* Left Column: Heading, Subtitle & CTA */}
-          <div className="lg:col-span-5 flex flex-col items-start lg:pr-6">
-            <span className="block text-[11px] md:text-[12px] font-bold tracking-[0.2em] text-[#004642] uppercase mb-3">
-              WHY GUESS?
-            </span>
+          {/* Left Column: Heading, Description & CTA */}
+          <div className="w-full md:w-[45%] text-left">
+            <p className="text-xs md:text-sm font-semibold tracking-widest text-[#004642] uppercase">
+              Why guess?
+            </p>
 
-            <h2 className="text-[32px] md:text-[40px] xl:text-[44px] leading-[1.18] font-bold text-[#004642] tracking-tight mb-5">
+            <h2
+              id="compare-heading"
+              className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#004642] mt-3 leading-tight"
+            >
               Drag the slider — see the difference for yourself
             </h2>
 
-            <p className="text-[14.5px] md:text-[15.5px] leading-[1.65] text-[#556965] mb-8 max-w-lg">
-              Curtainz.ai understands your room&apos;s lighting, depth and window shape, so
-              every preview looks like a real photograph — not a Photoshop mock-up.
-              Compare fabrics side by side and choose with confidence.
+            <p className="text-gray-600 text-base md:text-lg leading-relaxed mt-5">
+              Curtainz.ai understands your room&apos;s lighting, depth and window
+              shape, so every preview looks like a real photograph — not a
+              Photoshop mock-up. Compare fabrics side by side and choose with
+              confidence.
             </p>
 
-            <button
-              type="button"
-              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-lg bg-[#004642] hover:bg-[#003431] text-white text-[15px] font-semibold transition-colors duration-200 cursor-pointer shadow-sm"
-            >
-              <span>Upload your room photo</span>
-              <ArrowRight className="w-4 h-4 stroke-[2.2]" />
-            </button>
+            <div className="mt-6">
+              <Link
+                href="/#hero-heading"
+                className="inline-flex items-center gap-2 bg-[#004642] hover:bg-[#003431] text-white font-semibold text-sm md:text-base px-6 py-3 rounded-lg transition-colors shadow-sm"
+              >
+                <span>Upload your room photo</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
           </div>
 
-          {/* Right Column: Interactive Before / After Comparison */}
-          <div className="lg:col-span-7 flex justify-center lg:justify-end">
-            <div
-              ref={containerRef}
-              onMouseDown={handleMouseDown}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
-              onMouseMove={handleMouseMove}
-              onTouchMove={handleTouchMove}
-              className="relative w-full max-w-[580px] aspect-[516/512] rounded-2xl overflow-hidden select-none cursor-ew-resize shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
-            >
-              {/* After Image (Background / Right Layer) */}
-              <div className="absolute inset-0">
-                <Image
-                  src="https://curtainz.ai/_app/immutable/assets/after_image.Cb7JVlq1.avif"
-                  alt="Curtain room after visualizer"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 100vw, 580px"
-                  className="object-cover pointer-events-none"
-                />
-                {/* After Badge */}
-                <div className="absolute top-4 right-4 z-10 px-2.5 py-1 rounded bg-[#004642]/90 backdrop-blur-sm text-white text-[11px] font-semibold tracking-wide">
-                  After
-                </div>
-              </div>
-
-              {/* Before Image (Clipped / Left Layer) */}
+          {/* Right Column: 1:1 Interactive Before / After Image Slider */}
+          <div className="w-full md:w-[55%] flex justify-center">
+            <div className="slider-section">
               <div
-                className="absolute inset-0 overflow-hidden"
-                style={{ clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)` }}
+                className="slider-container rounded-sm shadow-xl"
+                style={{ ["--position" as string]: `${sliderPosition}%` }}
               >
-                <Image
-                  src="https://curtainz.ai/_app/immutable/assets/before_image.CbgS-B66.avif"
-                  alt="Curtain room before visualizer"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 100vw, 580px"
-                  className="object-cover pointer-events-none"
-                />
-                {/* Before Badge */}
-                <div className="absolute top-4 left-4 z-10 px-2.5 py-1 rounded bg-[#2c3e50]/80 backdrop-blur-sm text-white text-[11px] font-semibold tracking-wide">
-                  Before
-                </div>
-              </div>
+                <div className="image-container select-none">
+                  {/* Before Badge */}
+                  <div className="absolute top-2 left-3 z-10 pointer-events-none">
+                    <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-sm text-xs font-medium bg-gray-700 text-white shadow-sm">
+                      Before
+                    </span>
+                  </div>
 
-              {/* Divider Line & Slider Handle */}
-              <div
-                className="absolute top-0 bottom-0 w-[2px] bg-white pointer-events-none z-20"
-                style={{ left: `${sliderPosition}%` }}
-              >
-                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.3)] flex items-center justify-center pointer-events-auto">
-                  <div className="flex items-center gap-0.5 text-[#004642]">
-                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                      <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
-                    </svg>
-                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-                    </svg>
+                  {/* After Badge */}
+                  <div className="absolute top-2 right-3 z-10 pointer-events-none">
+                    <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-sm text-xs font-medium bg-[#004642] text-white shadow-sm">
+                      After
+                    </span>
+                  </div>
+
+                  {/* Base After Image */}
+                  <Image
+                    src="/after_image.png"
+                    alt="Room after curtain installation"
+                    width={1024}
+                    height={1024}
+                    priority
+                    className="slider-image pointer-events-none w-full h-auto block"
+                  />
+
+                  {/* Clipped Before Image Overlay */}
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`,
+                    }}
+                  >
+                    <Image
+                      src="/before_image.png"
+                      alt="Room before curtain installation"
+                      width={1024}
+                      height={1024}
+                      priority
+                      className="slider-image w-full h-auto block"
+                    />
                   </div>
                 </div>
-              </div>
 
+                {/* Range Slider for Keyboard & Mouse & Touch */}
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={sliderPosition}
+                  onChange={(e) => setSliderPosition(Number(e.target.value))}
+                  aria-label="Percentage of before photo shown"
+                  className="slider"
+                />
+
+                {/* Divider Line */}
+                <div
+                  className="slider-line"
+                  aria-hidden="true"
+                  style={{ left: `${sliderPosition}%` }}
+                />
+
+                {/* Divider Handle with Exact Phosphor Arrows SVG */}
+                <div
+                  className="slider-button"
+                  aria-hidden="true"
+                  style={{ left: `${sliderPosition}%` }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="28"
+                    height="28"
+                    fill="currentColor"
+                    viewBox="0 0 256 256"
+                  >
+                    <rect width="256" height="256" fill="none" />
+                    <line
+                      x1="128"
+                      y1="40"
+                      x2="128"
+                      y2="216"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="16"
+                    />
+                    <line
+                      x1="96"
+                      y1="128"
+                      x2="16"
+                      y2="128"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="16"
+                    />
+                    <polyline
+                      points="48 160 16 128 48 96"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="16"
+                    />
+                    <line
+                      x1="160"
+                      y1="128"
+                      x2="240"
+                      y2="128"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="16"
+                    />
+                    <polyline
+                      points="208 96 240 128 208 160"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="16"
+                    />
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
 
