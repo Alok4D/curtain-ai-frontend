@@ -9,6 +9,7 @@ import TestimonialsSection from "./_components/TestimonialsSection";
 import WhyCurtainzSection from "./_components/WhyCurtainzSection";
 import OurCollectionSection from "./_components/OurCollectionSection";
 import BeforeAfterSection from "./_components/BeforeAfterSection";
+import HowItWorksSection from "./_components/HowItWorksSection";
 
 export default function page() {
   return (
@@ -26,6 +27,7 @@ export default function page() {
         <PricingSection />
        
       </div>
+      <HowItWorksSection />
       <BeforeAfterSection />
       <OurCollectionSection />
       <WhyCurtainzSection />
