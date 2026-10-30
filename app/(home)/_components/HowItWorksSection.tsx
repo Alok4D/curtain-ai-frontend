@@ -34,7 +34,7 @@ const steps: StepItem[] = [
 
 export default function HowItWorksSection() {
   return (
-    <section className="w-full bg-[#FFFFFF] py-16 md:py-16 font-['Urbanist',sans-serif]">
+    <section className="w-full bg-[#F9FAFB] py-16 md:py-16 font-['Urbanist',sans-serif]">
       <div className="max-w-[1387px] mx-auto px-2 md:px-2 lg:px-4">
         
         {/* Section Header */}
