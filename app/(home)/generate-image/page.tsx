@@ -4,20 +4,32 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Check, Download, RotateCcw, Calendar, MessageSquare } from "lucide-react";
+import {
+  Check,
+  Download,
+  RotateCcw,
+  Calendar,
+  MessageSquare,
+  SlidersHorizontal,
+  ShieldCheck,
+  AlertCircle,
+  Columns,
+  Sparkles,
+} from "lucide-react";
 
 const STEPS = [
-  "Analyzing your room…",
-  "Measuring your windows…",
-  "Matching your fabric…",
-  "Draping the curtains…",
-  "Adjusting light & shadows…",
-  "Adding finishing touches…",
+  "Locating window geometry & room perspective…",
+  "Analyzing your room & identifying windows…",
+  "Matching your catalog fabric & texture…",
+  "Synthesizing weave & realistic fabric drop…",
+  "Harmonizing ambient light & shadows…",
+  "Locking room furniture & finishing touches…",
 ];
 
 export default function GenerateImagePage() {
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const sliderContainerRef = useRef<HTMLDivElement>(null);
 
   const [roomImage, setRoomImage] = useState<string>("/before_image.png");
   const [curtainName, setCurtainName] = useState<string>("Blue Lenin");
@@ -26,10 +38,25 @@ export default function GenerateImagePage() {
   );
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
 
+  // Styling & Fitting preferences from curtain_ai_room_visualizer
+  const [drapeLength, setDrapeLength] = useState<string>("just touching the floor");
+  const [drapePosition, setDrapePosition] = useState<string>(
+    "pulled open to the sides framing the window with natural daylight coming through"
+  );
+  const [curtainRod, setCurtainRod] = useState<string>(
+    "matte black minimalist curtain rod mounted just below the ceiling"
+  );
+
+  // Interactive Split-Slider State
+  const [sliderPosition, setSliderPosition] = useState<number>(50);
+  const [isSliderMode, setIsSliderMode] = useState<boolean>(true);
+  const isDraggingRef = useRef<boolean>(false);
+
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
   const [stepIndex, setStepIndex] = useState(0);
   const [remainingImages, setRemainingImages] = useState<number>(5);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const stepIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -52,6 +79,47 @@ export default function GenerateImagePage() {
     };
   }, []);
 
+  // Split-Slider Drag Handler (Mouse and Touch)
+  const handleSliderMove = (clientX: number) => {
+    if (!sliderContainerRef.current) return;
+    const rect = sliderContainerRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+    const percent = Math.round((x / rect.width) * 100);
+    setSliderPosition(percent);
+  };
+
+  const handleMouseDown = () => {
+    isDraggingRef.current = true;
+  };
+
+  useEffect(() => {
+    const handleMouseUp = () => {
+      isDraggingRef.current = false;
+    };
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isDraggingRef.current) {
+        handleSliderMove(e.clientX);
+      }
+    };
+    const handleTouchMove = (e: TouchEvent) => {
+      if (isDraggingRef.current && e.touches[0]) {
+        handleSliderMove(e.touches[0].clientX);
+      }
+    };
+
+    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchend", handleMouseUp);
+    window.addEventListener("touchmove", handleTouchMove);
+
+    return () => {
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchend", handleMouseUp);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, []);
+
   // Realistic confetti burst
   const triggerConfetti = () => {
     const canvas = canvasRef.current;
@@ -62,7 +130,14 @@ export default function GenerateImagePage() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const colors = ["#004642", "#d3c518", "#0e7367", "#10b981", "#fbbf24", "#60a5fa"];
+    const colors = [
+      "#004642",
+      "#d3c518",
+      "#0e7367",
+      "#10b981",
+      "#fbbf24",
+      "#60a5fa",
+    ];
     const particles: Array<{
       x: number;
       y: number;
@@ -136,38 +211,68 @@ export default function GenerateImagePage() {
     animId = requestAnimationFrame(render);
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (isGenerating) return;
 
     setIsGenerating(true);
     setProgress(0);
     setStepIndex(0);
+    setErrorMessage(null);
 
     // Step message cycle interval (2800ms)
     stepIntervalRef.current = setInterval(() => {
       setStepIndex((prev) => (prev + 1) % STEPS.length);
     }, 2800);
 
-    // Smooth asymptotic progress towards 90% (every 250ms)
+    // Smooth asymptotic progress towards 92% (every 250ms)
     progressIntervalRef.current = setInterval(() => {
-      setProgress((prev) => Math.min(90, prev + (90 - prev) * 0.045 + 0.2));
+      setProgress((prev) => Math.min(92, prev + (92 - prev) * 0.045 + 0.2));
     }, 250);
 
-    // Simulated authentic generation duration (approx 6-7 seconds)
-    setTimeout(() => {
+    try {
+      const response = await fetch("/api/generate-image", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          roomImage,
+          curtainImage,
+          drapeLength,
+          drapePosition,
+          curtainRod,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.error ||
+            "Failed to generate curtain preview. Please check your OpenAI API key and image inputs."
+        );
+      }
+
       if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
       if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
 
       setProgress(100);
-      const finalImage = "/after_image.png";
-      setGeneratedImage(finalImage);
-      sessionStorage.setItem("generatedImageUrl", finalImage);
+      setGeneratedImage(data.imageUrl);
+      sessionStorage.setItem("generatedImageUrl", data.imageUrl);
       setRemainingImages((prev) => Math.max(0, prev - 1));
       setIsGenerating(false);
 
-      // Trigger Confetti Celebration!
+      // Trigger Celebration
       triggerConfetti();
-    }, 6500);
+    } catch (err: any) {
+      if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      setProgress(0);
+      setIsGenerating(false);
+      setErrorMessage(
+        err.message || "An unexpected error occurred during image generation."
+      );
+    }
   };
 
   const handleDownload = async () => {
@@ -178,7 +283,10 @@ export default function GenerateImagePage() {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[:.]/g, "-")
+        .slice(0, 19);
       link.download = `curtain-ai-image-${timestamp}.png`;
       link.style.display = "none";
       document.body.appendChild(link);
@@ -186,7 +294,6 @@ export default function GenerateImagePage() {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } catch {
-      // Fallback direct link download
       const link = document.createElement("a");
       link.href = generatedImage;
       link.download = `curtain-room-preview.png`;
@@ -204,7 +311,6 @@ export default function GenerateImagePage() {
 
       <div className="container mx-auto px-4 py-4 md:py-6">
         <div className="max-w-6xl mx-auto">
-          
           {/* Progress Stepper */}
           <nav aria-label="Progress" className="flex justify-center mb-6 md:mb-8">
             <ol className="flex items-center gap-0">
@@ -266,51 +372,119 @@ export default function GenerateImagePage() {
             </h1>
             <p className="text-gray-500 text-sm mt-1">
               {generatedImage && !isGenerating
-                ? "Here is your AI curtain visualization"
+                ? "Here is your AI curtain visualization — compare and see the difference"
                 : "One click and our AI drapes your selected curtain right into your room"}
             </p>
           </div>
 
+          {/* Error Alert Banner */}
+          {errorMessage && (
+            <div className="mb-5 p-4 bg-amber-50 border border-amber-200 text-amber-900 rounded-xl text-xs md:text-sm flex items-start gap-3 shadow-xs">
+              <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="font-semibold text-amber-950">
+                  Generation Notice
+                </p>
+                <p className="mt-0.5 leading-relaxed text-amber-800">
+                  {errorMessage}
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Main Visualizer Container */}
           <div className="bg-white rounded-2xl shadow-md p-4 md:p-6 border border-gray-100">
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_20rem] gap-5 md:gap-6 items-start">
-              
-              {/* Left Column: Big Image Preview & Scanning Overlay */}
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_21rem] gap-5 md:gap-6 items-start">
+              {/* Left Column: Big Image Preview, Split-Slider & Scanning Overlay */}
               <div
-                className={`relative rounded-xl overflow-hidden bg-gray-100 transition-all duration-300 ${
+                className={`relative rounded-xl overflow-hidden bg-gray-900 transition-all duration-300 ${
                   isGenerating ? "ai-generating-frame" : ""
                 }`}
               >
-                <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] overflow-hidden">
-                  <Image
-                    src={generatedImage || roomImage}
-                    alt="Room preview"
-                    id="generated-image"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 750px"
-                    className="object-cover"
-                  />
+                <div
+                  ref={sliderContainerRef}
+                  className="relative w-full aspect-[4/3] sm:aspect-[16/10] overflow-hidden select-none flex items-center justify-center"
+                >
+                  {/* Mode 1: Result is generated and Slider Mode is active */}
+                  {generatedImage && !isGenerating && isSliderMode ? (
+                    <div
+                      className="relative w-full h-full cursor-ew-resize"
+                      onMouseDown={handleMouseDown}
+                      onTouchStart={handleMouseDown}
+                      onClick={(e) => handleSliderMove(e.clientX)}
+                    >
+                      {/* Base Image: Original Room (Right side) */}
+                      <Image
+                        src={roomImage}
+                        alt="Original Room"
+                        fill
+                        priority
+                        className="object-cover pointer-events-none"
+                      />
 
-                  {/* AI Generated Badge (visible after generation) */}
-                  {generatedImage && !isGenerating && (
-                    <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-white/90 backdrop-blur text-[#004642] px-3 py-1.5 rounded-full text-xs font-semibold shadow select-none z-10">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        width="13"
-                        height="13"
-                        fill="currentColor"
+                      {/* Clipped Overlay Image: Fitted AI Curtain (Left side) */}
+                      <div
+                        className="absolute inset-0 overflow-hidden pointer-events-none"
+                        style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
                       >
-                        <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" />
-                      </svg>
-                      <span>AI Generated</span>
+                        <Image
+                          src={generatedImage}
+                          alt="Fitted Curtain Room"
+                          fill
+                          priority
+                          className="object-cover"
+                        />
+                      </div>
+
+                      {/* Slider Divider Line & Handle */}
+                      <div
+                        className="absolute top-0 bottom-0 w-0.5 bg-white shadow-[0_0_10px_rgba(0,0,0,0.6)] pointer-events-none z-10"
+                        style={{ left: `${sliderPosition}%` }}
+                      >
+                        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center text-[#004642]">
+                          <svg
+                            className="w-4 h-4 fill-current"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M8.5 7l-5 5 5 5V7zm7 0v10l5-5-5-5z" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      {/* Before / After Badges */}
+                      <div className="absolute top-3 left-3 bg-[#004642]/85 backdrop-blur text-white px-2.5 py-1 rounded text-[11px] font-semibold tracking-wide shadow-sm pointer-events-none z-20">
+                        Fitted AI Curtain
+                      </div>
+                      <div className="absolute top-3 right-3 bg-black/60 backdrop-blur text-white px-2.5 py-1 rounded text-[11px] font-semibold tracking-wide shadow-sm pointer-events-none z-20">
+                        Original Room
+                      </div>
+                    </div>
+                  ) : (
+                    /* Mode 2: Full View (Original or Generated) */
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={generatedImage || roomImage}
+                        alt="Room preview"
+                        id="generated-image"
+                        fill
+                        priority
+                        sizes="(max-width: 1024px) 100vw, 750px"
+                        className="object-cover"
+                      />
+
+                      {/* AI Generated Badge (visible when showing generated result in full view) */}
+                      {generatedImage && !isGenerating && (
+                        <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-white/90 backdrop-blur text-[#004642] px-3 py-1.5 rounded-full text-xs font-semibold shadow select-none z-10">
+                          <Sparkles className="w-3.5 h-3.5 text-[#004642]" />
+                          <span>AI Generated Fitting</span>
+                        </div>
+                      )}
                     </div>
                   )}
 
                   {/* AI Scanning / Processing Overlay (identical to curtainz.ai) */}
                   {isGenerating && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/35 backdrop-brightness-90 z-20">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-brightness-90 z-30">
                       {/* Sweeping scan beam */}
                       <div className="ai-scan-beam" />
 
@@ -335,15 +509,7 @@ export default function GenerateImagePage() {
                       {/* Centered Orb & Status Text */}
                       <div className="relative z-10 flex flex-col items-center gap-4 px-6 text-center">
                         <div className="ai-orb">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            width="26"
-                            height="26"
-                            fill="white"
-                          >
-                            <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" />
-                          </svg>
+                          <Sparkles className="w-6 h-6 text-white" />
                         </div>
 
                         {/* Cycling Step Text */}
@@ -363,22 +529,40 @@ export default function GenerateImagePage() {
                         </div>
 
                         <p className="text-white/80 text-xs">
-                          This usually takes 15–30 seconds
+                          This usually takes 15–25 seconds
                         </p>
                       </div>
                     </div>
                   )}
                 </div>
+
+                {/* Bottom Canvas Footer Toolbar (when generated) */}
+                {generatedImage && !isGenerating && (
+                  <div className="px-4 py-2.5 bg-slate-900 border-t border-slate-800 flex items-center justify-between text-xs text-slate-300">
+                    <span className="text-[11px] text-slate-400">
+                      {isSliderMode
+                        ? "Drag the center handle to compare before & after"
+                        : "Showing newly fitted curtain in your room"}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setIsSliderMode(!isSliderMode)}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white font-medium transition-colors cursor-pointer"
+                    >
+                      <Columns className="w-3.5 h-3.5" />
+                      <span>{isSliderMode ? "Full View" : "Slider View"}</span>
+                    </button>
+                  </div>
+                )}
               </div>
 
-              {/* Right Column: Comparison Thumbnails & Actions */}
+              {/* Right Column: Comparison Thumbnails, Styling Controls & Actions */}
               <div className="flex flex-col gap-4 lg:sticky lg:top-28">
-                
                 {/* Thumbnails Row */}
                 <div className="flex gap-3">
                   {/* Your Room Thumbnail */}
                   <div className="flex-1 text-center">
-                    <div className="relative w-full h-24 rounded-lg overflow-hidden shadow-sm border border-gray-200">
+                    <div className="relative w-full h-20 sm:h-24 rounded-lg overflow-hidden shadow-sm border border-gray-200">
                       <Image
                         src={roomImage}
                         alt="Uploaded Room"
@@ -392,10 +576,10 @@ export default function GenerateImagePage() {
                   {/* Selected Curtain Thumbnail */}
                   <div className="flex-1">
                     <Link href="/select-curtains" className="group relative block">
-                      <div className="absolute inset-0 h-24 flex items-center justify-center bg-black/50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                      <div className="absolute inset-0 h-20 sm:h-24 flex items-center justify-center bg-black/50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
                         <p className="text-white text-[11px] font-medium">Change</p>
                       </div>
-                      <div className="relative w-full h-24 rounded-lg overflow-hidden shadow-sm border border-gray-200">
+                      <div className="relative w-full h-20 sm:h-24 rounded-lg overflow-hidden shadow-sm border border-gray-200">
                         <Image
                           src={curtainImage}
                           alt="Selected Curtain"
@@ -407,6 +591,97 @@ export default function GenerateImagePage() {
                     <p className="text-[11px] text-gray-500 mt-1 text-center truncate">
                       {curtainName}
                     </p>
+                  </div>
+                </div>
+
+                {/* Styling & Fitting Controls (from curtain_ai_room_visualizer) */}
+                <div className="bg-slate-50 border border-slate-200/90 rounded-xl p-3.5 space-y-3">
+                  <div className="flex items-center gap-1.5 text-slate-800 font-semibold text-xs tracking-wide">
+                    <SlidersHorizontal className="w-3.5 h-3.5 text-[#004642]" />
+                    <span>Fitting &amp; Styling Preferences</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    {/* Drape Length */}
+                    <div>
+                      <label className="block text-slate-600 font-medium mb-1 text-[11px]">
+                        Drape Length
+                      </label>
+                      <select
+                        value={drapeLength}
+                        onChange={(e) => setDrapeLength(e.target.value)}
+                        disabled={isGenerating}
+                        className="w-full bg-white border border-slate-200 rounded-lg p-2 text-slate-700 text-xs focus:ring-1 focus:ring-[#004642] focus:border-[#004642] outline-none"
+                      >
+                        <option value="just touching the floor">
+                          Floor-skimming (Precise)
+                        </option>
+                        <option value="floor-length floor puddle style">
+                          Floor-length (Modern puddle)
+                        </option>
+                        <option value="sill-length covering the window sill">
+                          Sill-length (Short)
+                        </option>
+                      </select>
+                    </div>
+
+                    {/* Drape Position */}
+                    <div>
+                      <label className="block text-slate-600 font-medium mb-1 text-[11px]">
+                        Drape Position
+                      </label>
+                      <select
+                        value={drapePosition}
+                        onChange={(e) => setDrapePosition(e.target.value)}
+                        disabled={isGenerating}
+                        className="w-full bg-white border border-slate-200 rounded-lg p-2 text-slate-700 text-xs focus:ring-1 focus:ring-[#004642] focus:border-[#004642] outline-none"
+                      >
+                        <option value="pulled open to the sides framing the window with natural daylight coming through">
+                          Framing sides (Open)
+                        </option>
+                        <option value="partially closed with soft pleats">
+                          Semi-closed (Diffused)
+                        </option>
+                        <option value="fully closed blocking the window">
+                          Fully Closed
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Rod / Hardware */}
+                  <div>
+                    <label className="block text-slate-600 font-medium mb-1 text-[11px]">
+                      Rod / Mounting Hardware
+                    </label>
+                    <select
+                      value={curtainRod}
+                      onChange={(e) => setCurtainRod(e.target.value)}
+                      disabled={isGenerating}
+                      className="w-full bg-white border border-slate-200 rounded-lg p-2 text-slate-700 text-xs focus:ring-1 focus:ring-[#004642] focus:border-[#004642] outline-none"
+                    >
+                      <option value="matte black minimalist curtain rod mounted just below the ceiling">
+                        Matte Black Architectural Rod
+                      </option>
+                      <option value="brushed brass warm gold curtain rod">
+                        Warm Brass / Gold Rod
+                      </option>
+                      <option value="hidden ceiling-recessed curtain track">
+                        Ceiling Track (Hidden hardware)
+                      </option>
+                      <option value="matching existing window trim">
+                        Match Existing Window Trim
+                      </option>
+                    </select>
+                  </div>
+
+                  {/* Strict Preservation Guarantee Note */}
+                  <div className="p-2.5 bg-amber-50/70 border border-amber-200/80 rounded-lg flex items-start gap-2 text-amber-900 text-[11px] leading-relaxed">
+                    <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold">Room Preservation Lock:</span>{" "}
+                      Walls, furniture, floors, and lamps remain 100% untouched.
+                    </div>
                   </div>
                 </div>
 
@@ -438,33 +713,17 @@ export default function GenerateImagePage() {
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                         />
                       </svg>
-                      <span>Generating…</span>
+                      <span>Generating with AI…</span>
                     </span>
                   ) : generatedImage ? (
                     <span className="inline-flex items-center gap-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        width="16"
-                        height="16"
-                        fill="#d3c518"
-                      >
-                        <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" />
-                      </svg>
-                      <span>Regenerate AI Image</span>
+                      <Sparkles className="w-4 h-4 text-[#d3c518]" />
+                      <span>Regenerate Curtain Fitting</span>
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        width="16"
-                        height="16"
-                        fill="#d3c518"
-                      >
-                        <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" />
-                      </svg>
-                      <span>Generate AI Image</span>
+                      <Sparkles className="w-4 h-4 text-[#d3c518]" />
+                      <span>Fit Curtain onto Room Window</span>
                     </span>
                   )}
                 </button>
@@ -527,12 +786,9 @@ export default function GenerateImagePage() {
                     Free consultation · Our experts bring samples to your home
                   </p>
                 </div>
-
               </div>
-
             </div>
           </div>
-
         </div>
       </div>
     </main>
