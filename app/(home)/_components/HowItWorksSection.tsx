@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 interface StepItem {
@@ -6,94 +7,102 @@ interface StepItem {
   title: string;
   description: string;
   image: string;
+  alt: string;
 }
 
 const steps: StepItem[] = [
   {
     step: 1,
     title: "Snap your room",
-    description: "Take a photo of the room with your phone, or upload one you already have.",
-    image:
-      "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?q=80&w=1000&auto=format&fit=crop",
+    description:
+      "Take a photo of the room with your phone, or upload one you already have.",
+    image: "/images/how-it-works/step-1-upload.png",
+    alt: "Photographing a bare window with a smartphone to start an AI curtain preview",
   },
   {
     step: 2,
     title: "Pick a style",
-    description: "Browse real fabrics \u2014 curtains, sheers and rollers \u2014 from our Dubai collection.",
-    image:
-      "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?q=80&w=1000&auto=format&fit=crop",
+    description:
+      "Browse real fabrics — curtains, sheers and rollers — from our Dubai collection.",
+    image: "/images/how-it-works/step-2-choose-fabric.png",
+    alt: "Browsing curtain, sheer and blind fabrics on Curtainz visualizer",
   },
   {
     step: 3,
     title: "See it on your windows",
-    description: "Our AI drapes the fabric onto your photo in seconds. Love it? We measure, sew and install.",
-    image:
-      "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1000&auto=format&fit=crop",
+    description:
+      "Our AI drapes the fabric onto your photo in seconds. Love it? We measure, sew and install.",
+    image: "/images/how-it-works/step-3-preview.png",
+    alt: "The same window shown dressed with wave-fold curtains in the AI preview",
   },
 ];
 
 export default function HowItWorksSection() {
   return (
-    <section className="w-full bg-[#F9FAFB] py-16 md:py-16 font-['Urbanist',sans-serif]">
-      <div className="max-w-[1387px] mx-auto px-2 md:px-2 lg:px-4">
-        
+    <section
+      aria-labelledby="how-heading"
+      className="bg-gray-50 font-['Urbanist',sans-serif]"
+    >
+      <div className="container mx-auto px-4 py-12 md:py-16">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16">
-          <span className="block text-[11px] md:text-[12px] font-bold tracking-[0.2em] text-[#004642] uppercase mb-2">
-            HOW IT WORKS
-          </span>
-          <h2 className="text-[30px] md:text-[40px] leading-[1.2] font-bold text-[#004642] tracking-tight">
+        <div className="text-center max-w-2xl mx-auto">
+          <p className="text-xs md:text-sm font-bold tracking-[0.15em] text-[#004642] uppercase">
+            How it works
+          </p>
+          <h2
+            id="how-heading"
+            className="text-2xl sm:text-3xl md:text-[34px] font-bold text-[#004642] tracking-tight mt-1.5 md:mt-2"
+          >
             Three steps to your perfect curtains
           </h2>
         </div>
 
-        {/* 3 Step Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch mb-12 md:mb-14">
+        {/* 3 Steps Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
           {steps.map((item) => (
             <div
               key={item.step}
-              className="bg-white border border-[#edf2f0] rounded-[24px] p-5 sm:p-6 flex flex-col items-center text-center shadow-[0_2px_12px_rgba(0,0,0,0.02)] transition-transform duration-200"
+              className="bg-white rounded-2xl p-6 shadow-sm text-center flex flex-col items-center"
             >
-              {/* Step Pill Badge */}
-              <div className="w-7 h-7 rounded-full bg-[#e8efed] text-[#004642] text-[12px] font-bold flex items-center justify-center mb-5">
+              {/* Number Circle Badge */}
+              <div className="w-12 h-12 mx-auto rounded-full bg-[#004642]/10 flex items-center justify-center text-[#004642] font-bold text-lg">
                 {item.step}
               </div>
 
               {/* Step Image */}
-              <div className="relative w-full aspect-[4/3] rounded-[18px] overflow-hidden mb-6 bg-[#f4f7f6]">
+              <div className="w-full aspect-[4/3] overflow-hidden rounded-xl mt-4 relative">
                 <Image
                   src={item.image}
-                  alt={item.title}
+                  alt={item.alt}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover"
+                  className="w-full h-full object-cover"
                 />
               </div>
 
               {/* Step Title */}
-              <h3 className="text-[17px] md:text-[18px] font-bold text-[#004642] tracking-tight mb-2">
+              <h3 className="text-lg font-bold text-[#004642] mt-3">
                 {item.title}
               </h3>
 
               {/* Step Description */}
-              <p className="text-[13.5px] md:text-[14px] leading-[1.6] text-[#556965] max-w-xs">
+              <p className="text-gray-600 text-sm mt-2 leading-relaxed">
                 {item.description}
               </p>
             </div>
           ))}
         </div>
 
-        {/* Centered CTA Button */}
-        <div className="flex justify-center">
-          <button
-            type="button"
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg bg-[#004642] hover:bg-[#003431] text-white text-[15px] font-semibold transition-colors duration-200 shadow-sm cursor-pointer"
+        {/* Action Button */}
+        <div className="flex justify-center mt-8">
+          <a
+            href="/#hero-heading"
+            className="bg-[#004642] hover:bg-[#003431] text-white font-semibold text-sm md:text-base px-6 py-3 rounded-lg inline-flex items-center gap-2 transition-colors duration-200 shadow-sm"
           >
             <span>Try it now — it&apos;s free</span>
-            <ArrowRight className="w-4 h-4 stroke-[2.2]" />
-          </button>
+            <ArrowRight className="w-[18px] h-[18px] stroke-[2.2]" />
+          </a>
         </div>
-
       </div>
     </section>
   );
