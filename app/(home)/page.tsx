@@ -4,6 +4,7 @@ import FeaturesSection from "./_components/FeaturesSection";
 import GetStarted from "./_components/GetStarted";
 import PricingSection from "./_components/PricingSection";
 import Footer from "./_components/Footer";
+import FaqSection from "./_components/FaqSection";
 
 export default function page() {
   return (
@@ -21,6 +22,7 @@ export default function page() {
         <PricingSection />
        
       </div>
+      <FaqSection />
        <Footer />
     </main>
   );
