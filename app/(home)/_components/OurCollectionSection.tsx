@@ -2,160 +2,161 @@
 
 import { useState } from "react";
 import Image from "next/image";
-
-type TabKey = "curtains" | "blinds" | "motorized";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface CollectionItem {
-  id: number;
-  title: string;
-  image: string;
+  src: string;
+  alt: string;
 }
 
-const collectionData: Record<TabKey, { label: string; items: CollectionItem[] }> = {
-  curtains: {
+interface CollectionTab {
+  label: string;
+  images: CollectionItem[];
+}
+
+const tabs: CollectionTab[] = [
+  {
     label: "Curtains & Drapes",
-    items: [
+    images: [
       {
-        id: 1,
-        title: "Pinch Pleat Double Curtains",
-        image:
-          "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1000&auto=format&fit=crop",
+        src: "/images/collection/curtains-drapes.png",
+        alt: "Pale greige pinch-pleat drapes with a sheer lining",
       },
       {
-        id: 2,
-        title: "Sheer Wave Curtains",
-        image:
-          "https://images.unsplash.com/photo-1540518614846-7ede433c4b4f?q=80&w=1000&auto=format&fit=crop",
+        src: "/images/collection/sheer.png",
+        alt: "White wave-fold sheer curtains diffusing daylight",
       },
       {
-        id: 3,
-        title: "Charcoal Blackout & Sheer",
-        image:
-          "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1000&auto=format&fit=crop",
+        src: "/images/collection/blackout-sheer.png",
+        alt: "Double-layer blackout and sheer curtains on a twin ceiling track",
       },
     ],
   },
-  blinds: {
+  {
     label: "Blinds & Shades",
-    items: [
+    images: [
       {
-        id: 1,
-        title: "Roller Blind",
-        image:
-          "https://images.unsplash.com/photo-1615873968403-89e068629265?q=80&w=1000&auto=format&fit=crop",
+        src: "/images/collection/roller-blinds.png",
+        alt: "Sand beige blackout roller blind in a bright modern apartment",
       },
       {
-        id: 2,
-        title: "Zebra Day & Night Blinds",
-        image:
-          "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?q=80&w=1000&auto=format&fit=crop",
+        src: "/images/collection/zebra-blinds.png",
+        alt: "Pale grey zebra day-and-night blinds showing open and closed bands",
       },
       {
-        id: 3,
-        title: "Venetian Wooden Blinds",
-        image:
-          "https://images.unsplash.com/photo-1533779283484-8da494b7a3c4?q=80&w=1000&auto=format&fit=crop",
+        src: "/images/collection/wooden-blinds.png",
+        alt: "Pale ash wooden venetian blinds with tilted slats",
       },
       {
-        id: 4,
-        title: "Roman Shades",
-        image:
-          "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1000&auto=format&fit=crop",
+        src: "/images/collection/roman-shades.png",
+        alt: "Pale greige linen roman shades raised into even folds",
       },
     ],
   },
-  motorized: {
+  {
     label: "Motorized Curtains",
-    items: [
+    images: [
       {
-        id: 1,
-        title: "Smart Motorized Track Curtain",
-        image:
-          "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1000&auto=format&fit=crop",
+        src: "/images/collection/motorized-curtains.png",
+        alt: "Motorised wave-fold curtains opening on a ceiling track",
       },
       {
-        id: 2,
-        title: "Motorized Roller Shades",
-        image:
-          "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1000&auto=format&fit=crop",
+        src: "/images/collection/motorized-blinds.png",
+        alt: "Cordless motorised roller blinds aligned across a wide window",
       },
     ],
   },
-};
+];
 
 export default function OurCollectionSection() {
-  const [activeTab, setActiveTab] = useState<TabKey>("curtains");
+  const [activeTab, setActiveTab] = useState<number>(0);
 
   return (
-    <section className="w-full bg-[#FFFFFF] py-16 md:py-24 font-['Urbanist',sans-serif]">
-      <div className="max-w-[1387px] mx-auto px-2 md:px-2 lg:px-4">
+    <section
+      id="services"
+      aria-labelledby="services-heading"
+      className="w-full bg-white font-['Urbanist',sans-serif]"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-12">
-          <span className="block text-[11px] md:text-[12px] font-bold tracking-[0.2em] text-[#004642] uppercase mb-2">
-            OUR COLLECTION
-          </span>
-          <h2 className="text-[28px] md:text-[40px] leading-[1.2] font-bold text-[#004642] tracking-tight">
-            Curtains, blinds & motorized systems — <br className="hidden sm:inline" />
-            made to measure
+        <div className="text-center max-w-2xl mx-auto">
+          <p className="text-xs md:text-sm font-semibold tracking-widest text-[#004642] uppercase">
+            Our collection
+          </p>
+          <h2
+            id="services-heading"
+            className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#004642] mt-2 leading-tight"
+          >
+            Curtains, blinds &amp; motorized systems — made to measure
           </h2>
         </div>
 
-        {/* Tab Navigation with Full-Width Bottom Hairline */}
-        <div className="relative mb-10 md:mb-14">
-          <div className="flex justify-center items-center gap-6 md:gap-12 overflow-x-auto no-scrollbar">
-            {(Object.keys(collectionData) as TabKey[]).map((tabKey) => {
-              const isActive = activeTab === tabKey;
-              return (
-                <button
-                  key={tabKey}
-                  type="button"
-                  onClick={() => setActiveTab(tabKey)}
-                  className={`relative pb-3 text-[14px] md:text-[15px] transition-colors whitespace-nowrap cursor-pointer ${
-                    isActive
-                      ? "text-[#004642] font-bold"
-                      : "text-[#6d827e] font-medium hover:text-[#004642]"
-                  }`}
-                >
-                  {collectionData[tabKey].label}
-                  {/* Active Indicator Underline */}
-                  {isActive && (
-                    <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#004642] z-10" />
-                  )}
-                </button>
-              );
-            })}
+        {/* Tab List */}
+        <div className="w-full mt-8">
+          <div
+            className="flex justify-center border-b border-gray-200 mb-6"
+            role="tablist"
+            aria-label="Curtain categories"
+          >
+            {tabs.map((tab, idx) => (
+              <button
+                key={tab.label}
+                role="tab"
+                aria-selected={activeTab === idx}
+                type="button"
+                onClick={() => setActiveTab(idx)}
+                className={`py-2.5 px-4 md:px-6 -mb-px font-semibold text-sm md:text-base focus:outline-none transition-colors duration-200 cursor-pointer ${
+                  activeTab === idx
+                    ? "border-b-2 border-[#004642] text-[#004642]"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
 
-          {/* Continuous thin horizontal divider behind tabs */}
-          <div className="w-full h-[1px] bg-[#e5ecea] -mt-[1px]" />
-        </div>
-
-        {/* Dynamic Image Grid */}
-        <div
-          className={`grid gap-5 md:gap-6 items-stretch transition-opacity duration-300 ${
-            activeTab === "curtains"
-              ? "grid-cols-1 md:grid-cols-3"
-              : activeTab === "blinds"
-              ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-              : "grid-cols-1 md:grid-cols-2"
-          }`}
-        >
-          {collectionData[activeTab].items.map((item) => (
-            <div
-              key={item.id}
-              className="relative w-full aspect-[4/5] sm:aspect-[3/4] md:aspect-[4/5] rounded-[22px] overflow-hidden bg-[#f4f7f6] group shadow-[0_2px_12px_rgba(0,0,0,0.03)]"
+          {/* Animated Tab Panel Grid */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className={`grid gap-4 ${
+                activeTab === 0
+                  ? "grid-cols-1 sm:grid-cols-3"
+                  : activeTab === 1
+                  ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-4"
+                  : "grid-cols-1 sm:grid-cols-2"
+              }`}
+              role="tabpanel"
             >
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
-                priority
-              />
-            </div>
-          ))}
+              {tabs[activeTab].images.map((item, index) => (
+                <div
+                  key={item.src}
+                  className="aspect-square overflow-hidden rounded-xl shadow-sm bg-gray-100 relative group"
+                >
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    fill
+                    sizes={
+                      activeTab === 1
+                        ? "(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
+                        : activeTab === 0
+                        ? "(max-width: 640px) 100vw, 33vw"
+                        : "(max-width: 640px) 100vw, 50vw"
+                    }
+                    loading={index === 0 ? "eager" : "lazy"}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
       </div>
