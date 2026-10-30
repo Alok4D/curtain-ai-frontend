@@ -163,8 +163,8 @@ export default function SelectCurtainsPage() {
 
           {/* Room Photo Status Banner */}
           {uploadedImageUrl ? (
-            <div className="flex items-center justify-center gap-3 mb-6 bg-white py-3 px-5 rounded-2xl max-w-sm mx-auto shadow-sm border border-gray-100">
-              <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0 border border-gray-200 shadow-sm">
+            <div className="flex items-center justify-center gap-3 mb-6 bg-white py-2 px-4 rounded-xl max-w-xs mx-auto border border-gray-200 shadow-2xs">
+              <div className="relative w-10 h-10 rounded-md overflow-hidden shrink-0 border border-gray-200">
                 <Image
                   src={uploadedImageUrl}
                   alt="Your uploaded room"
@@ -174,12 +174,12 @@ export default function SelectCurtainsPage() {
               </div>
               <div className="text-left">
                 <p className="text-xs font-semibold text-gray-800 flex items-center gap-1.5">
-                  <span className="text-green-600 font-bold">✓</span> Room photo ready
+                  <span className="text-emerald-600 font-bold">✓</span> Room photo ready
                 </p>
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="text-xs text-[#004642] underline hover:opacity-80 cursor-pointer mt-0.5"
+                  className="text-xs text-[#004642] underline hover:opacity-80 cursor-pointer"
                 >
                   Use a different photo
                 </button>
@@ -262,10 +262,10 @@ export default function SelectCurtainsPage() {
                 key={curtain.id}
                 type="button"
                 onClick={() => handleSelectCurtain(curtain)}
-                className="curtain-option group cursor-pointer rounded-xl border-2 border-gray-200 bg-white p-2.5 w-full transition-all duration-200 hover:shadow-lg hover:border-[#004642] text-left"
+                className="curtain-option group cursor-pointer rounded-2xl border-2 border-gray-200 bg-white p-2.5 w-full transition-all duration-200 hover:border-[#004642] hover:shadow-md text-left"
                 aria-label={`Preview ${curtain.name} on your room`}
               >
-                <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden mb-2">
+                <div className="relative aspect-square bg-gray-100 rounded-xl overflow-hidden mb-2.5">
                   <Image
                     src={curtain.display_image_url || curtain.image_url}
                     alt={curtain.name}
@@ -273,12 +273,12 @@ export default function SelectCurtainsPage() {
                     sizes="(max-width: 768px) 50vw, 25vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  {/* Hover Slide-up Preview Bar */}
-                  <span className="absolute inset-x-0 bottom-0 bg-[#004642]/90 backdrop-blur-xs text-white text-[11px] font-semibold py-1.5 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                  {/* Hover Slide-up Preview Bar matching curtainz.ai */}
+                  <span className="absolute inset-x-0 bottom-0 bg-[#004642] text-white text-xs font-semibold py-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
                     Preview on my room
                   </span>
                 </div>
-                <span className="block font-medium text-xs text-center text-gray-800 truncate">
+                <span className="block font-medium text-sm text-center text-neutral-800 truncate">
                   {curtain.name}
                 </span>
               </button>

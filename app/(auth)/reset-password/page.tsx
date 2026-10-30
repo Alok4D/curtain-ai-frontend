@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Lock, EyeOff, Eye, ArrowLeft } from 'lucide-react';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -32,7 +32,7 @@ const newPasswordSchema = z.object({
 
 type ResetPasswordValues = z.infer<typeof newPasswordSchema>;
 
-export default function NewPasswordPage() {
+function ResetPasswordForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const token = searchParams.get('token');
@@ -172,5 +172,12 @@ export default function NewPasswordPage() {
 
             </div>
         </div>
+    );
+}
+export default function NewPasswordPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <ResetPasswordForm />
+        </Suspense>
     );
 }

@@ -61,7 +61,7 @@ export default function HeroSection() {
           {/* Left Column: Content & Upload CTA (1:1 identical to curtainz.ai) */}
           <div className="w-full md:w-1/2 text-left">
             <p className="text-xs md:text-sm font-semibold tracking-widest text-[#004642] uppercase">
-              Free AI Visualizer · Bangladesh
+              FREE AI VISUALIZER · DUBAI
             </p>
 
             {/* H1 Heading with lime underline */}
@@ -103,7 +103,7 @@ export default function HeroSection() {
               <button
                 type="button"
                 onClick={handleBoxClick}
-                className="cta-button border-2 rounded-lg px-6 sm:px-8 py-5 sm:py-6 text-black cursor-pointer w-full relative overflow-hidden gradient-border-flow"
+                className="cta-button border-2 rounded-2xl px-6 sm:px-8 py-5 sm:py-6 text-black cursor-pointer w-full relative overflow-hidden gradient-border-flow"
               >
                 <div className="flex items-center gap-4 sm:gap-5 justify-center">
                   <svg
