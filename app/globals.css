@@ -151,3 +151,107 @@ h6 {
 button, a{
   cursor: pointer;
 }
+
+
+/* ========================================================
+   Curtainz Hero Animations (Floating cards, arrow & reveal)
+   ======================================================== */
+@keyframes hero-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.hero-float {
+  animation: hero-float 6s ease-in-out infinite;
+}
+
+.hero-float-alt {
+  animation-delay: -3s;
+}
+
+@keyframes hero-arrow {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateX(6px);
+    opacity: 1;
+  }
+}
+
+.hero-arrow {
+  animation: hero-arrow 1.8s ease-in-out infinite;
+}
+
+@keyframes hero-reveal {
+  0%, 8% {
+    clip-path: inset(0 100% 0 0);
+  }
+  42%, 72% {
+    clip-path: inset(0 0 0 0);
+  }
+  94%, 100% {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+.hero-reveal {
+  clip-path: inset(0 100% 0 0);
+  animation: hero-reveal 7s ease-in-out infinite;
+}
+
+@keyframes hero-reveal-line {
+  0%, 8% {
+    left: 0;
+    opacity: 1;
+  }
+  42% {
+    left: calc(100% - 3px);
+    opacity: 1;
+  }
+  46%, 68% {
+    left: calc(100% - 3px);
+    opacity: 0;
+  }
+  72% {
+    left: calc(100% - 3px);
+    opacity: 1;
+  }
+  94%, 100% {
+    left: 0;
+    opacity: 1;
+  }
+}
+
+.hero-reveal-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, transparent, rgba(211, 197, 24, 0.95), transparent);
+  box-shadow: 0 0 14px 3px rgba(211, 197, 24, 0.55);
+  animation: hero-reveal-line 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-float,
+  .hero-float-alt,
+  .hero-arrow,
+  .hero-reveal-line {
+    animation: none;
+  }
+  .hero-reveal {
+    animation: none;
+    clip-path: none;
+  }
+  .hero-reveal-line {
+    display: none;
+  }
+}

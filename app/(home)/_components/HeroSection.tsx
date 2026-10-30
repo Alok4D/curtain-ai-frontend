@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import { Camera, Download, Check, ArrowRight } from "lucide-react";
 
@@ -13,7 +13,7 @@ export default function HeroSection() {
 
   return (
     <section className="w-full bg-[#FFFFFF] py-12 md:py-20 lg:py-24 font-['Urbanist',sans-serif] overflow-hidden">
-      <div className="max-w-[1387px] mx-auto px-2 md:px-2 lg:px-4">
+      <div className="max-w-[1387px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           
           {/* Left Column: Content & Upload Box */}
@@ -95,46 +95,67 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Right Column: Dynamic Tilted Image Showcase */}
-          <div className="lg:col-span-6 flex items-center justify-center lg:justify-end gap-3 sm:gap-6 pt-4 lg:pt-0">
+          {/* Right Column: Dynamic Tilted Image Showcase (Exact 1:1 match with curtainz.ai) */}
+          <div className="lg:col-span-6 flex items-center justify-center lg:justify-end gap-3 sm:gap-6 lg:gap-8 pt-4 lg:pt-0">
             
-            {/* Card 1: Before Image (Left Tilt) */}
-            <div className="relative w-[190px] sm:w-[240px] md:w-[265px] aspect-[3/4] rounded-[22px] overflow-hidden bg-white p-2 shadow-[0_12px_36px_rgba(0,0,0,0.12)] border border-[#edf2f0] -rotate-3 transition-transform duration-300 hover:rotate-0">
-              <div className="relative w-full h-full rounded-[16px] overflow-hidden">
+            {/* Card 1: Before Image (Left Tilt & Floating Animation) */}
+            <div className="relative rounded-xl transform rotate-[-6deg] hero-float">
+              <div className="relative w-64 lg:w-72 h-80 lg:h-96 rounded-xl overflow-hidden shadow-xl">
                 <Image
-                  src="https://curtainz.ai/_app/immutable/assets/before_image.CbgS-B66.avif"
-                  alt="Room before curtain installation"
+                  src="/before_image.png"
+                  alt="Living room before adding curtains"
                   fill
                   priority
-                  sizes="(max-width: 768px) 50vw, 265px"
-                  className="object-cover object-center"
+                  sizes="(max-width: 1024px) 256px, 288px"
+                  className="w-64 lg:w-72 h-80 lg:h-96 object-cover rounded-xl shadow-xl"
                 />
                 {/* Before Badge */}
-                <span className="absolute top-3 left-3 bg-[#425551]/80 backdrop-blur-sm text-white text-[10.5px] font-semibold px-2.5 py-0.5 rounded-full shadow-sm">
+                <span className="absolute top-3 left-3 bg-white/90 text-gray-700 text-xs font-semibold px-2.5 py-1 rounded-full shadow select-none">
                   Before
                 </span>
               </div>
             </div>
 
-            {/* Direction Arrow */}
-            <div className="hidden sm:flex text-[#004642] items-center justify-center -mx-1 z-10">
-              <ArrowRight className="w-6 h-6 stroke-[2.2]" />
+            {/* Center Animated Arrow */}
+            <div className="text-[#04362f] shrink-0 hero-arrow flex items-center justify-center">
+              <ArrowRight className="w-8 h-8 stroke-[2.2]" />
             </div>
 
-            {/* Card 2: After Image (Right Tilt + Yellow/Lime Accent Border) */}
-            <div className="relative w-[190px] sm:w-[240px] md:w-[265px] aspect-[3/4] rounded-[22px] overflow-hidden bg-white p-2 shadow-[0_16px_40px_rgba(0,0,0,0.15)] border-2 border-[#d0dc27] rotate-2 transition-transform duration-300 hover:rotate-0">
-              <div className="relative w-full h-full rounded-[16px] overflow-hidden">
+            {/* Card 2: After Image (Right Tilt + Reveal Wipe Animation + Golden Glow Line + Lime Ring) */}
+            <div className="relative rounded-xl transform rotate-[6deg] hero-float hero-float-alt">
+              <div className="relative w-64 lg:w-72 h-80 lg:h-96 rounded-xl overflow-hidden shadow-xl ring-4 ring-[#d3c518]/70">
+                {/* Base Before Image */}
                 <Image
-                  src="https://curtainz.ai/_app/immutable/assets/after_image.Cb7JVlq1.avif"
-                  alt="Room after AI curtain visualizer preview"
+                  src="/before_image.png"
+                  alt="Living room before adding curtains"
                   fill
                   priority
-                  sizes="(max-width: 768px) 50vw, 265px"
-                  className="object-cover object-center"
+                  sizes="(max-width: 1024px) 256px, 288px"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
-                {/* AI Preview Badge */}
-                <span className="absolute top-3 left-3 bg-[#004642]/90 backdrop-blur-sm text-white text-[10.5px] font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
-                  <span>✦</span>
+
+                {/* Animated Reveal After Image */}
+                <Image
+                  src="/after_image.png"
+                  alt="Living room with AI-added curtains"
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 256px, 288px"
+                  className="hero-reveal absolute inset-0 w-full h-full object-cover"
+                />
+
+                {/* Sweeping Reveal Glow Line */}
+                <div className="hero-reveal-line" aria-hidden="true" />
+
+                {/* AI Preview Badge with Sparkle */}
+                <span className="absolute top-3 left-3 bg-[#04362f] text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow flex items-center gap-1.5 z-10 select-none">
+                  <svg
+                    className="w-3.5 h-3.5 fill-[#d3c518] text-[#d3c518]"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
+                  </svg>
                   <span>AI Preview</span>
                 </span>
               </div>
