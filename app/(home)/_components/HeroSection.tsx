@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { Camera, Download, Check, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function HeroSection() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -12,91 +12,157 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="w-full bg-[#FFFFFF] py-12 md:py-20 lg:py-24 font-['Urbanist',sans-serif] overflow-hidden">
-      <div className="max-w-[1387px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+    <section
+      aria-labelledby="hero-heading"
+      className="w-full bg-[#FFFFFF] font-['Urbanist',sans-serif] overflow-hidden"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-10 md:pt-36 md:pb-16">
+        <div className="flex flex-col md:flex-row gap-10 lg:gap-12 items-center">
           
-          {/* Left Column: Content & Upload Box */}
-          <div className="lg:col-span-6 flex flex-col items-start">
-            {/* Sub-header badge */}
-            <span className="block text-[11px] md:text-[12px] font-bold tracking-[0.2em] text-[#004642] uppercase mb-4">
-              FREE AI VISUALIZER · DUBAI
-            </span>
+          {/* Left Column: Content & Upload CTA (1:1 identical to curtainz.ai) */}
+          <div className="w-full md:w-1/2 text-left">
+            {/* Sub-header badge / label */}
+            <p className="text-xs md:text-sm font-semibold tracking-widest text-[#004642] uppercase">
+              Free AI Visualizer · Dubai
+            </p>
 
             {/* H1 Heading with lime underline */}
-            <h1 className="text-[34px] sm:text-[40px] md:text-[48px] leading-[1.25] font-bold text-[#004642] tracking-tight mb-5">
-              See new curtains{" "}
-              <span className="relative inline-block border-b-[3px] border-[#c8d42d] pb-0.5">
-                on your own
-              </span>
-              <br />
-              <span className="relative inline-block border-b-[3px] border-[#c8d42d] pb-0.5">
-                windows
+            <h1
+              id="hero-heading"
+              className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#004642] mt-3 leading-tight"
+            >
+              See new curtains on{" "}
+              <span className="underline decoration-[#d3c518] decoration-4 underline-offset-4">
+                your own windows
               </span>{" "}
-              – before you buy
+              - before you buy
             </h1>
 
             {/* Subtitle */}
-            <p className="text-[17px] md:text-[18px] leading-[29px] font-normal text-[#4A5565] mb-8 max-w-xl">
+            <p className="text-gray-600 mt-5 text-base md:text-lg mb-8 leading-relaxed">
               Take a photo of your room, pick a fabric, and our AI shows you
               exactly how it will look — in about 20 seconds. Free, no sign-up
               needed.
             </p>
 
-            {/* Upload Box */}
-            <div className="w-full max-w-[490px]">
+            {/* Upload Box with Animated Flowing Gradient Border */}
+            <div className="flex flex-col items-center gap-4 w-full md:w-4/5">
               <input
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 className="hidden"
               />
-              
-              <div
-                onClick={handleBoxClick}
-                className="w-full bg-white border-[1.5px] border-[#004642] rounded-xl p-5 md:py-5 md:px-6 flex items-center justify-center gap-4 cursor-pointer transition-all duration-200 shadow-[0_12px_32px_rgba(40,116,101,0.12)] hover:shadow-[0_16px_36px_rgba(40,116,101,0.18)] hover:border-[#003431]"
-              >
-                <div className="text-[#004642] shrink-0">
-                  <Camera className="w-7 h-7 stroke-[1.8]" />
-                </div>
-                <div className="text-left">
-                  <h3 className="text-[18px] leading-tight font-bold text-[#004642] tracking-tight">
-                    Upload your room photo
-                  </h3>
-                  <p className="text-[13.5px] text-[#4A5565] mt-1">
-                    Free AI preview in ~20 seconds
-                  </p>
-                </div>
-              </div>
 
-              {/* Drag & Drop Hint */}
-              <div className="flex flex-col items-center justify-center mt-3 text-center">
-                <Download className="w-4 h-4 text-[#7b918d] stroke-[1.8] mb-1" />
-                <span className="text-[13px] md:text-[14px] text-[#7b918d]">
-                  or drag & drop your image here
-                </span>
+              <button
+                type="button"
+                onClick={handleBoxClick}
+                className="cta-button border-2 rounded-lg px-6 sm:px-8 py-5 sm:py-6 text-black cursor-pointer w-full relative overflow-hidden gradient-border-flow"
+              >
+                <div className="flex items-center gap-4 sm:gap-5 justify-center">
+                  <svg
+                    className="w-7 h-7 shrink-0 text-black mb-0.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
+                    <circle cx="12" cy="13" r="3" />
+                  </svg>
+                  <div className="flex flex-col items-start text-left">
+                    <span className="text-base sm:text-lg font-semibold text-neutral-900 leading-tight">
+                      Upload your room photo
+                    </span>
+                    <span className="text-xs sm:text-sm text-neutral-600 font-normal mt-0.5">
+                      Free AI preview in ~20 seconds
+                    </span>
+                  </div>
+                </div>
+              </button>
+
+              {/* Desktop Drag & Drop Hint */}
+              <div className="hidden md:flex flex-col items-center gap-1.5 text-gray-500 text-sm">
+                <svg
+                  className="w-5 h-5 opacity-70"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7,10 12,15 17,10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                <p>or drag &amp; drop your image here</p>
               </div>
             </div>
 
             {/* Benefits List */}
-            <div className="flex flex-wrap items-center gap-y-2 gap-x-5 md:gap-x-7 mt-7 text-[#6A7282] text-[14px] leading-[20px] font-normal">
-              <div className="inline-flex items-center gap-1.5">
-                <Check className="w-4 h-4 text-[#004642] stroke-[2.5]" />
+            <ul className="flex flex-wrap gap-x-5 gap-y-2 mt-6 text-sm text-gray-500">
+              <li className="flex items-center gap-1.5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-[#004642]"
+                  aria-hidden="true"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
                 <span>5 free AI previews</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5">
-                <Check className="w-4 h-4 text-[#004642] stroke-[2.5]" />
+              </li>
+              <li className="flex items-center gap-1.5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-[#004642]"
+                  aria-hidden="true"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
                 <span>No sign-up</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5">
-                <Check className="w-4 h-4 text-[#004642] stroke-[2.5]" />
+              </li>
+              <li className="flex items-center gap-1.5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-[#004642]"
+                  aria-hidden="true"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
                 <span>Free home visits in Dubai</span>
-              </div>
-            </div>
+              </li>
+            </ul>
           </div>
 
           {/* Right Column: Dynamic Tilted Image Showcase (Exact 1:1 match with curtainz.ai) */}
-          <div className="lg:col-span-6 flex items-center justify-center lg:justify-end gap-3 sm:gap-6 lg:gap-8 pt-4 lg:pt-0">
+          <div className="w-full md:w-1/2 flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 pt-4 md:pt-0">
             
             {/* Card 1: Before Image (Left Tilt & Floating Animation) */}
             <div className="relative rounded-xl transform rotate-[-6deg] hero-float">
@@ -117,7 +183,7 @@ export default function HeroSection() {
             </div>
 
             {/* Center Animated Arrow */}
-            <div className="text-[#04362f] shrink-0 hero-arrow flex items-center justify-center">
+            <div className="text-[#004642] shrink-0 hero-arrow flex items-center justify-center">
               <ArrowRight className="w-8 h-8 stroke-[2.2]" />
             </div>
 
@@ -148,7 +214,7 @@ export default function HeroSection() {
                 <div className="hero-reveal-line" aria-hidden="true" />
 
                 {/* AI Preview Badge with Sparkle */}
-                <span className="absolute top-3 left-3 bg-[#04362f] text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow flex items-center gap-1.5 z-10 select-none">
+                <span className="absolute top-3 left-3 bg-[#004642] text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow flex items-center gap-1.5 z-10 select-none">
                   <svg
                     className="w-3.5 h-3.5 fill-[#d3c518] text-[#d3c518]"
                     viewBox="0 0 24 24"

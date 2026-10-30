@@ -255,3 +255,41 @@ button, a{
     display: none;
   }
 }
+
+/* ========================================================
+   Curtainz Hero CTA Animated Flowing Border & Hover
+   ======================================================== */
+@keyframes flow-gradient {
+  0%, 100% {
+    background-position: 0%;
+  }
+  50% {
+    background-position: 100%;
+  }
+}
+
+.gradient-border-flow {
+  background-color: transparent;
+  background-image: linear-gradient(#fff, #fff), linear-gradient(90deg, #023734, #0a4946, #65b8b3, #549e9a, #a9ede9, #cce1e0);
+  background-position: 0 0, 0 0;
+  background-repeat: repeat, repeat;
+  background-size: 300% 300%;
+  background-attachment: scroll, scroll;
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  border: 2px solid transparent !important;
+  animation: 3s ease-in-out infinite flow-gradient;
+}
+
+.cta-button {
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cta-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.cta-button:active:not(:disabled) {
+  transform: translateY(0);
+}

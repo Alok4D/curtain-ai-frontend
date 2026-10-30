@@ -6,8 +6,8 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { name: "About Us", href: "#about" },
-  { name: "AI Visualizer", href: "#visualizer" },
+  { name: "About Us", href: "#about-us" },
+  { name: "AI Visualizer", href: "#ai-visualizer" },
   { name: "FAQ", href: "#faq" },
   { name: "Services", href: "#services" },
 ];
@@ -16,85 +16,70 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="w-full bg-[#004642] sticky top-0 z-50 font-['Urbanist',sans-serif]">
-      <div className="max-w-[1387px] mx-auto px-2 md:px-4 lg:px-4">
-        <div className="flex items-center justify-between h-[72px]">
-          
-          {/* Logo */}
-          <Link href="/" className="inline-flex items-center transition-opacity hover:opacity-90">
+    <header className="fixed inset-x-0 top-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full bg-[#004642] font-['Urbanist',sans-serif]">
+      <nav className="relative max-w-7xl mx-auto w-full flex flex-wrap md:flex-nowrap basis-full items-center justify-between px-4 sm:px-6 lg:px-8 py-4 md:py-3">
+        {/* Logo */}
+        <div className="flex items-center">
+          <Link
+            className="flex-none rounded-md inline-block py-2 font-semibold focus:outline-none focus:opacity-80"
+            href="/"
+            aria-label="Curtainz home"
+          >
             <Image
+              className="w-32 md:w-44 h-auto"
               src="https://curtainz.ai/_app/immutable/assets/curtainzLogoWhite.DNEf-IQo.svg"
               alt="Curtainz Logo"
-              width={140}
-              height={36}
+              width={446}
+              height={108}
               priority
-              className="h-8 md:h-9 w-auto object-contain"
             />
           </Link>
+          <div className="ms-1 sm:ms-2" />
+        </div>
 
-          {/* Desktop Navigation Links & Action */}
-          <div className="hidden md:flex items-center gap-8 lg:gap-10">
-            <nav className="flex items-center gap-6 lg:gap-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="text-[16px] leading-[24px] font-normal text-[#D4D4D4] hover:text-white transition-colors duration-150"
-                >
-                  {link.name}
-                </Link>
-              ))}
-            </nav>
-
+        {/* Right CTA & Mobile Toggle */}
+        <div className="md:order-3 flex items-center gap-x-3">
+          <div className="md:ps-3">
             <Link
+              className="group inline-flex items-center gap-x-2 text-xs md:text-base py-2 px-3.5 bg-white font-semibold whitespace-nowrap text-neutral-800 rounded-sm focus:outline-none uppercase hover:bg-neutral-100 transition-colors shadow-sm"
               href="#book-visit"
-              className="bg-white hover:bg-neutral-100 text-[#004642] text-[13.5px] font-bold tracking-[0.06em] uppercase px-5 py-2.5 rounded-sm transition-colors duration-150 shadow-sm"
             >
-              BOOK A FREE VISIT
+              Book a free visit
             </Link>
           </div>
 
-          {/* Mobile Menu Hamburger Button */}
-          <div className="flex md:hidden items-center">
+          <div className="md:hidden">
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-[#D4D4D4] hover:text-white focus:outline-none"
+              className="size-9 flex justify-center items-center text-sm font-semibold rounded-full bg-neutral-800 text-white"
               aria-label="Toggle navigation menu"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
-
         </div>
-      </div>
 
-      {/* Mobile Dropdown Drawer */}
-      {isOpen && (
-        <div className="md:hidden bg-[#003835] border-t border-[#005a55] px-6 py-5">
-          <nav className="flex flex-col space-y-4">
+        {/* Navigation Links */}
+        <div
+          className={`overflow-hidden transition-all duration-300 basis-full grow md:block ${
+            isOpen ? "block" : "hidden"
+          }`}
+        >
+          <div className="flex flex-col md:flex-row md:items-center md:justify-end gap-y-3 md:gap-y-0 py-3 md:py-0 md:ps-7">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="text-[16px] font-medium text-[#D4D4D4] hover:text-white py-1 transition-colors"
+                className="pe-3 ps-px py-2 sm:px-3 md:py-4 text-base text-white hover:text-neutral-300 font-medium transition-colors"
               >
                 {link.name}
               </Link>
             ))}
-            <div className="pt-2">
-              <Link
-                href="#book-visit"
-                onClick={() => setIsOpen(false)}
-                className="block text-center w-full bg-white hover:bg-neutral-100 text-[#004642] text-[13.5px] font-bold tracking-[0.06em] uppercase py-3 rounded-sm transition-colors"
-              >
-                BOOK A FREE VISIT
-              </Link>
-            </div>
-          </nav>
+          </div>
         </div>
-      )}
+      </nav>
     </header>
   );
 }
