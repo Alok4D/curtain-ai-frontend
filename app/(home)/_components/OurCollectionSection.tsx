@@ -77,7 +77,7 @@ export default function OurCollectionSection() {
       aria-labelledby="services-heading"
       className="w-full bg-white font-['Urbanist',sans-serif]"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div className="max-w-[1387px] mx-auto px-2 sm:px-4 lg:px-4 py-12 md:py-16">
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto">
