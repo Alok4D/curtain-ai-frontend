@@ -17,7 +17,7 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full bg-[#004642] font-['Urbanist',sans-serif]">
-      <nav className="relative max-w-7xl mx-auto w-full flex flex-wrap md:flex-nowrap basis-full items-center justify-between px-4 sm:px-6 lg:px-8 py-4 md:py-3">
+      <nav className="relative max-w-[1387px] mx-auto w-full flex flex-wrap md:flex-nowrap basis-full items-center justify-between px-2 sm:px-4 lg:px-4 py-4 md:py-3">
         {/* Logo */}
         <div className="flex items-center">
           <Link

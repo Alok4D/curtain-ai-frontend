@@ -16,7 +16,7 @@ export default function HeroSection() {
       aria-labelledby="hero-heading"
       className="w-full bg-[#FFFFFF] font-['Urbanist',sans-serif] overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-10 md:pt-36 md:pb-16">
+      <div className="max-w-[1387px] mx-auto px-2 sm:px-4 lg:px-4 pt-24 pb-10 md:pt-36 md:pb-16">
         <div className="flex flex-col md:flex-row gap-10 lg:gap-12 items-center">
           
           {/* Left Column: Content & Upload CTA (1:1 identical to curtainz.ai) */}
