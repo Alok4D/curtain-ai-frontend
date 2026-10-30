@@ -1,15 +1,53 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 
 export default function HeroSection() {
-    
+  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleFile = (file: File) => {
+    if (!file || !file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target?.result as string;
+      if (dataUrl) {
+        sessionStorage.setItem("uploadedImageUrl", dataUrl);
+        sessionStorage.setItem("roomImageId", Date.now().toString());
+        router.push("/select-curtains");
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleBoxClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleFile(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) handleFile(file);
   };
 
   return (
@@ -46,11 +84,19 @@ export default function HeroSection() {
             </p>
 
             {/* Upload Box with Animated Flowing Gradient Border */}
-            <div className="flex flex-col items-center gap-4 w-full md:w-4/5">
+            <div
+              className={`flex flex-col items-center gap-4 w-full md:w-4/5 transition-all ${
+                isDragging ? "scale-[1.02]" : ""
+              }`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
               <input
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
+                onChange={handleInputChange}
                 className="hidden"
               />
 

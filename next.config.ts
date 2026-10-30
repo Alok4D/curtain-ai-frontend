@@ -35,6 +35,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "curtainz.ai",
       },
+      {
+        protocol: "https",
+        hostname: "curtainz-ae.b-cdn.net",
+      },
     ],
   },
 };
