@@ -1,791 +1,272 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
-import {
-  User,
-  Lock,
-  Mail,
-  Phone,
-  MapPin,
-  Shield,
-  Bell,
-  Camera,
-  Check,
-  Eye,
-  EyeOff,
-  Save,
-  RotateCcw,
-  Sparkles,
-  KeyRound,
-  Sliders,
-  CheckCircle2,
-  AlertCircle,
-} from "lucide-react";
-import { toast } from "sonner";
+import { useState } from "react";
+import { Upload, ChevronDown, CheckCircle2, Eye, EyeOff, MessageSquare, ArrowUpRight } from "lucide-react";
 
-interface AdminProfile {
-  name: string;
-  email: string;
-  phone: string;
-  role: string;
-  location: string;
-  bio: string;
-  avatarUrl: string;
-}
-
-interface NotificationSettings {
-  emailOnBooking: boolean;
-  whatsappAlerts: boolean;
-  aiUsageThreshold: boolean;
-  marketingUpdates: boolean;
-  currency: string;
-}
-
-const DEFAULT_PROFILE: AdminProfile = {
-  name: "Curtainz Studio Admin",
-  email: "admin@curtainz.ai",
-  phone: "+971 52 313 5707",
-  role: "Chief Store Administrator",
-  location: "Dubai Design District (d3), UAE",
-  bio: "Managing Curtainz AI Visualizer catalog, client fabric consultations, and luxury drape fittings across Dubai.",
-  avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
-};
-
-const DEFAULT_NOTIFICATIONS: NotificationSettings = {
-  emailOnBooking: true,
-  whatsappAlerts: true,
-  aiUsageThreshold: true,
-  marketingUpdates: false,
-  currency: "AED",
-};
-
-export default function SettingsPage() {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Active Tab: 'profile' | 'security' | 'preferences'
-  const [activeTab, setActiveTab] = useState<"profile" | "security" | "preferences">("profile");
-
-  // Profile Form State
-  const [profile, setProfile] = useState<AdminProfile>(DEFAULT_PROFILE);
-  const [isSavingProfile, setIsSavingProfile] = useState(false);
-
-  // Password Form State
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+export default function AdminProfileSecurity() {
+  // Password visibility states
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
 
-  // Studio Preferences State
-  const [preferences, setPreferences] = useState<NotificationSettings>(DEFAULT_NOTIFICATIONS);
-  const [isSavingPreferences, setIsSavingPreferences] = useState(false);
-
-  // Load from localStorage on mount
-  useEffect(() => {
-    try {
-      const storedProfile = localStorage.getItem("curtainz_admin_profile");
-      if (storedProfile) {
-        setProfile(JSON.parse(storedProfile));
-      }
-
-      const storedPrefs = localStorage.getItem("curtainz_admin_preferences");
-      if (storedPrefs) {
-        setPreferences(JSON.parse(storedPrefs));
-      }
-    } catch {
-      // Fallback to default state
-    }
-  }, []);
-
-  // Handle Avatar Change
-  const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-      toast.error("Please select a valid image file.");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const dataUrl = event.target?.result as string;
-      if (dataUrl) {
-        setProfile((prev) => ({ ...prev, avatarUrl: dataUrl }));
-        toast.success("Profile photo updated in preview. Click Save to persist.");
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleRemoveAvatar = () => {
-    setProfile((prev) => ({
-      ...prev,
-      avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
-    }));
-    toast.info("Avatar reset to default.");
-  };
-
-  // Save Profile Handler
-  const handleSaveProfile = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!profile.name.trim()) {
-      toast.error("Please enter a valid admin name.");
-      return;
-    }
-    if (!profile.email.trim() || !profile.email.includes("@")) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-
-    setIsSavingProfile(true);
-    setTimeout(() => {
-      try {
-        localStorage.setItem("curtainz_admin_profile", JSON.stringify(profile));
-        toast.success("Admin profile updated successfully!");
-      } catch {
-        toast.error("Failed to save changes to local storage.");
-      } finally {
-        setIsSavingProfile(false);
-      }
-    }, 400);
-  };
-
-  // Reset Profile to Default
-  const handleResetProfile = () => {
-    if (confirm("Reset profile details to default?")) {
-      setProfile(DEFAULT_PROFILE);
-      localStorage.setItem("curtainz_admin_profile", JSON.stringify(DEFAULT_PROFILE));
-      toast.info("Profile reset to default values.");
-    }
-  };
-
-  // Change Password Handler
-  const handleChangePassword = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!currentPassword) {
-      toast.error("Please enter your current password.");
-      return;
-    }
-
-    if (newPassword.length < 8) {
-      toast.error("New password must be at least 8 characters long.");
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      toast.error("New passwords do not match. Please verify.");
-      return;
-    }
-
-    setIsChangingPassword(true);
-    setTimeout(() => {
-      // Simulate password change success
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
-      setIsChangingPassword(false);
-      toast.success("Password changed successfully! Keep your credentials safe.");
-    }, 600);
-  };
-
-  // Save Studio Preferences Handler
-  const handleSavePreferences = () => {
-    setIsSavingPreferences(true);
-    setTimeout(() => {
-      try {
-        localStorage.setItem("curtainz_admin_preferences", JSON.stringify(preferences));
-        toast.success("Studio preferences and alerts saved!");
-      } catch {
-        toast.error("Failed to save preferences.");
-      } finally {
-        setIsSavingPreferences(false);
-      }
-    }, 350);
-  };
+  // Form states
+  const [fullName, setFullName] = useState("Alex Morgan");
+  const [region, setRegion] = useState("United States");
+  const [email, setEmail] = useState("alex@example.com");
 
   return (
-    <div className="space-y-8 font-['Urbanist',sans-serif] max-w-6xl mx-auto pb-12">
-      {/* Top Page Header */}
-      <div className="bg-white p-6 rounded-2xl border border-gray-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-[#004642] bg-[#004642]/10 px-2.5 py-1 rounded-full">
-            Admin Studio Settings
-          </span>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#004642] tracking-tight mt-2">
-            Account &amp; Studio Settings
+    <div className="min-h-screen bg-[#FBF9F5] py-12 px-4 sm:px-6 lg:px-8 font-sans antialiased text-[#2D312E]">
+      <div className="max-w-6xl mx-auto">
+        
+        {/* Page Title & Subtitle */}
+        <header className="mb-8">
+          <h1 className="text-3xl sm:text-4xl font-serif text-[#1C201D] tracking-tight">
+            Admin profile &amp; security
           </h1>
-          <p className="text-xs sm:text-sm text-gray-500 mt-1">
-            Manage your administrator profile, security credentials, and studio notification preferences.
+          <p className="mt-1.5 text-sm text-[#666B67]">
+            Update your admin profile and manage password settings.
           </p>
-        </div>
+        </header>
 
-        {/* Live Admin Tag */}
-        <div className="flex items-center gap-3 bg-emerald-50/80 border border-emerald-200/70 py-2 px-3.5 rounded-xl self-start sm:self-auto">
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <div className="text-left">
-            <p className="text-xs font-bold text-emerald-900 leading-tight">
-              {profile.name}
-            </p>
-            <p className="text-[10px] text-emerald-700 leading-tight">
-              {profile.role}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Tabs Navigation */}
-      <div className="flex bg-white p-1.5 rounded-2xl border border-gray-200/80 shadow-xs overflow-x-auto gap-1">
-        <button
-          type="button"
-          onClick={() => setActiveTab("profile")}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === "profile"
-              ? "bg-[#004642] text-white shadow-sm"
-              : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-          }`}
-        >
-          <User className="w-4 h-4" />
-          <span>Profile &amp; Personal Info</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab("security")}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === "security"
-              ? "bg-[#004642] text-white shadow-sm"
-              : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-          }`}
-        >
-          <KeyRound className="w-4 h-4" />
-          <span>Security &amp; Password</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab("preferences")}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === "preferences"
-              ? "bg-[#004642] text-white shadow-sm"
-              : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-          }`}
-        >
-          <Sliders className="w-4 h-4" />
-          <span>Studio Preferences &amp; Alerts</span>
-        </button>
-      </div>
-
-      {/* TAB 1: Profile & Personal Info */}
-      {activeTab === "profile" && (
-        <form onSubmit={handleSaveProfile} className="space-y-6">
-          {/* Avatar & Hero Box */}
-          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-gray-200/80 shadow-xs space-y-6">
-            <h2 className="text-base font-bold text-gray-900 flex items-center gap-2 border-b border-gray-100 pb-3">
-              <Camera className="w-4 h-4 text-[#004642]" />
-              <span>Admin Profile Photo</span>
-            </h2>
-
-            <div className="flex flex-col sm:flex-row items-center gap-6">
-              {/* Avatar Preview */}
-              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-[#004642]/20 shadow-sm shrink-0 bg-gray-100">
-                <Image
-                  src={profile.avatarUrl}
-                  alt={profile.name}
-                  fill
-                  className="object-cover"
-                />
+        {/* Main Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+          
+          {/* Left Column (Forms) */}
+          <div className="lg:col-span-2 space-y-6">
+            
+            {/* 1. Profile Information Card */}
+            <section className="bg-white rounded-2xl p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-[#ECEAE4]">
+              <div className="mb-6">
+                <h2 className="text-2xl font-serif text-[#1C201D] tracking-tight">
+                  Profile information
+                </h2>
+                <p className="mt-1 text-xs sm:text-sm text-[#737874]">
+                  Your personal details and where we can reach you.
+                </p>
               </div>
 
-              {/* Upload Controls */}
-              <div className="flex-1 text-center sm:text-left space-y-2">
-                <p className="text-sm font-bold text-gray-800">
-                  Upload high-resolution profile picture
-                </p>
-                <p className="text-xs text-gray-500">
-                  Recommended: Square JPG or PNG, at least 400x400 pixels.
-                </p>
-
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5 pt-1">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleAvatarUpload}
-                    className="hidden"
-                  />
+              {/* Avatar & Photo Upload */}
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-14 h-14 rounded-full bg-[#E5E9E2] flex items-center justify-center text-[#58615A] text-lg font-serif">
+                  AM
+                </div>
+                <div>
                   <button
                     type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="inline-flex items-center gap-1.5 bg-[#004642] hover:bg-[#003431] text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-[#D5D8D3] rounded-lg text-xs sm:text-sm font-medium text-[#2D312E] bg-white hover:bg-[#F7F8F6] transition-colors"
                   >
-                    <Camera className="w-3.5 h-3.5" />
-                    <span>Upload New Photo</span>
+                    <Upload className="w-3.5 h-3.5 text-[#58615A]" />
+                    Change photo
                   </button>
-
-                  <button
-                    type="button"
-                    onClick={handleRemoveAvatar}
-                    className="inline-flex items-center gap-1.5 border border-gray-200 text-gray-600 hover:text-red-600 hover:bg-red-50 text-xs font-semibold px-3 py-2 rounded-xl transition-colors cursor-pointer"
-                  >
-                    <span>Remove</span>
-                  </button>
+                  <p className="mt-1.5 text-[11px] text-[#8C918D]">
+                    JPG or PNG · Up to 2 MB
+                  </p>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Profile Details Form */}
-          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-gray-200/80 shadow-xs space-y-6">
-            <h2 className="text-base font-bold text-gray-900 flex items-center gap-2 border-b border-gray-100 pb-3">
-              <User className="w-4 h-4 text-[#004642]" />
-              <span>Personal &amp; Contact Details</span>
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* Full Name */}
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                  Full Name <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <User className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              {/* Name & Region Inputs */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-xs font-semibold text-[#1C201D] mb-1.5">
+                    Full name
+                  </label>
                   <input
                     type="text"
-                    value={profile.name}
-                    onChange={(e) =>
-                      setProfile({ ...profile, name: e.target.value })
-                    }
-                    placeholder="e.g. Sarah Jenkins"
-                    required
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-800 focus:outline-none focus:border-[#004642] focus:bg-white transition-all"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="w-full px-3.5 py-2 text-sm bg-white border border-[#D5D8D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3B463B] text-[#1C201D]"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#1C201D] mb-1.5">
+                    Region
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={region}
+                      onChange={(e) => setRegion(e.target.value)}
+                      className="w-full px-3.5 py-2 text-sm bg-white border border-[#D5D8D3] rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-[#3B463B] text-[#1C201D] pr-9 cursor-pointer"
+                    >
+                      <option value="United States">United States</option>
+                      <option value="United Kingdom">United Kingdom</option>
+                      <option value="Canada">Canada</option>
+                      <option value="Australia">Australia</option>
+                    </select>
+                    <ChevronDown className="w-4 h-4 text-[#737874] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
                 </div>
               </div>
 
               {/* Email Address */}
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                  Email Address <span className="text-red-500">*</span>
+              <div className="mb-6">
+                <label className="block text-xs font-semibold text-[#1C201D] mb-1.5">
+                  Email address
                 </label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="email"
-                    value={profile.email}
-                    onChange={(e) =>
-                      setProfile({ ...profile, email: e.target.value })
-                    }
-                    placeholder="admin@curtainz.ai"
-                    required
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-800 focus:outline-none focus:border-[#004642] focus:bg-white transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* Phone / WhatsApp */}
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                  Phone / WhatsApp Number
-                </label>
-                <div className="relative">
-                  <Phone className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="tel"
-                    value={profile.phone}
-                    onChange={(e) =>
-                      setProfile({ ...profile, phone: e.target.value })
-                    }
-                    placeholder="+971 52 313 5707"
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-800 focus:outline-none focus:border-[#004642] focus:bg-white transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* Role / Designation */}
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                  Admin Role / Designation
-                </label>
-                <div className="relative">
-                  <Shield className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={profile.role}
-                    onChange={(e) =>
-                      setProfile({ ...profile, role: e.target.value })
-                    }
-                    placeholder="Chief Store Administrator"
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-800 focus:outline-none focus:border-[#004642] focus:bg-white transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* Studio Location */}
-              <div className="md:col-span-2">
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                  Studio Location / Headquarters
-                </label>
-                <div className="relative">
-                  <MapPin className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={profile.location}
-                    onChange={(e) =>
-                      setProfile({ ...profile, location: e.target.value })
-                    }
-                    placeholder="Dubai Design District (d3), UAE"
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-800 focus:outline-none focus:border-[#004642] focus:bg-white transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* Bio / Description */}
-              <div className="md:col-span-2">
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                  Admin Bio / Studio Note
-                </label>
-                <textarea
-                  rows={3}
-                  value={profile.bio}
-                  onChange={(e) =>
-                    setProfile({ ...profile, bio: e.target.value })
-                  }
-                  placeholder="Tell clients or team members about your role..."
-                  className="w-full p-3 bg-gray-50/50 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-800 focus:outline-none focus:border-[#004642] focus:bg-white transition-all resize-none"
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-3.5 py-2 text-sm bg-white border border-[#D5D8D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3B463B] text-[#1C201D]"
                 />
+                <p className="mt-1.5 text-xs text-[#737874]">
+                  Your login email and destination for account updates.
+                </p>
               </div>
-            </div>
 
-            {/* Form Action Buttons */}
-            <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-              <button
-                type="button"
-                onClick={handleResetProfile}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-800 cursor-pointer"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Reset to Default</span>
-              </button>
+              {/* Footer Section: Verification & Action */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
+                <div className="flex items-center gap-1.5 text-xs text-[#525753]">
+                  <CheckCircle2 className="w-4 h-4 text-[#525753]" />
+                  <span>Email verified</span>
+                </div>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-[#3B463B] hover:bg-[#303930] text-white text-xs sm:text-sm font-medium rounded-lg transition-colors cursor-pointer"
+                >
+                  Save changes
+                </button>
+              </div>
+            </section>
 
-              <button
-                type="submit"
-                disabled={isSavingProfile}
-                className="inline-flex items-center gap-2 bg-[#004642] hover:bg-[#003431] text-white text-xs sm:text-sm font-semibold px-6 py-2.5 rounded-xl transition-all shadow-sm cursor-pointer disabled:opacity-60"
-              >
-                {isSavingProfile ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Saving Changes…</span>
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4" />
-                    <span>Save Profile Changes</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </form>
-      )}
+            {/* 2. Change Password Card */}
+            <section className="bg-white rounded-2xl p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-[#ECEAE4]">
+              <div className="mb-6">
+                <h2 className="text-2xl font-serif text-[#1C201D] tracking-tight">
+                  Change password
+                </h2>
+                <p className="mt-1 text-xs sm:text-sm text-[#737874]">
+                  Keep your account secure with a password you don&apos;t use elsewhere.
+                </p>
+              </div>
 
-      {/* TAB 2: Security & Password */}
-      {activeTab === "security" && (
-        <form onSubmit={handleChangePassword} className="space-y-6">
-          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-gray-200/80 shadow-xs space-y-6">
-            <div>
-              <h2 className="text-base font-bold text-gray-900 flex items-center gap-2 border-b border-gray-100 pb-3">
-                <Lock className="w-4 h-4 text-[#004642]" />
-                <span>Change Administrator Password</span>
-              </h2>
-              <p className="text-xs text-gray-500 mt-2">
-                Ensure your account is using a strong, unique password to safeguard admin operations and client consultation data.
-              </p>
-            </div>
-
-            <div className="space-y-4 max-w-xl">
               {/* Current Password */}
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                  Current Password <span className="text-red-500">*</span>
+              <div className="mb-4">
+                <label className="block text-xs font-semibold text-[#1C201D] mb-1.5">
+                  Current password
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type={showCurrentPassword ? "text" : "password"}
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
                     placeholder="Enter current password"
-                    required
-                    className="w-full pl-10 pr-10 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-800 focus:outline-none focus:border-[#004642] focus:bg-white transition-all"
+                    className="w-full px-3.5 py-2 text-sm bg-white border border-[#D5D8D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3B463B] text-[#1C201D] placeholder:text-[#A0A5A1] pr-10"
                   />
                   <button
                     type="button"
                     onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C918D] hover:text-[#58615A]"
                   >
                     {showCurrentPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
                       <Eye className="w-4 h-4" />
+                    ) : (
+                      <EyeOff className="w-4 h-4" />
                     )}
                   </button>
                 </div>
               </div>
 
-              {/* New Password */}
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                  New Password <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <KeyRound className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type={showNewPassword ? "text" : "password"}
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="At least 8 characters"
-                    required
-                    className="w-full pl-10 pr-10 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-800 focus:outline-none focus:border-[#004642] focus:bg-white transition-all"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
-                  >
-                    {showNewPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
+              {/* New Password & Confirm Password */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-xs font-semibold text-[#1C201D] mb-1.5">
+                    New password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showNewPassword ? "text" : "password"}
+                      placeholder="Create new password"
+                      className="w-full px-3.5 py-2 text-sm bg-white border border-[#D5D8D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3B463B] text-[#1C201D] placeholder:text-[#A0A5A1] pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C918D] hover:text-[#58615A]"
+                    >
+                      {showNewPassword ? (
+                        <Eye className="w-4 h-4" />
+                      ) : (
+                        <EyeOff className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#1C201D] mb-1.5">
+                    Confirm new password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Repeat new password"
+                      className="w-full px-3.5 py-2 text-sm bg-white border border-[#D5D8D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3B463B] text-[#1C201D] placeholder:text-[#A0A5A1] pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C918D] hover:text-[#58615A]"
+                    >
+                      {showConfirmPassword ? (
+                        <Eye className="w-4 h-4" />
+                      ) : (
+                        <EyeOff className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {/* Confirm New Password */}
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                  Confirm New Password <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <Check className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Re-type new password"
-                    required
-                    className="w-full pl-10 pr-10 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-800 focus:outline-none focus:border-[#004642] focus:bg-white transition-all"
-                  />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setShowConfirmPassword(!showConfirmPassword)
-                    }
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Password Requirements Checklist */}
-              <div className="p-3.5 bg-gray-50 border border-gray-200 rounded-xl space-y-1.5 text-[11px] text-gray-600">
-                <p className="font-semibold text-gray-800">Password Checklist:</p>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2
-                    className={`w-3.5 h-3.5 ${
-                      newPassword.length >= 8
-                        ? "text-emerald-600"
-                        : "text-gray-400"
-                    }`}
-                  />
-                  <span>Minimum 8 characters length</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2
-                    className={`w-3.5 h-3.5 ${
-                      newPassword && newPassword === confirmPassword
-                        ? "text-emerald-600"
-                        : "text-gray-400"
-                    }`}
-                  />
-                  <span>Passwords match exactly</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <div className="pt-4 border-t border-gray-100 flex justify-end">
-              <button
-                type="submit"
-                disabled={isChangingPassword}
-                className="inline-flex items-center gap-2 bg-[#004642] hover:bg-[#003431] text-white text-xs sm:text-sm font-semibold px-6 py-2.5 rounded-xl transition-all shadow-sm cursor-pointer disabled:opacity-60"
-              >
-                {isChangingPassword ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Updating Password…</span>
-                  </>
-                ) : (
-                  <>
-                    <Lock className="w-4 h-4" />
-                    <span>Update Password</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </form>
-      )}
-
-      {/* TAB 3: Studio Preferences & Alerts */}
-      {activeTab === "preferences" && (
-        <div className="space-y-6">
-          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-gray-200/80 shadow-xs space-y-6">
-            <div>
-              <h2 className="text-base font-bold text-gray-900 flex items-center gap-2 border-b border-gray-100 pb-3">
-                <Bell className="w-4 h-4 text-[#004642]" />
-                <span>Consultation Alerts &amp; Notifications</span>
-              </h2>
-              <p className="text-xs text-gray-500 mt-2">
-                Configure how and when the admin team is notified about user interactions and consultation requests.
+              {/* Password Requirements Helper Text */}
+              <p className="text-[11px] text-[#737874] mb-6">
+                Use at least 8 characters, including letters and a number. Your new password must be different from your current one.
               </p>
-            </div>
 
-            <div className="space-y-4">
-              {/* Toggle 1: Email on Booking */}
-              <div className="flex items-center justify-between p-4 rounded-xl border border-gray-200 bg-gray-50/50">
-                <div className="space-y-0.5 pr-4">
-                  <p className="text-xs sm:text-sm font-bold text-gray-800">
-                    Email Alert on Home Visit Booking
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Receive an immediate email whenever a client in Dubai books a free in-home consultation.
-                  </p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer shrink-0">
-                  <input
-                    type="checkbox"
-                    checked={preferences.emailOnBooking}
-                    onChange={(e) =>
-                      setPreferences({
-                        ...preferences,
-                        emailOnBooking: e.target.checked,
-                      })
-                    }
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#004642]" />
-                </label>
-              </div>
-
-              {/* Toggle 2: WhatsApp Alerts */}
-              <div className="flex items-center justify-between p-4 rounded-xl border border-gray-200 bg-gray-50/50">
-                <div className="space-y-0.5 pr-4">
-                  <p className="text-xs sm:text-sm font-bold text-gray-800">
-                    WhatsApp Instant Dispatch
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Enable direct WhatsApp click-to-chat triggers for rapid response with booking leads.
-                  </p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer shrink-0">
-                  <input
-                    type="checkbox"
-                    checked={preferences.whatsappAlerts}
-                    onChange={(e) =>
-                      setPreferences({
-                        ...preferences,
-                        whatsappAlerts: e.target.checked,
-                      })
-                    }
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#004642]" />
-                </label>
-              </div>
-
-              {/* Toggle 3: AI Usage Alerts */}
-              <div className="flex items-center justify-between p-4 rounded-xl border border-gray-200 bg-gray-50/50">
-                <div className="space-y-0.5 pr-4">
-                  <p className="text-xs sm:text-sm font-bold text-gray-800">
-                    AI Visualizer Usage Spike Alerts
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Notify admin team when OpenAI Visualizer daily previews exceed 500 rooms.
-                  </p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer shrink-0">
-                  <input
-                    type="checkbox"
-                    checked={preferences.aiUsageThreshold}
-                    onChange={(e) =>
-                      setPreferences({
-                        ...preferences,
-                        aiUsageThreshold: e.target.checked,
-                      })
-                    }
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#004642]" />
-                </label>
-              </div>
-
-              {/* Currency Preference */}
-              <div className="pt-2">
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                  Studio Default Currency
-                </label>
-                <select
-                  value={preferences.currency}
-                  onChange={(e) =>
-                    setPreferences({ ...preferences, currency: e.target.value })
-                  }
-                  className="w-full sm:w-64 p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-800 focus:outline-none focus:border-[#004642] focus:bg-white"
+              {/* Footer Section: Forgot Password & Action */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
+                <a
+                  href="#forgot-password"
+                  className="text-xs font-semibold text-[#1C201D] hover:underline"
                 >
-                  <option value="AED">AED (United Arab Emirates Dirham)</option>
-                  <option value="USD">USD (United States Dollar)</option>
-                  <option value="EUR">EUR (Euro)</option>
-                  <option value="BDT">BDT (Bangladeshi Taka)</option>
-                </select>
+                  Forgot your password?
+                </a>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-[#3B463B] hover:bg-[#303930] text-white text-xs sm:text-sm font-medium rounded-lg transition-colors cursor-pointer"
+                >
+                  Update password
+                </button>
               </div>
-            </div>
-
-            {/* Save Button */}
-            <div className="pt-4 border-t border-gray-100 flex justify-end">
-              <button
-                type="button"
-                onClick={handleSavePreferences}
-                disabled={isSavingPreferences}
-                className="inline-flex items-center gap-2 bg-[#004642] hover:bg-[#003431] text-white text-xs sm:text-sm font-semibold px-6 py-2.5 rounded-xl transition-all shadow-sm cursor-pointer disabled:opacity-60"
-              >
-                {isSavingPreferences ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Saving Preferences…</span>
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4" />
-                    <span>Save Studio Preferences</span>
-                  </>
-                )}
-              </button>
-            </div>
+            </section>
           </div>
+
+          {/* Right Column: Help Sidebar Card */}
+          <div className="lg:col-span-1">
+            <aside className="bg-white rounded-2xl p-6 sm:p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-[#ECEAE4]">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center text-[#58615A] mb-4">
+                <MessageSquare className="w-5 h-5 text-[#58615A]" />
+              </div>
+              
+              <h3 className="text-xl font-serif text-[#1C201D] tracking-tight mb-2">
+                Need a little help?
+              </h3>
+
+              <p className="text-xs sm:text-sm text-[#666B67] leading-relaxed mb-5">
+                For questions about your admin profile or account security, our team is a message away.
+              </p>
+
+              <a
+                href="#contact-support"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#1C201D] hover:underline"
+              >
+                <span>Contact support</span>
+                <ArrowUpRight className="w-3.5 h-3.5 text-[#1C201D]" />
+              </a>
+            </aside>
+          </div>
+
         </div>
-      )}
+
+      </div>
     </div>
   );
 }
-
