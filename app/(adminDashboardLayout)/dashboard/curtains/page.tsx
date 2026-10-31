@@ -160,14 +160,15 @@ export default function CurtainManagementPage() {
           </p>
         </div>
 
+       <Link href={'/dashboard/curtains/add-curtain'}>
         <button
           type="button"
-          onClick={handleOpenAddModal}
           className="inline-flex items-center gap-2 bg-[#004642] hover:bg-[#003431] text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl transition-all shadow-sm cursor-pointer shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>Add New Fabric</span>
         </button>
+       </Link>
       </div>
 
       {/* Filter Tabs and Search Bar */}

@@ -6,11 +6,6 @@ import {
   Layers,
   TrendingUp,
   ArrowUpRight,
-  Phone,
-  MessageSquare,
-  CheckCircle2,
-  Clock,
-  Plus,
 } from "lucide-react";
 
 // Static mock data for overview metrics & tables
@@ -24,15 +19,7 @@ const metrics = [
     color: "text-[#004642]",
     bgColor: "bg-[#004642]/10",
   },
-  {
-    title: "Home Visit Requests",
-    value: "128",
-    change: "+18.2%",
-    subtitle: "16 pending consultations",
-    icon: Calendar,
-    color: "text-emerald-700",
-    bgColor: "bg-emerald-50",
-  },
+ 
   {
     title: "Active Fabric Catalog",
     value: "24",
@@ -42,15 +29,7 @@ const metrics = [
     color: "text-teal-700",
     bgColor: "bg-teal-50",
   },
-  {
-    title: "Consultation Pipeline",
-    value: "AED 94,500",
-    change: "+14.0%",
-    subtitle: "Estimated custom orders",
-    icon: TrendingUp,
-    color: "text-amber-700",
-    bgColor: "bg-amber-50",
-  },
+
 ];
 
 const recentAiPreviews = [
