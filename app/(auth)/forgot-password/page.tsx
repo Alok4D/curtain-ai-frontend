@@ -7,7 +7,7 @@ import { Mail, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useForgotPasswordMutation } from '@/lib/features/auth/authApi';
+import { useForgotPasswordMutation } from '@/lib/feature/auth/authApi';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Check, Camera, Download, AlertCircle } from "lucide-react";
 import curtainData from "@/data/curtains.json";
+import { useGetAllCurtainsQuery } from "@/lib/feature/curtain/curtainApi";
 
 interface CurtainItem {
   id: number;
@@ -23,6 +24,9 @@ export default function SelectCurtainsPage() {
   const [activeTab, setActiveTab] = useState<TabType>("curtains");
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // RTK Query API Hook
+  const { data: curtainsResponse } = useGetAllCurtainsQuery();
 
   useEffect(() => {
     // Read uploaded room image from sessionStorage
@@ -49,14 +53,14 @@ export default function SelectCurtainsPage() {
     reader.readAsDataURL(file);
   };
 
-  const handleSelectCurtain = (curtain: CurtainItem) => {
+  const handleSelectCurtain = (curtain: CurtainItem | any) => {
     if (!uploadedImageUrl) {
       setErrorMsg("Please upload a room photo first before choosing a curtain.");
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
-    sessionStorage.setItem("selectedCurtain", curtain.id.toString());
+    sessionStorage.setItem("selectedCurtain", (curtain.id || curtain._id || "").toString());
     sessionStorage.setItem("selectedCurtainName", curtain.name);
     sessionStorage.setItem(
       "selectedCurtainImageUrl",
@@ -66,7 +70,14 @@ export default function SelectCurtainsPage() {
     router.push("/generate-image");
   };
 
-  const currentList: CurtainItem[] = curtainData[activeTab] || [];
+  // Group curtains from API or fallback to static curtainData
+  const fabrics = curtainsResponse?.data && curtainsResponse.data.length > 0 ? {
+    curtains: curtainsResponse.data.filter((c: any) => c.category === "curtains"),
+    sheers: curtainsResponse.data.filter((c: any) => c.category === "sheers"),
+    rollers: curtainsResponse.data.filter((c: any) => c.category === "rollers"),
+  } : curtainData;
+
+  const currentList: any[] = fabrics[activeTab] || [];
 
   const tabDescriptions: Record<TabType, string> = {
     curtains:
@@ -161,7 +172,7 @@ export default function SelectCurtainsPage() {
             </div>
           )}
 
-          {/* Room Photo Status Banner */}
+          {/* Room Photo Banner (shows current photo thumbnail or prompt to upload) */}
           {uploadedImageUrl ? (
             <div className="flex items-center justify-center gap-3 mb-6 bg-white py-2 px-4 rounded-xl max-w-xs mx-auto border border-gray-200 shadow-2xs">
               <div className="relative w-10 h-10 rounded-md overflow-hidden shrink-0 border border-gray-200">
@@ -257,9 +268,9 @@ export default function SelectCurtainsPage() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 w-full mb-10"
             role="tabpanel"
           >
-            {currentList.map((curtain) => (
+            {currentList.map((curtain: any) => (
               <button
-                key={curtain.id}
+                key={curtain._id || curtain.id}
                 type="button"
                 onClick={() => handleSelectCurtain(curtain)}
                 className="curtain-option group cursor-pointer rounded-2xl border-2 border-gray-200 bg-white p-2.5 w-full transition-all duration-200 hover:border-[#004642] hover:shadow-md text-left"
@@ -272,6 +283,7 @@ export default function SelectCurtainsPage() {
                     fill
                     sizes="(max-width: 768px) 50vw, 25vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    unoptimized={(curtain.display_image_url || curtain.image_url)?.startsWith("data:")}
                   />
                   {/* Hover Slide-up Preview Bar matching curtainz.ai */}
                   <span className="absolute inset-x-0 bottom-0 bg-[#004642] text-white text-xs font-semibold py-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">

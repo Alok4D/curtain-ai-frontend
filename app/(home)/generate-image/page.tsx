@@ -17,6 +17,7 @@ import {
   Sparkles,
   ChevronDown,
 } from "lucide-react";
+import { useGenerateCurtainPreviewMutation } from "@/lib/feature/visualizer/visualizerApi";
 
 const STEPS = [
   "Locating window geometry & room perspective…",
@@ -62,6 +63,9 @@ export default function GenerateImagePage() {
 
   const stepIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // RTK Query API Hook
+  const [generateCurtainPreview] = useGenerateCurtainPreviewMutation();
 
   useEffect(() => {
     // Read selections from sessionStorage
@@ -232,35 +236,27 @@ export default function GenerateImagePage() {
     }, 250);
 
     try {
-      const response = await fetch("/api/generate-image", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          roomImage,
-          curtainImage,
-          drapeLength,
-          drapePosition,
-          curtainRod,
-        }),
-      });
+      const result = await generateCurtainPreview({
+        roomImage,
+        curtainImage,
+        curtainName,
+        drapeLength,
+        drapePosition,
+        curtainRod,
+      }).unwrap();
 
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
-        throw new Error(
-          data.error ||
-            "Failed to generate curtain preview. Please check your OpenAI API key and image inputs."
-        );
+      if (!result?.data?.imageUrl) {
+        throw new Error(result?.message || "Failed to generate curtain preview. Please check your image inputs.");
       }
+
+      const finalImageUrl = result.data.imageUrl;
 
       if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
       if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
 
       setProgress(100);
-      setGeneratedImage(data.imageUrl);
-      sessionStorage.setItem("generatedImageUrl", data.imageUrl);
+      setGeneratedImage(finalImageUrl);
+      sessionStorage.setItem("generatedImageUrl", finalImageUrl);
       setRemainingImages((prev) => Math.max(0, prev - 1));
       setIsGenerating(false);
 
@@ -272,7 +268,7 @@ export default function GenerateImagePage() {
       setProgress(0);
       setIsGenerating(false);
       setErrorMessage(
-        err.message || "An unexpected error occurred during image generation."
+        err?.data?.message || err?.message || "An unexpected error occurred during image generation."
       );
     }
   };

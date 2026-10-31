@@ -8,7 +8,7 @@ import { useState, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useResetPasswordMutation } from '@/lib/features/auth/authApi';
+import { useResetPasswordMutation } from '@/lib/feature/auth/authApi';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 
