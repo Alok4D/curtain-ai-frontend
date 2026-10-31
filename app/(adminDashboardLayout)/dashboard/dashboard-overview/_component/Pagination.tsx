@@ -1,84 +1,103 @@
-import Link from 'next/link';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
+"use client";
+
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  onPageChange?: (page: number) => void;
 }
 
-export const Pagination = ({ currentPage, totalPages }: PaginationProps) => {
+export const Pagination = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: PaginationProps) => {
+  if (totalPages <= 1) return null;
+
   const getPageNumbers = () => {
     const pages = [];
     const maxVisible = 5;
-    
+
     if (totalPages <= maxVisible) {
       for (let i = 1; i <= totalPages; i++) pages.push(i);
     } else {
-      // Logic for more complex pagination can go here
-      // For now, sticking to a simpler version that shows first 3
       for (let i = 1; i <= Math.min(3, totalPages); i++) pages.push(i);
     }
     return pages;
   };
 
-  const createPageUrl = (pageNumber: number) => {
-    return `/dashboard?page=${pageNumber}`;
+  const handlePageClick = (page: number) => {
+    if (page >= 1 && page <= totalPages && onPageChange) {
+      onPageChange(page);
+    }
   };
 
   return (
-    <div className="flex items-center justify-center gap-2 mt-8">
-      <Link 
-        href={createPageUrl(Math.max(1, currentPage - 1))}
+    <div className="flex items-center justify-center gap-1.5 mt-6 font-['Urbanist',sans-serif]">
+      {/* Prev */}
+      <button
+        type="button"
+        onClick={() => handlePageClick(currentPage - 1)}
+        disabled={currentPage === 1}
         className={cn(
-          "p-2 border border-[#374151] rounded-full text-gray-400 hover:bg-[#1F2937] transition-all",
-          currentPage === 1 && "opacity-30 pointer-events-none"
+          "p-2 border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-all cursor-pointer shadow-2xs",
+          currentPage === 1 && "opacity-30 cursor-not-allowed hover:bg-transparent"
         )}
+        aria-label="Previous page"
       >
-        <ChevronLeft size={20} />
-      </Link>
-      
+        <ChevronLeft className="w-4 h-4" />
+      </button>
+
+      {/* Numbers */}
       {getPageNumbers().map((page) => (
-        <Link 
+        <button
           key={page}
-          href={createPageUrl(page)}
+          type="button"
+          onClick={() => handlePageClick(page)}
           className={cn(
-            "w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-200",
-            currentPage === page 
-              ? "bg-[#064E3B] text-[#10B981] font-medium" 
-              : "text-gray-400 hover:text-white hover:bg-white/5"
+            "w-9 h-9 flex items-center justify-center rounded-lg text-xs font-semibold transition-all cursor-pointer",
+            currentPage === page
+              ? "bg-[#004642] text-white shadow-xs"
+              : "border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-gray-900"
           )}
         >
           {page}
-        </Link>
+        </button>
       ))}
-      
+
       {totalPages > 5 && (
         <>
-          <span className="text-gray-600 px-2">...</span>
-          <Link 
-            href={createPageUrl(totalPages)}
+          <span className="text-gray-400 px-1 text-xs">&hellip;</span>
+          <button
+            type="button"
+            onClick={() => handlePageClick(totalPages)}
             className={cn(
-              "w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-200",
-              currentPage === totalPages 
-                ? "bg-[#064E3B] text-[#10B981] font-medium" 
-                : "text-gray-400 hover:text-white hover:bg-white/5"
+              "w-9 h-9 flex items-center justify-center rounded-lg text-xs font-semibold transition-all cursor-pointer",
+              currentPage === totalPages
+                ? "bg-[#004642] text-white shadow-xs"
+                : "border border-gray-200 text-gray-600 hover:bg-gray-50"
             )}
           >
             {totalPages}
-          </Link>
+          </button>
         </>
       )}
-      
-      <Link 
-        href={createPageUrl(Math.min(totalPages, currentPage + 1))}
+
+      {/* Next */}
+      <button
+        type="button"
+        onClick={() => handlePageClick(currentPage + 1)}
+        disabled={currentPage === totalPages}
         className={cn(
-          "p-2 border border-[#374151] rounded-full text-gray-400 hover:bg-[#1F2937] transition-all",
-          currentPage === totalPages && "opacity-30 pointer-events-none"
+          "p-2 border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-all cursor-pointer shadow-2xs",
+          currentPage === totalPages && "opacity-30 cursor-not-allowed hover:bg-transparent"
         )}
+        aria-label="Next page"
       >
-        <ChevronRight size={20} />
-      </Link>
+        <ChevronRight className="w-4 h-4" />
+      </button>
     </div>
   );
-};
+};
