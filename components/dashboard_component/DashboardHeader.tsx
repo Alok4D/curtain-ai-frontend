@@ -57,20 +57,24 @@ export function DashboardHeader() {
             <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500" />
           </button>
 
-          {/* Admin Profile */}
-          <div className="flex items-center gap-2.5 pl-2 border-l border-gray-200">
-            <div className="w-8 h-8 rounded-full bg-[#004642] text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
+          {/* Admin Profile Link */}
+          <Link
+            href="/dashboard/settings"
+            className="flex items-center gap-2.5 pl-2 border-l border-gray-200 hover:opacity-85 transition-opacity group cursor-pointer"
+            title="Admin Settings"
+          >
+            <div className="w-8 h-8 rounded-full bg-[#004642] text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
               AD
             </div>
             <div className="hidden sm:block text-left">
-              <p className="text-xs font-bold text-gray-800 leading-tight">
+              <p className="text-xs font-bold text-gray-800 leading-tight group-hover:text-[#004642] transition-colors">
                 Admin
               </p>
               <p className="text-[10px] text-gray-500 leading-tight">
                 Curtainz Dubai
               </p>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </header>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope, Montserrat, Inter, Urbanist } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const urbanist = Urbanist({
   variable: "--font-urbanist",
@@ -44,6 +45,7 @@ export default function RootLayout({
         <div className="min-h-screen flex flex-col">
           <main className="flex-1">{children}</main>
         </div>
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );

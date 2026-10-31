@@ -56,16 +56,16 @@ export function DashboardSidebar() {
       badge: null,
     },
     {
-      title: "Curtains & Fabrics",
+      title: "Curtain Management",
       icon: Layers,
       href: "/dashboard/curtains",
       badge: "24",
     },
     {
-      title: "Home Visit Bookings",
-      icon: Calendar,
-      href: "/dashboard/bookings",
-      badge: "16",
+      title: "Settings & Profile",
+      icon: Settings,
+      href: "/dashboard/settings",
+      badge: null,
     },
   ];
 
@@ -234,21 +234,28 @@ export function DashboardSidebar() {
             collapsed && "justify-center p-1"
           )}
         >
-          {/* Avatar */}
-          <div className="w-8 h-8 rounded-full bg-[#a4df3b] text-[#004642] font-bold text-xs flex items-center justify-center shrink-0">
-            AD
-          </div>
-
-          {!collapsed && (
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-white truncate">
-                Curtainz Admin
-              </p>
-              <p className="text-[10px] text-emerald-200/70 truncate">
-                admin@curtainz.ai
-              </p>
+          {/* Avatar & Name -> Link to Settings */}
+          <Link
+            href="/dashboard/settings"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center gap-3 flex-1 min-w-0 group cursor-pointer"
+            title="Account Settings"
+          >
+            <div className="w-8 h-8 rounded-full bg-[#a4df3b] text-[#004642] font-bold text-xs flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              AD
             </div>
-          )}
+
+            {!collapsed && (
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-white truncate group-hover:text-emerald-200 transition-colors">
+                  Curtainz Admin
+                </p>
+                <p className="text-[10px] text-emerald-200/70 truncate">
+                  admin@curtainz.ai
+                </p>
+              </div>
+            )}
+          </Link>
 
           {!collapsed && (
             <button

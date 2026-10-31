@@ -15,6 +15,7 @@ import {
   Layers,
   ArrowUpDown,
 } from "lucide-react";
+import { toast } from "sonner";
 import initialData from "@/data/curtains.json";
 
 interface FabricItem {
@@ -81,8 +82,10 @@ export default function CurtainManagementPage() {
   });
 
   const handleDelete = (id: number) => {
-    if (confirm("Are you sure you want to remove this fabric from catalog?")) {
+    const item = fabrics.find((f) => f.id === id);
+    if (confirm(`Are you sure you want to remove "${item?.name || "this fabric"}" from the catalog?`)) {
       setFabrics((prev) => prev.filter((item) => item.id !== id));
+      toast.info(`Fabric removed from catalog.`);
     }
   };
 
@@ -116,7 +119,10 @@ export default function CurtainManagementPage() {
 
   const handleSaveFabric = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name) return;
+    if (!formData.name) {
+      toast.error("Please enter a fabric name.");
+      return;
+    }
 
     if (editingFabric) {
       // Update existing
@@ -125,6 +131,7 @@ export default function CurtainManagementPage() {
           f.id === editingFabric.id ? { ...f, ...formData } : f
         )
       );
+      toast.success(`Updated "${formData.name}" successfully!`);
     } else {
       // Add new
       const newItem: FabricItem = {
@@ -132,6 +139,7 @@ export default function CurtainManagementPage() {
         ...formData,
       };
       setFabrics((prev) => [newItem, ...prev]);
+      toast.success(`Added "${formData.name}" to catalog!`);
     }
 
     setIsModalOpen(false);
