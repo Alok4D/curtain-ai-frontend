@@ -51,6 +51,31 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // 1. Delegate directly to dedicated Curtainz Backend Engine
+    const backendApi =
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+    try {
+      const backendRes = await fetch(`${backendApi}/visualizer/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (backendRes.ok) {
+        const backendData = await backendRes.json();
+        if (backendData.success && backendData.data?.imageUrl) {
+          return NextResponse.json({
+            success: true,
+            imageUrl: backendData.data.imageUrl,
+            delegatedToBackend: true,
+          });
+        }
+      }
+    } catch {
+      // Backend not running; fallback to local visualizer logic below
+    }
+
+    // 2. Direct Fallback if backend is not running
     const apiKey = process.env.OPENAI_API_KEY?.trim();
     const modelName =
       process.env.OPENAI_IMAGE_MODEL?.trim() || "gpt-image-2.5-sunburst";
@@ -59,7 +84,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "OpenAI API Key is missing. Please add your OPENAI_API_KEY in the .env.local file to enable live image generation.",
+            "OpenAI API Key is missing. Please start the backend server on port 5000 or add OPENAI_API_KEY in .env.local.",
         },
         { status: 400 }
       );
@@ -178,4 +203,3 @@ Output ONLY the modified room photograph with the newly fitted curtains.
     );
   }
 }
-
