@@ -5,8 +5,8 @@ import { Upload, ChevronDown, CheckCircle2, Eye, EyeOff, MessageSquare, ArrowUpR
 
 export default function AdminProfileSecurity() {
   // Password visibility states
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Form states

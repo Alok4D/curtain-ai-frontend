@@ -3,17 +3,75 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ChevronDown, Eye, EyeOff, Check, ArrowRight, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, Eye, EyeOff, Check, ArrowRight, Sparkles, Loader2, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
+import { useRegisterMutation } from "@/lib/feature/auth/authApi";
 
 export default function RegisterPage() {
-  const [fullName, setFullName] = useState("Alex Morgan");
-  const [email, setEmail] = useState("alex@example.com");
- 
-  const [password, setPassword] = useState("••••••••••••");
-  const [confirmPassword, setConfirmPassword] = useState("••••••••••••");
+  const router = useRouter();
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [phone, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [registerUser, { isLoading }] = useRegisterMutation();
+
+  const hasMinLength = password.length >= 6;
+  const hasNumberAndLetter = /[0-9]/.test(password) && /[a-zA-Z]/.test(password);
+  const passwordsMatch = password.length > 0 && password === confirmPassword;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage(null);
+
+    if (!fullName.trim()) {
+      setErrorMessage("Please enter your full name.");
+      return;
+    }
+    if (!email.trim()) {
+      setErrorMessage("Please enter your email address.");
+      return;
+    }
+    if (password.length < 6) {
+      setErrorMessage("Password must be at least 6 characters long.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match.");
+      return;
+    }
+    if (!agreeTerms) {
+      setErrorMessage("You must agree to the Terms of Use and Privacy Policy.");
+      return;
+    }
+
+    try {
+      const res = await registerUser({
+        name: fullName.trim(),
+        email: email.trim(),
+        password,
+        phone: phone.trim() || undefined,
+      }).unwrap();
+
+      toast.success(res?.message || "Account created successfully! Please log in.");
+      router.push("/login");
+    } catch (err: any) {
+      console.error("Registration error:", err);
+      const msg =
+        err?.data?.message ||
+        err?.message ||
+        "Failed to create account. Please try again.";
+      setErrorMessage(msg);
+      toast.error(msg);
+    }
+  };
 
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#FBF9F5] font-sans antialiased text-[#2D312E]">
@@ -98,8 +156,18 @@ export default function RegisterPage() {
             </p>
           </div>
 
+          {/* Error Alert Box */}
+          {errorMessage && (
+            <div className="mb-6 p-3.5 rounded-xl bg-[#FDF0EE] border border-[#F6D0CA] flex items-start gap-2.5 text-[#B44335] animate-in fade-in duration-200">
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+              <p className="text-xs leading-relaxed text-[#A43B2E]">
+                {errorMessage}
+              </p>
+            </div>
+          )}
+
           {/* Form */}
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Full Name */}
             <div>
               <label className="block text-xs font-semibold text-[#1C201D] mb-1.5">
@@ -107,8 +175,10 @@ export default function RegisterPage() {
               </label>
               <input
                 type="text"
+                required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
+                placeholder="Alex Morgan"
                 className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-[#D5D8D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3E4A3E] text-[#1C201D]"
               />
             </div>
@@ -120,13 +190,13 @@ export default function RegisterPage() {
               </label>
               <input
                 type="email"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="alex@example.com"
                 className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-[#D5D8D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3E4A3E] text-[#1C201D]"
               />
             </div>
-
-         
 
             {/* Password */}
             <div>
@@ -136,8 +206,10 @@ export default function RegisterPage() {
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
+                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••••••"
                   className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-[#D5D8D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3E4A3E] text-[#1C201D] pr-10"
                 />
                 <button
@@ -152,13 +224,13 @@ export default function RegisterPage() {
 
               {/* Password Requirements Checklist */}
               <div className="flex items-center gap-4 mt-1.5 text-[11px] text-[#636864]">
-                <span className="inline-flex items-center gap-1">
-                  <Check className="w-3 h-3 text-[#3E4A3E]" />
-                  At least 8 characters
+                <span className={`inline-flex items-center gap-1 ${hasMinLength ? "text-[#2E7D32]" : "text-[#8C918D]"}`}>
+                  <Check className="w-3 h-3" />
+                  At least 6 characters
                 </span>
-                <span className="inline-flex items-center gap-1">
-                  <Check className="w-3 h-3 text-[#3E4A3E]" />
-                  Letters and a number
+                <span className={`inline-flex items-center gap-1 ${hasNumberAndLetter ? "text-[#2E7D32]" : "text-[#8C918D]"}`}>
+                  <Check className="w-3 h-3" />
+                  Letters & number
                 </span>
               </div>
             </div>
@@ -171,8 +243,10 @@ export default function RegisterPage() {
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
+                  required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••••••"
                   className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-[#D5D8D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3E4A3E] text-[#1C201D] pr-10"
                 />
                 <button
@@ -186,10 +260,12 @@ export default function RegisterPage() {
               </div>
 
               {/* Match Indicator */}
-              <div className="flex items-center gap-1 mt-1.5 text-[11px] text-[#636864]">
-                <Check className="w-3 h-3 text-[#3E4A3E]" />
-                <span>Passwords match</span>
-              </div>
+              {confirmPassword.length > 0 && (
+                <div className={`flex items-center gap-1 mt-1.5 text-[11px] ${passwordsMatch ? "text-[#2E7D32]" : "text-[#C62828]"}`}>
+                  <Check className="w-3 h-3" />
+                  <span>{passwordsMatch ? "Passwords match" : "Passwords do not match"}</span>
+                </div>
+              )}
             </div>
 
             {/* Agree Terms Checkbox */}
@@ -219,10 +295,20 @@ export default function RegisterPage() {
             <div className="pt-2">
               <button
                 type="submit"
-                className="w-full py-3 px-4 bg-[#3E4A3E] hover:bg-[#323D32] text-white text-xs sm:text-sm font-medium rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-sm"
+                disabled={isLoading}
+                className="w-full py-3 px-4 bg-[#3E4A3E] hover:bg-[#323D32] disabled:opacity-60 text-white text-xs sm:text-sm font-medium rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-sm"
               >
-                <ArrowRight className="w-4 h-4" />
-                <span>Create account</span>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Creating account...</span>
+                  </>
+                ) : (
+                  <>
+                    <ArrowRight className="w-4 h-4" />
+                    <span>Create account</span>
+                  </>
+                )}
               </button>
             </div>
           </form>

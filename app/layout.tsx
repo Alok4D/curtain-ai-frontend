@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Manrope, Montserrat, Inter, Urbanist } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import ReduxProvider from "@/components/providers/ReduxProvider";
 
 const urbanist = Urbanist({
   variable: "--font-urbanist",
@@ -42,10 +43,12 @@ export default function RootLayout({
         className={`${urbanist.variable} ${manrope.variable} ${montserrat.variable} ${inter.variable} font-urbanist antialiased`}
         style={{ "--font-title": "var(--font-urbanist)" } as React.CSSProperties}
       >
-        <div className="min-h-screen flex flex-col">
-          <main className="flex-1">{children}</main>
-        </div>
-        <Toaster richColors position="top-right" />
+        <ReduxProvider>
+          <div className="min-h-screen flex flex-col">
+            <main className="flex-1">{children}</main>
+          </div>
+          <Toaster richColors position="top-right" />
+        </ReduxProvider>
       </body>
     </html>
   );
