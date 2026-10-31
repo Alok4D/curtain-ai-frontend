@@ -110,7 +110,7 @@ export const authApi = baseApi.injectEndpoints({
 
     updateProfile: builder.mutation<
       { success: boolean; message: string; data: any },
-      { name?: string; phone?: string; location?: string; bio?: string }
+      { name?: string; phone?: string; location?: string; bio?: string; avatarUrl?: string }
     >({
       query: (data) => ({
         url: '/users/me',

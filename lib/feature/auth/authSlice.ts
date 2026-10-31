@@ -8,6 +8,8 @@ export interface IUser {
   role: 'admin' | 'user';
   phone?: string;
   avatarUrl?: string;
+  location?: string;
+  bio?: string;
   createdAt?: string;
 }
 
