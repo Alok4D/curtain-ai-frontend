@@ -1,77 +1,151 @@
-# Clash-Gambling Platform
+# 🛋️ Curtainz AI Studio - Frontend Application
 
-Clash-Gambling is a premium sports analytics and gambling platform designed for serious bettors. It leverages AI-driven insights and real-time data to help users identify +EV (Expected Value) opportunities before the market moves.
+A luxury, AI-powered virtual curtain fitting and interior drapery visualization studio. Built with **Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS, and Redux Toolkit (RTK Query)**, this platform allows homeowners and interior designers to visualize fabrics, drapes, sheers, and roller blinds directly on their actual room windows within seconds.
 
-## 🔗 Live Project Links
+---
 
-- **Main Website**: [https://clash-gambling.vercel.app](https://clash-gambling.vercel.app)
-- **User Dashboard**: [https://clash-gambling.vercel.app/user-dashboard](https://clash-gambling.vercel.app/user-dashboard)
-- **Admin Dashboard**: [https://clash-gambling.vercel.app/dashboard](https://clash-gambling.vercel.app/dashboard)
+## 🌟 Key Features & User Journeys
 
-![Clash-Gambling Landing Page](public/full-landing-image-for-readmefile.png)
+### 1. 🪟 Interactive AI Room Visualizer (`/generate-image`)
+- **Interactive Before/After Split Slider**: Smooth drag-to-compare split view allowing users to contrast their bare room against the AI-fitted drape.
+- **Scanning & Synthesis Overlay**: Real-time visual feedback with sweeping laser beam and progressive step status.
+- **Custom Fit & Styling Controls**:
+  - **Drape Length**: Floor-skimming, modern puddle, sill-length.
+  - **Drape Arrangement**: Open framing sides, semi-closed with soft pleats, or fully closed.
+  - **Curtain Rod & Hardware**: Matte black architectural rod, brushed brass gold, or hidden ceiling track.
+- **Direct WhatsApp Consultation & Free Home Visit Booking**: One-click leads generation for measuring and physical swatch presentation.
 
-## 🚀 Key Features
+### 2. 🧵 Fabric Selection Catalog (`/select-curtains`)
+- **Categorized Tabs**: Instant switching between `Curtains` (heavy drapes & blackouts), `Sheers` (light-filtering linen), and `Rollers` (minimalist textured blinds).
+- **Live Database Integration**: Dynamically populated from the MongoDB database via RTK Query with graceful local fallback.
+- **Hover Preview Effects**: Interactive slide-up cards with instant "Preview on my room" action.
+- **Room Photo Header**: Thumbnail preview of uploaded room with quick change capability.
 
-### 💎 Premium Landing Page
-- **High-Impact UI**: Modern dark-theme design with neon highlights, vibrant gradients, and glassmorphism.
-- **How It Works**: Interactive sections explaining the platform's unique value proposition.
-- **Flexible Pricing**: Multiple subscription tiers with seamless payment integration via a custom modal.
-- **Performance Optimized**: Built with Next.js Server Components for fast load times and SEO.
+### 3. 👑 Comprehensive Admin Dashboard (`/dashboard`)
+- **Dashboard Overview (`/dashboard/dashboard-overview`)**:
+  - Live metric cards: Total Registered Users, Active Curtains in Catalog, and Completed AI Visualizations.
+  - Users Management Table with role badges and join dates.
+  - Recent AI Previews Gallery showcasing live generated rooms.
+- **Curtains Management (`/dashboard/curtains`)**:
+  - Filterable catalog table with search and category tabs.
+  - Direct actions to view details, edit, or delete items.
+- **Dedicated Full-Page Add Fabric (`/dashboard/curtains/add-curtain`)**:
+  - Supports adding fabrics via direct web URL or image upload.
+  - Real-time preview swatch, material, and pricing inputs.
+- **Dedicated Full-Page Edit Fabric (`/dashboard/curtains/update-curtain`)**:
+  - Pre-filled inputs with live thumbnail updating.
+- **Curtain Details Page (`/dashboard/curtains/[id]`)**:
+  - High-resolution display of both catalog swatch and fitted room preview with complete metadata.
+- **Admin Settings (`/dashboard/settings`)**:
+  - Profile customization: Avatar image upload/URL, name, phone, UAE location, and studio bio.
+  - Secure password management: Old vs new password validation with real-time feedback.
 
-### 📊 User Dashboard
-- **Market Overview**: Comprehensive display of current sports markets and betting lines.
-- **Game Analysis**: Deep-dive analytics for specific matches, including line movement charts and key performance indicators.
-- **SharpBot (AI Assistant)**: An integrated AI consultant that provides real-time insights and data-driven recommendations.
-- **Saved Games**: Bookmark specific games to track their movement and outcomes.
-- **Subscription Management**: Complete control over plans, billing, and access levels.
-- **Personalized Account**: Profile management with photo uploads, security settings, and responsive layout.
+### 4. 🔐 Authentication System (`/login`, `/signup`, `/forgot-password`, `/reset-password`)
+- **JWT Auth Flow**: Redux state synchronization with secure cookies (`js-cookie`) and local storage.
+- **Protected Routes**: Automatic redirection between public visualizer and admin dashboard.
+- **Forgot Password**: Fully integrated with real SMTP email dispatch.
 
-### 🛠️ Admin Dashboard
-- **User Administration**: Professional-grade table to manage the entire user base with filtering and sorting.
-- **Subscription Controls**: Advanced tools for inviting users and managing subscription durations (7, 30, 90 days, or Unlimited).
-- **Responsive Management**: Fully optimized admin interface that remains functional on mobile devices.
-
-### 🔐 Authentication System
-- **Secure Auth Flow**: Professional-grade Login and Signup interfaces with robust validation.
-- **Password Recovery**: Integrated "Forgot Password" and "Reset Password" flows with email-style interaction.
-- **Security Features**: Real-time validation feedback and secure password visibility toggles.
+---
 
 ## 🛠️ Technology Stack
 
-- **Core**: [Next.js](https://nextjs.org/) (App Router)
+- **Framework**: [Next.js 16](https://nextjs.org/) (Turbopack, App Router)
+- **Library**: [React 19](https://react.dev/)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **State Management & Data Fetching**: [Redux Toolkit](https://redux-toolkit.js.org/) & [RTK Query](https://redux-toolkit.js.org/rtk-query/overview)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Icons**: [Lucide React](https://lucide.dev/)
-- **UI Components**: [Shadcn UI](https://ui.shadcn.com/) (Radix UI)
-- **Forms**: [React Hook Form](https://react-hook-form.com/) & [Zod](https://zod.dev/)
-- **Data Visualization**: [Recharts](https://recharts.org/)
-- **Typography**: 
-  - **Montserrat**: Main brand and heading font.
-  - **Manrope**: Primary UI and body font.
-  - **Inter**: System/Interface utility font.
+- **Notifications**: [Sonner](https://sonner.emilkowal.ski/)
+- **Typography**: [Urbanist](https://fonts.google.com/specimen/Urbanist) Google Font (Luxury & Modern)
 
-## 📖 How to Run Locally
+---
 
-1. **Clone the repository**:
+## 📁 Directory Structure
+
+```text
+curtain-ai-frontend/
+├── app/
+│   ├── (adminDashboardLayout)/
+│   │   ├── dashboard/
+│   │   │   ├── curtains/
+│   │   │   │   ├── [id]/              # Single curtain detail view
+│   │   │   │   ├── add-curtain/       # Full-page add fabric
+│   │   │   │   ├── update-curtain/    # Full-page update fabric
+│   │   │   │   └── page.tsx           # Curtains catalog table & management
+│   │   │   ├── dashboard-overview/    # KPIs, user table, recent AI previews
+│   │   │   └── settings/              # Admin profile & password change
+│   │   └── layout.tsx                 # Dashboard sidebar & header layout
+│   ├── (auth)/
+│   │   ├── login/                     # Admin & user sign-in
+│   │   ├── signup/                    # Account registration
+│   │   ├── forgot-password/           # Password recovery request
+│   │   └── reset-password/            # Secure reset token entry
+│   ├── (home)/
+│   │   ├── select-curtains/           # Curtains, sheers & rollers catalog
+│   │   ├── generate-image/            # AI visualizer with before/after slider
+│   │   └── page.tsx                   # Studio landing page
+│   └── layout.tsx                     # Global root layout & Redux Provider
+├── components/
+│   ├── dashboard_component/           # DashboardHeader, DashboardSidebar
+│   └── ui/                            # Shared inputs, buttons, skeletons
+├── data/
+│   └── curtains.json                  # Catalog fallback data
+├── lib/
+│   ├── api/
+│   │   └── baseApi.ts                 # Central RTK Query Base API with bearer token headers
+│   ├── feature/
+│   │   ├── admin/adminApi.ts          # Admin metrics & user listings
+│   │   ├── auth/                      # authApi.ts & authSlice.ts
+│   │   ├── curtain/curtainApi.ts      # Curtains catalog CRUD mutations
+│   │   └── visualizer/visualizerApi.ts# AI Visualizer generation mutation
+│   ├── hooks/redux.ts                 # useAppDispatch & useAppSelector
+│   └── redux/store.ts                 # Central store configuration
+├── public/                            # Static swatches, logos, before images
+├── package.json
+└── next.config.ts
+```
+
+---
+
+## ⚙️ Environment Variables Configuration
+
+Create a `.env.local` file in the root of `curtain-ai-frontend`:
+
+```env
+# Backend API Base URL
+NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
+```
+
+---
+
+## 🚀 Getting Started
+
+1. **Install Dependencies**:
    ```bash
-   git clone <repository-url>
-   ```
-
-2. **Install dependencies**:
-   ```bash
+   cd curtain-ai-frontend
    pnpm install
    ```
 
-3. **Start the development server**:
+2. **Run in Development Mode**:
    ```bash
    pnpm dev
    ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-4. **Build for production**:
+3. **Production Build**:
    ```bash
    pnpm build
+   pnpm start
    ```
 
 ---
-*Empowering bettors with data-driven precision and AI-powered insights.*
+
+## 🔑 Default Admin Credentials
+
+- **Email**: `admin@curtainz.ai`
+- **Password**: `admin123456`
+- **Dashboard URL**: [http://localhost:3000/dashboard/dashboard-overview](http://localhost:3000/dashboard/dashboard-overview)
+
+---
+
+*Curtainz AI Studio — Empowering luxury home transformations through cutting-edge AI visualization.*
