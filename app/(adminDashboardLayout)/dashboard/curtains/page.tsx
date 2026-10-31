@@ -261,12 +261,7 @@ export default function CurtainManagementPage() {
                 <p className="text-[11px] text-gray-500 mt-0.5 truncate">
                   {fabric.material}
                 </p>
-                <p className="text-xs font-semibold text-[#004642] mt-2">
-                  AED {fabric.price}{" "}
-                  <span className="text-[10px] text-gray-400 font-normal">
-                    / linear meter
-                  </span>
-                </p>
+ 
               </div>
 
               {/* Actions Footer */}
