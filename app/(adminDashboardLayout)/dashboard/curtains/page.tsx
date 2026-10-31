@@ -6,7 +6,6 @@ import Link from "next/link";
 import {
   Plus,
   Search,
-  SlidersHorizontal,
   Edit2,
   Trash2,
   Sparkles,

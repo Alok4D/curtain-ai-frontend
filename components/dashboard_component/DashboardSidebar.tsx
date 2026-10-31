@@ -69,20 +69,7 @@ export function DashboardSidebar() {
     },
   ];
 
-  const secondaryMenuItems = [
-    {
-      title: "AI Visualizer",
-      icon: Sparkles,
-      href: "/generate-image",
-      isExternal: false,
-    },
-    {
-      title: "Live Website",
-      icon: ExternalLink,
-      href: "/",
-      isExternal: true,
-    },
-  ];
+ 
 
   const sidebarContent = (
     <div className="flex flex-col h-full bg-[#004642] text-white border-r border-[#033633] overflow-hidden font-['Urbanist',sans-serif]">
@@ -140,11 +127,7 @@ export function DashboardSidebar() {
       <div className="flex-1 px-3 py-5 overflow-y-auto space-y-6 custom-scrollbar">
         {/* Section 1: Main Management */}
         <div>
-          {!collapsed && (
-            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-emerald-300/70 mb-2">
-              Management
-            </p>
-          )}
+     
           <ul className="space-y-1">
             {mainMenuItems.map((item) => {
               const isActive = pathname === item.href;
@@ -192,38 +175,7 @@ export function DashboardSidebar() {
           </ul>
         </div>
 
-        {/* Section 2: Quick Links */}
-        <div>
-          {!collapsed && (
-            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-emerald-300/70 mb-2">
-              Studio &amp; Tools
-            </p>
-          )}
-          <ul className="space-y-1">
-            {secondaryMenuItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    target={item.isExternal ? "_blank" : undefined}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-emerald-100/90 hover:bg-white/10 hover:text-white transition-all group",
-                      collapsed && "justify-center px-0 h-11 w-11 mx-auto"
-                    )}
-                    title={collapsed ? item.title : undefined}
-                  >
-                    <Icon className="w-5 h-5 shrink-0 text-emerald-300/80 group-hover:scale-105" />
-                    {!collapsed && (
-                      <span className="flex-1 truncate">{item.title}</span>
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+      
       </div>
 
       {/* Footer / Admin User Profile */}

@@ -15,8 +15,8 @@ export default function AdminProfileSecurity() {
   const [email, setEmail] = useState("alex@example.com");
 
   return (
-    <div className="min-h-screen bg-[#FBF9F5] py-12 px-4 sm:px-6 lg:px-8 font-sans antialiased text-[#2D312E]">
-      <div className="max-w-6xl mx-auto">
+    <div className="font-sans antialiased text-[#2D312E]">
+      <div className="max-w-full mx-auto">
         
         {/* Page Title & Subtitle */}
         <header className="mb-8">
