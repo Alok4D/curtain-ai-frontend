@@ -41,11 +41,11 @@ const Footer = () => {
             </Link>
 
             {/* Secondary Button: Book a free visit */}
-            <Link
+            {/* <Link
               href="#book-visit"
               className="inline-flex items-center justify-center gap-2.5 bg-transparent text-white font-semibold text-[15px] px-6 py-3.5 rounded-[9px] border border-white/90 hover:bg-white/10 hover:border-white active:scale-[0.98] transition-all duration-200 w-full sm:w-auto"
             >
-              {/* Calendar Icon */}
+             
               <svg
                 className="w-4 h-4 text-white"
                 fill="none"
@@ -62,7 +62,7 @@ const Footer = () => {
                 <path d="M9 14l2 2 4-4" strokeWidth="2" />
               </svg>
               <span>Book a free visit</span>
-            </Link>
+            </Link> */}
           </div>
         </section>
 
@@ -72,31 +72,19 @@ const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-14 pb-14">
             {/* Column 1: Brand Info (Left) */}
             <div className="md:col-span-5 flex flex-col items-start pr-0 md:pr-6">
-              {/* Brand Logo Badge */}
+              {/* Brand Logo */}
               <Link
                 href="/"
-                className="inline-flex items-center border border-white/85 px-3 py-1.5 rounded-[3px] group hover:border-white transition-colors mb-5"
+                className="inline-flex items-center gap-2 mb-5 group focus:outline-none"
+                aria-label="Curtainz home"
               >
-                <div className="flex items-center gap-1.5">
-                  {/* Decorative Leaf / Fabric Accent Flourish */}
-                  <svg
-                    className="w-5 h-6 -mr-1 text-white"
-                    viewBox="0 0 26 30"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M4 19C4 11 10 4 19 2C19 9 14 17 5 19Z"
-                      fill="#a4df3b"
-                    />
-                    <path
-                      d="M9 24C11 18 16 12 23 11C21 18 16 23 10 25Z"
-                      fill="#5eead4"
-                      opacity="0.6"
-                    />
-                  </svg>
-                  {/* Brand Typography */}
-                  <span className="text-[23px] font-semibold tracking-normal text-white">
+                <div className="flex items-center gap-1.5 text-white">
+                  <span className="flex gap-0.5">
+                    <span className="w-1 h-5 bg-white rounded-sm inline-block" />
+                    <span className="w-1 h-5 bg-white rounded-sm inline-block" />
+                    <span className="w-1 h-5 bg-white rounded-sm inline-block" />
+                  </span>
+                  <span className="text-xl sm:text-2xl font-serif font-medium tracking-wide">
                     Curtainz
                   </span>
                 </div>
@@ -104,7 +92,7 @@ const Footer = () => {
 
               {/* Brand Description */}
               <p className="text-[#cadbd8] text-[13.5px] leading-[1.65] font-normal max-w-[340px]">
-                Made-to-measure curtains, sheers and blinds in Dubai - previewed
+                Made-to-measure curtains, sheers and blinds in Bangladesh - previewed
                 on your own windows with AI before you buy.
               </p>
             </div>
@@ -175,7 +163,7 @@ const Footer = () => {
 
               {/* Location text */}
               <p className="text-[#cadbd8] text-[13.5px] font-normal">
-                Dubai, United Arab Emirates
+                Bangladesh, Dhaka
               </p>
             </div>
           </div>
@@ -186,15 +174,7 @@ const Footer = () => {
           {/* Bottom Bar: Copyright & Legal Links */}
           <div className="py-7 flex flex-col items-center justify-center text-center gap-1.5 text-[12.5px] text-[#b8ccc8]">
             <div>© {currentYear} Curtainz. All rights reserved.</div>
-            <div>
-              Operated by{" "}
-              <Link
-                href="#consultants"
-                className="underline hover:text-white transition-colors"
-              >
-                D Consultants LLC-FZ
-              </Link>
-            </div>
+        
             <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 pt-1 text-[12px] text-[#a5bfba]">
               <Link href="#terms" className="hover:text-white transition-colors">
                 Terms &amp; Conditions

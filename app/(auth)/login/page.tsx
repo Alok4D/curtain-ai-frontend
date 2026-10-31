@@ -4,7 +4,7 @@ import { useState, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, AlertCircle, Eye, EyeOff, ArrowRight, Sparkles, Loader2 } from "lucide-react";
+import { ArrowLeft, AlertCircle, Eye, EyeOff, ArrowRight, Sparkles, Loader2, Loader } from "lucide-react";
 import { toast } from "sonner";
 import { useLoginMutation } from "@/lib/feature/auth/authApi";
 import { useAppDispatch } from "@/lib/hooks/redux";
@@ -158,7 +158,7 @@ function LoginForm() {
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader className="w-4 h-4 animate-spin" />
                 <span>Signing in...</span>
               </>
             ) : (

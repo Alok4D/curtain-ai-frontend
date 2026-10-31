@@ -37,18 +37,20 @@ export default function Navbar() {
         {/* Logo */}
         <div className="flex items-center">
           <Link
-            className="flex-none rounded-md inline-block py-2 font-semibold focus:outline-none focus:opacity-80"
+            className="flex-none rounded-md inline-flex items-center py-2 focus:outline-none focus:opacity-90 group"
             href="/"
             aria-label="Curtainz home"
           >
-            <Image
-              className="w-32 md:w-44 h-auto"
-              src="https://curtainz.ai/_app/immutable/assets/curtainzLogoWhite.DNEf-IQo.svg"
-              alt="Curtainz Logo"
-              width={446}
-              height={108}
-              priority
-            />
+            <div className="flex items-center gap-1.5 text-white">
+              <span className="flex gap-0.5">
+                <span className="w-1 h-5 bg-white rounded-sm inline-block" />
+                <span className="w-1 h-5 bg-white rounded-sm inline-block" />
+                <span className="w-1 h-5 bg-white rounded-sm inline-block" />
+              </span>
+              <span className="text-xl sm:text-2xl font-serif font-medium tracking-wide">
+                Curtainz
+              </span>
+            </div>
           </Link>
           <div className="ms-1 sm:ms-2" />
         </div>
@@ -61,7 +63,7 @@ export default function Navbar() {
               href="/#book-visit"
               onClick={(e) => handleNavClick(e, "/#book-visit")}
             >
-              Book a free visit
+              Try your room
             </Link>
           </div>
 
