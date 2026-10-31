@@ -1,362 +1,209 @@
 "use client";
 
-import { useState, Suspense } from "react";
-import Link from "next/link";
+import { useState } from "react";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Mail, Lock, Eye, EyeOff, ArrowLeft, Sparkles, ShieldCheck } from "lucide-react";
-import { toast } from "sonner";
-import Cookies from "js-cookie";
+import Link from "next/link";
+import { ArrowLeft, AlertCircle, Eye, EyeOff, ArrowRight, Sparkles } from "lucide-react";
 
-const loginSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters" }),
-  rememberMe: z.boolean().optional(),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
-
-function LoginForm() {
+export default function LoginPage() {
+  const [email, setEmail] = useState("alex@example.com");
+  const [password, setPassword] = useState("••••••••••••");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      rememberMe: true,
-    },
-  });
-
-  const onSubmit = async (data: LoginFormValues) => {
-    setIsLoading(true);
-    const toastId = toast.loading("Authenticating…");
-
-    setTimeout(() => {
-      setIsLoading(false);
-      Cookies.set("accessToken", "demo_jwt_access_token", { expires: 7 });
-      localStorage.setItem("userRole", "ADMIN");
-      localStorage.setItem("userEmail", data.email);
-
-      toast.success("Welcome back to Curtainz Studio!", { id: toastId });
-
-      if (data.email.toLowerCase().includes("admin") || !callbackUrl) {
-        router.push("/dashboard");
-      } else {
-        router.push(callbackUrl);
-      }
-    }, 800);
-  };
-
-  const handleQuickAdminLogin = () => {
-    setValue("email", "admin@curtainz.ai");
-    setValue("password", "curtainz2026");
-    onSubmit({
-      email: "admin@curtainz.ai",
-      password: "curtainz2026",
-      rememberMe: true,
-    });
-  };
+  const [rememberMe, setRememberMe] = useState(true);
 
   return (
-    <div className="min-h-screen w-full flex bg-[#032c26] font-['Urbanist',sans-serif] text-slate-800">
-      {/* Left Column: Form Area */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-10 lg:p-16 bg-white z-10 shadow-2xl">
-        {/* Top Header */}
-        <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-[#004642] hover:opacity-80 transition-opacity"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to website</span>
-          </Link>
+    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#FBF9F5] font-sans antialiased text-[#2D312E]">
+      
+      {/* Left Column: Visual Showcase Banner */}
+      <div className="relative w-full lg:w-1/2 min-h-[500px] lg:min-h-screen flex flex-col justify-between p-8 sm:p-12 lg:p-16 overflow-hidden">
+        {/* Background Image */}
+        <Image
+          src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1600&auto=format&fit=crop"
+          alt="Warm living room with soft curtains"
+          fill
+          priority
+          className="object-cover object-center"
+        />
 
-          {/* Curtainz Brand Logo */}
-          <Link href="/" className="flex items-center gap-1.5">
-            <svg
-              className="w-5 h-6 text-[#004642]"
-              viewBox="0 0 26 30"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M4 19C4 11 10 4 19 2C19 9 14 17 5 19Z" fill="#a4df3b" />
-              <path
-                d="M9 24C11 18 16 12 23 11C21 18 16 23 10 25Z"
-                fill="#004642"
-                opacity="0.8"
-              />
-            </svg>
-            <span className="text-xl font-bold tracking-tight text-[#004642]">
+        {/* Dark Vignette Overlay for Readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/40 z-10" />
+
+        {/* Top Logo */}
+        <div className="relative z-20 flex items-center gap-2">
+          <div className="flex items-center gap-1.5 text-white">
+            <span className="flex gap-0.5">
+              <span className="w-1 h-5 bg-white rounded-sm inline-block" />
+              <span className="w-1 h-5 bg-white rounded-sm inline-block" />
+              <span className="w-1 h-5 bg-white rounded-sm inline-block" />
+            </span>
+            <span className="text-xl sm:text-2xl font-serif font-medium tracking-wide">
               Curtainz
             </span>
+          </div>
+        </div>
+
+        {/* Bottom Banner Content */}
+        <div className="relative z-20 max-w-lg text-white mt-auto pt-16">
+          <span className="block text-[11px] font-semibold tracking-[0.2em] uppercase text-white/80 mb-3">
+            A MORE BEAUTIFUL EVERYDAY
+          </span>
+
+          <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-serif leading-[1.2] font-normal mb-4 tracking-tight">
+            A little light. <br />
+            A softer space. <br />
+            A room that&apos;s yours.
+          </h2>
+
+          <p className="text-sm sm:text-base text-white/85 leading-relaxed mb-6 font-light">
+            Explore thoughtful fabrics and see the difference in your own room, before you decide.
+          </p>
+
+          <div className="inline-flex items-center gap-2 text-xs text-white/75">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Imagined with AI Curtain Studio</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Column: Login Form & Navigation */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-12 lg:p-16 xl:p-20">
+        
+        {/* Top Link: Back to Home */}
+        <div className="mb-10 sm:mb-12">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-[#4D534E] hover:text-[#1C201D] transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to home</span>
           </Link>
         </div>
 
-        {/* Center: Login Form */}
-        <div className="max-w-md w-full mx-auto my-8">
-          <div className="mb-8 text-left">
-            <span className="inline-block text-[11px] font-bold tracking-widest text-[#004642] uppercase bg-[#004642]/10 px-2.5 py-1 rounded-full mb-3">
-              Admin &amp; Studio Access
+        {/* Form Container */}
+        <div className="w-full max-w-[440px] mx-auto">
+          {/* Header */}
+          <div className="mb-6">
+            <span className="block text-[11px] font-semibold tracking-[0.18em] uppercase text-[#696F6A] mb-2">
+              YOUR SPACE, REVISITED
             </span>
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#004642] tracking-tight">
-              Sign in to your account
+            <h1 className="text-3xl sm:text-4xl font-serif text-[#1C201D] tracking-tight mb-2">
+              Welcome home.
             </h1>
-            <p className="text-sm text-gray-500 mt-2">
-              Manage your made-to-measure curtain catalog, bookings &amp; AI visualizer.
+            <p className="text-xs sm:text-sm text-[#666B67] leading-relaxed">
+              Log in to return to your projects, favourite fabrics and room transformations.
             </p>
           </div>
 
-          {/* Quick Demo Access Pill */}
-          <button
-            type="button"
-            onClick={handleQuickAdminLogin}
-            className="w-full mb-6 p-3 bg-[#e9f3f1] hover:bg-[#d8ece8] border border-[#b8dfd8] rounded-xl flex items-center justify-between text-left transition-colors cursor-pointer group"
-          >
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-full bg-[#004642] text-white flex items-center justify-center shrink-0">
-                <Sparkles className="w-3.5 h-3.5" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-[#004642]">
-                  Quick Demo: Login as Admin
-                </p>
-                <p className="text-[11px] text-gray-500">
-                  Click to auto-fill credentials &amp; open dashboard
-                </p>
-              </div>
-            </div>
-            <span className="text-xs font-bold text-[#004642] group-hover:translate-x-0.5 transition-transform">
-              &rarr;
-            </span>
-          </button>
+          {/* Error Alert Box */}
+          <div className="mb-6 p-3.5 rounded-xl bg-[#FDF0EE] border border-[#F6D0CA] flex items-start gap-2.5 text-[#B44335]">
+            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+            <p className="text-xs leading-relaxed text-[#A43B2E]">
+              We couldn&apos;t sign you in. Check your email and password, then try again.
+            </p>
+          </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Email Field */}
+          {/* Login Form */}
+          <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+            {/* Email Address */}
             <div>
-              <label
-                htmlFor="email"
-                className="block text-xs font-semibold text-gray-700 mb-1.5"
-              >
-                Email Address
+              <label className="block text-xs font-semibold text-[#1C201D] mb-1.5">
+                Email address
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="alex@example.com"
+                className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-[#D5D8D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3E4A3E] text-[#1C201D]"
+              />
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="block text-xs font-semibold text-[#1C201D] mb-1.5">
+                Password
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                  <Mail className="w-4 h-4" />
-                </div>
                 <input
-                  id="email"
-                  type="email"
-                  placeholder="admin@curtainz.ai"
-                  {...register("email")}
-                  className={`w-full pl-10 pr-4 py-3 bg-gray-50 border rounded-xl text-sm focus:outline-none focus:bg-white transition-all ${
-                    errors.email
-                      ? "border-red-400 focus:border-red-500"
-                      : "border-gray-200 focus:border-[#004642] focus:ring-1 focus:ring-[#004642]"
-                  }`}
-                />
-              </div>
-              {errors.email && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-
-            {/* Password Field */}
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label
-                  htmlFor="password"
-                  className="block text-xs font-semibold text-gray-700"
-                >
-                  Password
-                </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-xs text-[#004642] hover:underline font-medium"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                  <Lock className="w-4 h-4" />
-                </div>
-                <input
-                  id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  {...register("password")}
-                  className={`w-full pl-10 pr-10 py-3 bg-gray-50 border rounded-xl text-sm focus:outline-none focus:bg-white transition-all ${
-                    errors.password
-                      ? "border-red-400 focus:border-red-500"
-                      : "border-gray-200 focus:border-[#004642] focus:ring-1 focus:ring-[#004642]"
-                  }`}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-[#D5D8D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3E4A3E] text-[#1C201D] pr-10"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C918D] hover:text-[#58615A]"
+                  aria-label="Toggle password visibility"
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
-              {errors.password && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.password.message}
-                </p>
-              )}
             </div>
 
-            {/* Remember Me */}
-            <div className="flex items-center justify-between pt-1">
-              <label className="flex items-center gap-2 cursor-pointer">
+            {/* Remember Me & Forgot Password */}
+            <div className="flex items-center justify-between text-xs pt-1">
+              <label className="flex items-center gap-2 cursor-pointer text-[#4D534E]">
                 <input
                   type="checkbox"
-                  {...register("rememberMe")}
-                  className="w-4 h-4 text-[#004642] rounded border-gray-300 focus:ring-[#004642]"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 rounded border-[#C6CAC4] text-[#3E4A3E] focus:ring-[#3E4A3E] accent-[#3E4A3E]"
                 />
-                <span className="text-xs text-gray-600 font-medium">
-                  Remember me for 30 days
-                </span>
+                <span>Remember me</span>
               </label>
+              <Link
+                href="#forgot-password"
+                className="text-xs text-[#4D534E] hover:text-[#1C201D] hover:underline"
+              >
+                Forgot password?
+              </Link>
             </div>
 
             {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full mt-2 py-3.5 px-4 bg-[#004642] hover:bg-[#003431] text-white font-semibold rounded-xl text-sm transition-all shadow-md active:scale-[0.99] cursor-pointer disabled:opacity-75 flex items-center justify-center gap-2"
-            >
-              {isLoading ? (
-                <span className="inline-flex items-center gap-2">
-                  <svg
-                    className="animate-spin h-4 w-4 text-white"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                    />
-                  </svg>
-                  <span>Signing in…</span>
-                </span>
-              ) : (
-                <span>Sign In to Dashboard</span>
-              )}
-            </button>
+            <div className="pt-2">
+              <button
+                type="submit"
+                className="w-full py-3 px-4 bg-[#3E4A3E] hover:bg-[#323D32] text-white text-xs sm:text-sm font-medium rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-sm"
+              >
+                <ArrowRight className="w-4 h-4" />
+                <span>Log in</span>
+              </button>
+            </div>
           </form>
 
-          {/* Sign Up Redirect */}
-          <p className="text-center text-xs text-gray-500 mt-6">
-            Don&apos;t have an account yet?{" "}
-            <Link
-              href="/signup"
-              className="font-semibold text-[#004642] hover:underline"
-            >
-              Create an account
+          {/* Bottom Footnote Links */}
+          <div className="text-center mt-6 space-y-2">
+            <p className="text-xs text-[#5F6560]">
+              New to Curtainz?{" "}
+              <Link href="/signup" className="font-semibold text-[#1C201D] hover:underline">
+                Create an account
+              </Link>
+            </p>
+            <p className="text-[11px] text-[#7E847F]">
+              Just exploring?{" "}
+              <Link href="#preview" className="underline hover:text-[#1C201D]">
+                Try 5 free AI previews without signing up.
+              </Link>
+            </p>
+          </div>
+        </div>
+
+        {/* Legal Footer */}
+        <div className="flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#8A908B] pt-10 mt-6 border-t border-[#EDEBE5]">
+          <span>&copy; 2026 Curtainz</span>
+          <div className="flex items-center gap-4 mt-2 sm:mt-0">
+            <Link href="#privacy" className="hover:underline">
+              Privacy policy
             </Link>
-          </p>
+            <Link href="#terms" className="hover:underline">
+              Terms of use
+            </Link>
+          </div>
         </div>
 
-        {/* Footer info */}
-        <div className="text-center text-xs text-gray-400">
-          Curtainz AI &bull; Made-to-measure window dressings &amp; AI visualizer
-        </div>
       </div>
 
-      {/* Right Column: Visual Showcase (Hidden on Mobile) */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-[#04362f] flex-col justify-between p-12 text-white overflow-hidden">
-        {/* Subtle Decorative Backdrop Elements */}
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-[#a4df3b]/10 blur-3xl pointer-events-none" />
-
-        {/* Top Badge */}
-        <div className="relative z-10 flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#a4df3b] animate-pulse" />
-          <span className="text-xs uppercase tracking-wider text-emerald-200 font-semibold">
-            Dubai’s #1 AI Curtain Platform
-          </span>
-        </div>
-
-        {/* Center Visual Mockup Card */}
-        <div className="relative z-10 my-auto max-w-lg">
-          <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 aspect-[4/3] bg-emerald-950/50">
-            <Image
-              src="/after_image.png"
-              alt="Curtain Studio Preview"
-              fill
-              priority
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end p-6">
-              <span className="inline-block bg-[#004642]/90 backdrop-blur text-white text-xs font-semibold px-3 py-1 rounded-full w-fit mb-2">
-                In-Situ AI Fitting
-              </span>
-              <h3 className="text-xl font-bold text-white">
-                Transform any room in 20 seconds
-              </h3>
-              <p className="text-xs text-gray-200 mt-1 line-clamp-2">
-                Preview real made-to-measure fabrics on real windows before measuring, sewing and installation in Dubai.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Feature Highlights */}
-        <div className="relative z-10 grid grid-cols-3 gap-4 pt-6 border-t border-white/10 text-xs">
-          <div>
-            <p className="font-bold text-white text-base">5 Free</p>
-            <p className="text-emerald-200 text-[11px]">AI previews per user</p>
-          </div>
-          <div>
-            <p className="font-bold text-white text-base">100%</p>
-            <p className="text-emerald-200 text-[11px]">Room preservation</p>
-          </div>
-          <div>
-            <p className="font-bold text-white text-base">Dubai</p>
-            <p className="text-emerald-200 text-[11px]">Free home consultation</p>
-          </div>
-        </div>
-      </div>
     </div>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-[#004642] flex items-center justify-center text-white text-sm">Loading login…</div>}>
-      <LoginForm />
-    </Suspense>
   );
 }
