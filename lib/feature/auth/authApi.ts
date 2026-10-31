@@ -14,6 +14,8 @@ export interface LoginResponse {
       role: 'admin' | 'user';
       phone?: string;
       avatarUrl?: string;
+      location?: string;
+      bio?: string;
     };
   };
 }
@@ -29,6 +31,7 @@ export interface RegisterResponse {
     role: 'admin' | 'user';
     phone?: string;
     avatarUrl?: string;
+    location?: string;
   };
 }
 
@@ -105,6 +108,18 @@ export const authApi = baseApi.injectEndpoints({
       providesTags: ['Users'],
     }),
 
+    updateProfile: builder.mutation<
+      { success: boolean; message: string; data: any },
+      { name?: string; phone?: string; location?: string; bio?: string }
+    >({
+      query: (data) => ({
+        url: '/users/me',
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Users'],
+    }),
+
     refreshToken: builder.mutation<
       { success: boolean; message: string; data: { accessToken: string } },
       { refreshToken?: string } | void
@@ -125,5 +140,6 @@ export const {
   useResetPasswordMutation,
   useChangePasswordMutation,
   useGetMeQuery,
+  useUpdateProfileMutation,
   useRefreshTokenMutation,
 } = authApi;
