@@ -82,7 +82,7 @@ export function DashboardSidebar() {
       >
         <Link href="/dashboard" className="flex items-center gap-2.5 group">
           {/* Brand Logo with Leaf Flourish */}
-          <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center shrink-0 group-hover:bg-white/15 transition-colors">
+          <div className="w-9 h-9 rounded-sm bg-white/10 border border-white/20 flex items-center justify-center shrink-0 group-hover:bg-white/15 transition-colors">
             <svg
               className="w-5 h-6 text-white"
               viewBox="0 0 26 30"
@@ -114,7 +114,7 @@ export function DashboardSidebar() {
           type="button"
           onClick={() => setCollapsed(!collapsed)}
           className={cn(
-            "hidden lg:flex w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-white items-center justify-center transition-colors cursor-pointer",
+            "hidden lg:flex w-7 h-7 rounded-sm bg-white/10 hover:bg-white/20 text-white items-center justify-center transition-colors cursor-pointer",
             collapsed && "hidden"
           )}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -139,7 +139,7 @@ export function DashboardSidebar() {
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group",
+                      "flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm font-medium transition-all group",
                       isActive
                         ? "bg-white text-[#004642] shadow-sm font-semibold"
                         : "text-emerald-100/90 hover:bg-white/10 hover:text-white",
@@ -182,7 +182,7 @@ export function DashboardSidebar() {
       <div className="p-3 border-t border-white/10 bg-[#003734]">
         <div
           className={cn(
-            "flex items-center gap-3 p-2 rounded-xl bg-white/5",
+            "flex items-center gap-3 p-2 rounded-sm bg-white/5",
             collapsed && "justify-center p-1"
           )}
         >
