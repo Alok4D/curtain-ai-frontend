@@ -2,13 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Layers,
-  Calendar,
-  Sparkles,
-  ExternalLink,
   LogOut,
   ChevronLeft,
   ChevronRight,
@@ -16,12 +14,21 @@ import {
   X,
   Settings,
 } from "lucide-react";
-import Cookies from "js-cookie";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useGetMeQuery } from "@/lib/feature/auth/authApi";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
+import { logOut } from "@/lib/feature/auth/authSlice";
 
 export function DashboardSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const reduxUser = useAppSelector((state) => state.auth.user);
+  const { data: meData } = useGetMeQuery();
+
+  const user = meData?.data || reduxUser;
 
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -43,9 +50,19 @@ export function DashboardSidebar() {
   }, []);
 
   const handleLogout = () => {
-    Cookies.remove("accessToken");
-    localStorage.removeItem("userRole");
+    dispatch(logOut());
+    toast.success("Logged out successfully");
     router.push("/login");
+  };
+
+  // Compute initials
+  const getInitials = (name?: string) => {
+    if (!name) return "AD";
+    const parts = name.trim().split(" ");
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
   };
 
   const mainMenuItems = [
@@ -68,8 +85,6 @@ export function DashboardSidebar() {
       badge: null,
     },
   ];
-
- 
 
   const sidebarContent = (
     <div className="flex flex-col h-full bg-[#004642] text-white border-r border-[#033633] overflow-hidden font-['Urbanist',sans-serif]">
@@ -125,9 +140,7 @@ export function DashboardSidebar() {
 
       {/* Main Navigation */}
       <div className="flex-1 px-3 py-5 overflow-y-auto space-y-6 custom-scrollbar">
-        {/* Section 1: Main Management */}
         <div>
-     
           <ul className="space-y-1">
             {mainMenuItems.map((item) => {
               const isActive = pathname === item.href;
@@ -174,11 +187,9 @@ export function DashboardSidebar() {
             })}
           </ul>
         </div>
-
-      
       </div>
 
-      {/* Footer / Admin User Profile */}
+      {/* Footer / Admin User Profile connected to API */}
       <div className="p-3 border-t border-white/10 bg-[#003734]">
         <div
           className={cn(
@@ -193,17 +204,29 @@ export function DashboardSidebar() {
             className="flex items-center gap-3 flex-1 min-w-0 group cursor-pointer"
             title="Account Settings"
           >
-            <div className="w-8 h-8 rounded-full bg-[#a4df3b] text-[#004642] font-bold text-xs flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-              AD
-            </div>
+            {user?.avatarUrl ? (
+              <div className="relative w-8 h-8 rounded-full overflow-hidden border border-[#a4df3b]/40 shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                <Image
+                  src={user.avatarUrl}
+                  alt={user.name || "Admin"}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-[#a4df3b] text-[#004642] font-bold text-xs flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-xs">
+                {getInitials(user?.name)}
+              </div>
+            )}
 
             {!collapsed && (
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-semibold text-white truncate group-hover:text-emerald-200 transition-colors">
-                  Curtainz Admin
+                  {user?.name || "Curtainz Admin"}
                 </p>
                 <p className="text-[10px] text-emerald-200/70 truncate">
-                  admin@curtainz.ai
+                  {user?.email || "admin@curtainz.ai"}
                 </p>
               </div>
             )}
@@ -226,7 +249,7 @@ export function DashboardSidebar() {
           <button
             type="button"
             onClick={() => setCollapsed(false)}
-            className="w-full mt-2 py-1.5 text-emerald-300 hover:text-white hover:bg-white/10 rounded-lg flex items-center justify-center transition-colors"
+            className="w-full mt-2 py-1.5 text-emerald-300 hover:text-white hover:bg-white/10 rounded-lg flex items-center justify-center transition-colors cursor-pointer"
             title="Expand Sidebar"
           >
             <ChevronRight className="w-4 h-4" />
@@ -243,7 +266,7 @@ export function DashboardSidebar() {
         <button
           type="button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-2 bg-[#004642] text-white rounded-lg shadow-md"
+          className="p-2 bg-[#004642] text-white rounded-lg shadow-md cursor-pointer"
           aria-label="Toggle Menu"
         >
           {mobileMenuOpen ? (
