@@ -20,7 +20,7 @@ export function VisualizerPreview({
 }: VisualizerPreviewProps) {
   return (
     <div
-      className={`relative rounded-xl overflow-hidden bg-gray-900 transition-all duration-300 ${
+      className={`relative rounded-sm overflow-hidden bg-gray-900 transition-all duration-300 ${
         isGenerating ? "ai-generating-frame" : ""
       }`}
     >
@@ -36,13 +36,7 @@ export function VisualizerPreview({
             className="object-cover"
           />
 
-          {/* AI Generated Badge (visible when generated image is displayed and not currently generating) */}
-          {generatedImage && !isGenerating && (
-            <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-white/95 backdrop-blur text-neutral-800 px-3.5 py-1.5 rounded-full text-xs font-semibold shadow-sm select-none z-10">
-              <Sparkles className="w-3.5 h-3.5 text-neutral-900 fill-neutral-900" />
-              <span>AI Generated</span>
-            </div>
-          )}
+       
         </div>
 
         {/* AI Scanning / Processing Overlay (identical to curtainz.ai) */}

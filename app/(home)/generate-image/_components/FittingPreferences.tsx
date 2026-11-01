@@ -24,7 +24,7 @@ export function FittingPreferences({
   isGenerating,
 }: FittingPreferencesProps) {
   return (
-    <div className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/60">
+    <div className="border border-slate-200 rounded-md overflow-hidden bg-slate-50/60">
       <button
         type="button"
         onClick={() => setShowPreferences((prev) => !prev)}
