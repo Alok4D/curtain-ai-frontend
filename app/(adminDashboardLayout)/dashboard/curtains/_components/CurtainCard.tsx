@@ -41,30 +41,9 @@ export default function CurtainCard({ fabric, onDelete }: CurtainCardProps) {
           </div>
         )}
 
-        {/* Top Badges (Category & Status) */}
-        <div className="absolute top-2 left-2 flex flex-wrap gap-1 z-10">
-          <span className="bg-[#004642] text-white text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-none">
-            {fabric.category}
-          </span>
-          {fabric.opacity && (
-            <span className="bg-white/90 backdrop-blur-xs text-gray-800 border border-gray-200 text-[10px] font-semibold capitalize px-1.5 py-0.5 rounded-none">
-              {fabric.opacity}
-            </span>
-          )}
-        </div>
+      
 
-        {/* Active / Inactive Tag */}
-        <div className="absolute top-2 right-2 z-10">
-          <span
-            className={`text-[10px] font-bold uppercase px-2 py-0.5 border ${
-              fabric.isActive !== false
-                ? "bg-emerald-50 text-emerald-700 border-emerald-300"
-                : "bg-gray-100 text-gray-500 border-gray-300"
-            }`}
-          >
-            {fabric.isActive !== false ? "Active" : "Draft"}
-          </span>
-        </div>
+     
       </Link>
 
       {/* Content Details */}
@@ -80,29 +59,9 @@ export default function CurtainCard({ fabric, onDelete }: CurtainCardProps) {
             </Link>
           </div>
 
-          <p className="text-[11px] text-gray-500 mt-1 truncate" title={fabric.fabric || fabric.material}>
-            {fabric.fabric || fabric.material || "Custom Tailored Fabric"}
-            {fabric.pattern ? ` · ${fabric.pattern}` : ""}
-          </p>
+      
 
-          {/* Color & Room Badges */}
-          <div className="flex flex-wrap items-center gap-1 mt-2.5">
-            {fabric.colors && fabric.colors.length > 0 && (
-              fabric.colors.slice(0, 3).map((col, idx) => (
-                <span
-                  key={idx}
-                  className="inline-block text-[10px] font-medium bg-gray-100 text-gray-700 px-1.5 py-0.5 border border-gray-200 capitalize"
-                >
-                  {col}
-                </span>
-              ))
-            )}
-            {fabric.suitableRooms && fabric.suitableRooms.length > 0 && (
-              <span className="text-[10px] text-gray-400 font-medium ml-1">
-                +{fabric.suitableRooms.length} rooms
-              </span>
-            )}
-          </div>
+      
         </div>
 
         {/* Bottom Action Footer */}

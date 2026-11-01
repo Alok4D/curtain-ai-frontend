@@ -373,7 +373,7 @@ export default function AddCurtainForm() {
                 {/* Category */}
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-bold text-[#1C201D] mb-1">
-                    Category (Product-এর মূল ধরন) *
+                    Category *
                   </label>
                   <div className="relative">
                     <select
@@ -401,7 +401,7 @@ export default function AddCurtainForm() {
                 {/* Colors (tags) */}
                 <div>
                   <label className="block text-xs font-bold text-[#1C201D] mb-1">
-                    Colors (Room-এর color-এর সঙ্গে match)
+                    Colors
                   </label>
                   <div className="flex flex-wrap items-center gap-1.5 mb-2">
                     {colors.map((col) => (
@@ -470,7 +470,7 @@ export default function AddCurtainForm() {
                   {/* Fabric */}
                   <div>
                     <label className="block text-xs font-bold text-[#1C201D] mb-1">
-                      Fabric (Fabric-এর ধরন)
+                      Fabric
                     </label>
                     <input
                       type="text"
@@ -498,7 +498,7 @@ export default function AddCurtainForm() {
                   {/* Opacity */}
                   <div>
                     <label className="block text-xs font-bold text-[#1C201D] mb-1">
-                      Opacity (Privacy ও light filtering)
+                      Opacity
                     </label>
                     <div className="relative">
                       <select
@@ -519,7 +519,7 @@ export default function AddCurtainForm() {
                   {/* Texture */}
                   <div>
                     <label className="block text-xs font-bold text-[#1C201D] mb-1">
-                      Texture (Fabric-এর visual appearance)
+                      Texture
                     </label>
                     <input
                       type="text"
@@ -543,7 +543,7 @@ export default function AddCurtainForm() {
                 {/* Style options */}
                 <div>
                   <label className="block text-xs font-bold text-[#1C201D] mb-1.5">
-                    Interior Style (Interior style-এর সঙ্গে match)
+                    Interior Style
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {STYLE_OPTIONS.map((st) => {
@@ -570,7 +570,7 @@ export default function AddCurtainForm() {
                 {/* Suitable Rooms */}
                 <div>
                   <label className="block text-xs font-bold text-[#1C201D] mb-1.5">
-                    Suitable Rooms (কোন room-এ মানাবে)
+                    Suitable Rooms
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                     {ROOM_OPTIONS.map((room) => {
@@ -609,7 +609,7 @@ export default function AddCurtainForm() {
                   className="w-4 h-4 text-[#004642] rounded-none border-gray-300 accent-[#004642] cursor-pointer"
                 />
                 <span className="text-xs text-[#2D312E] font-bold">
-                  isActive (Product বর্তমানে available/displayable কি না)
+                  isActive
                 </span>
               </label>
 
