@@ -36,10 +36,6 @@ const tabs: CollectionTab[] = [
     label: "Blinds & Shades",
     images: [
       {
-        src: "/images/collection/roller-blinds.png",
-        alt: "Sand beige blackout roller blind in a bright modern apartment",
-      },
-      {
         src: "/images/collection/zebra-blinds.png",
         alt: "Pale grey zebra day-and-night blinds showing open and closed bands",
       },
@@ -92,7 +88,7 @@ export default function OurCollectionSection() {
             id="services-heading"
             className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#004642] mt-2 leading-tight"
           >
-            Curtains, blinds &amp; motorized systems — made to measure
+            Curtains, blinds &amp; motorized systems made to measure
           </h2>
         </div>
 
@@ -129,13 +125,7 @@ export default function OurCollectionSection() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className={`grid gap-4 ${
-                activeTab === 0
-                  ? "grid-cols-1 sm:grid-cols-3"
-                  : activeTab === 1
-                  ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-4"
-                  : "grid-cols-1 sm:grid-cols-2"
-              }`}
+              className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6"
               role="tabpanel"
             >
               {tabs[activeTab].images.map((item, index) => (
@@ -147,13 +137,7 @@ export default function OurCollectionSection() {
                     src={item.src}
                     alt={item.alt}
                     fill
-                    sizes={
-                      activeTab === 1
-                        ? "(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
-                        : activeTab === 0
-                        ? "(max-width: 640px) 100vw, 33vw"
-                        : "(max-width: 640px) 100vw, 50vw"
-                    }
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     loading={index === 0 ? "eager" : "lazy"}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
