@@ -85,8 +85,8 @@ export default function CurtainManagementPage() {
   const hasFilters = activeTab !== "all" || Boolean(searchQuery.trim());
 
   return (
-    <div className="space-y-6 font-['Urbanist',sans-serif]">
-      {/* 1. Header with Stats & Actions (Add New Fabric navigates to /dashboard/curtains/add-curtain) */}
+    <div className="space-y-5 font-['Urbanist',sans-serif]">
+      {/* 1. Header with Stats & Actions */}
       <CurtainsHeader
         onSeedCatalog={handleSeedCatalog}
         isSeeding={isSeeding}

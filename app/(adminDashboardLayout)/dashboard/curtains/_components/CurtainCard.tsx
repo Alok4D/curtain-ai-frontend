@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Edit2, Trash2, Sparkles } from "lucide-react";
+import { Edit2, Trash2 } from "lucide-react";
 import { ICurtain } from "@/lib/feature/curtain/curtainApi";
 
 interface CurtainCardProps {
@@ -15,11 +15,11 @@ export default function CurtainCard({ fabric, onDelete }: CurtainCardProps) {
   const fabricId = fabric.id || fabric._id;
 
   return (
-    <div className="bg-white rounded-none border border-gray-200/80 overflow-hidden shadow-xs hover:shadow-md transition-all group flex flex-col justify-between font-['Urbanist',sans-serif]">
-      {/* Image Preview with Category & Stock Status Badges */}
+    <div className="bg-white rounded-none border border-gray-200 shadow-none hover:border-gray-400 transition-colors group flex flex-col justify-between font-['Urbanist',sans-serif]">
+      {/* Image Preview with Category & Price Badges */}
       <Link
         href={`/dashboard/curtains/${fabricId}`}
-        className="relative aspect-square bg-[#F7F8F5] overflow-hidden block"
+        className="relative aspect-square bg-[#F7F8F5] overflow-hidden block border-b border-gray-200"
       >
         {imageUrl ? (
           <Image
@@ -36,52 +36,64 @@ export default function CurtainCard({ fabric, onDelete }: CurtainCardProps) {
           </div>
         )}
 
-     
+      
      
       </Link>
 
       {/* Content Details */}
       <div className="p-4 flex-1 flex flex-col justify-between">
         <div>
-          <div className="flex items-start justify-between gap-2">
-            <Link
-              href={`/dashboard/curtains/${fabricId}`}
-              className="font-bold text-sm text-gray-900 truncate flex-1 hover:text-[#004642] transition-colors"
-              title={fabric.name}
-            >
-              {fabric.name}
-            </Link>
-
-            
-          <div className="flex items-center gap-1">
-            {/* Dedicated Page Link for Edit */}
-            <Link
-              href={`/dashboard/curtains/update-curtain?id=${fabricId}`}
-              className="p-1.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
-              title="Edit Fabric on Dedicated Page"
-            >
-              <Edit2 className="w-3.5 h-3.5" />
-            </Link>
-
-            {/* Delete Modal Trigger */}
-            <button
-              type="button"
-              onClick={() => onDelete(fabric)}
-              className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-              title="Remove Fabric from Catalog"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        
-          </div>
+          <Link
+            href={`/dashboard/curtains/${fabricId}`}
+            className="font-bold text-sm text-gray-900 truncate hover:text-[#004642] transition-colors block"
+            title={fabric.name}
+          >
+            {fabric.name}
+          </Link>
 
           <p className="text-[11px] text-gray-500 mt-1 truncate" title={fabric.material}>
             {fabric.material || "Custom Tailored Drape"}
           </p>
         </div>
 
-     
+        {/* Bottom Action Footer */}
+        <div className="flex items-center justify-between pt-3 mt-3 border-t border-gray-100">
+          {/* Stock Status Indicator */}
+          <span
+            className={`inline-flex items-center gap-1.5 text-[11px] font-semibold ${
+              fabric.inStock !== false ? "text-emerald-700" : "text-amber-700"
+            }`}
+          >
+            <span
+              className={`w-1.5 h-1.5 rounded-none ${
+                fabric.inStock !== false ? "bg-emerald-600" : "bg-amber-600"
+              }`}
+            />
+            <span>{fabric.inStock !== false ? "In Stock" : "Out of Stock"}</span>
+          </span>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-1.5">
+            {/* Edit Button */}
+            <Link
+              href={`/dashboard/curtains/update-curtain?id=${fabricId}`}
+              className="p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 border border-gray-200 rounded-none transition-colors cursor-pointer"
+              title="Edit Fabric"
+            >
+              <Edit2 className="w-3.5 h-3.5" />
+            </Link>
+
+            {/* Delete Button */}
+            <button
+              type="button"
+              onClick={() => onDelete(fabric)}
+              className="p-1.5 text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200 rounded-none transition-colors cursor-pointer"
+              title="Delete Fabric"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

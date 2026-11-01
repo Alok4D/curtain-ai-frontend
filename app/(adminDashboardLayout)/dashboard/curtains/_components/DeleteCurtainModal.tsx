@@ -39,16 +39,16 @@ export default function DeleteCurtainModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/55 backdrop-blur-xs z-50 flex items-center justify-center p-4 font-['Urbanist',sans-serif]">
-      <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 font-['Urbanist',sans-serif]">
+      <div className="bg-white rounded-none max-w-md w-full p-6 shadow-none border border-gray-300">
         <div className="flex items-start justify-between pb-3">
-          <div className="w-10 h-10 rounded-full bg-red-50 text-red-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-none bg-red-50 text-red-600 border border-red-200 flex items-center justify-center shrink-0">
             <AlertTriangle className="w-5 h-5" />
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer"
+            className="p-1.5 rounded-none text-gray-400 hover:text-gray-700 hover:bg-gray-100 border border-transparent hover:border-gray-200 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -68,7 +68,7 @@ export default function DeleteCurtainModal({
             type="button"
             onClick={onClose}
             disabled={isLoading}
-            className="px-4 py-2 border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+            className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-none text-xs font-semibold transition-colors cursor-pointer shadow-none"
           >
             Cancel
           </button>
@@ -76,7 +76,7 @@ export default function DeleteCurtainModal({
             type="button"
             onClick={handleDelete}
             disabled={isLoading}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-60 text-white rounded-xl text-xs font-semibold transition-colors shadow-sm cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-60 text-white rounded-none text-xs font-semibold transition-colors shadow-none cursor-pointer border border-red-600"
           >
             {isLoading ? (
               <>
@@ -92,4 +92,3 @@ export default function DeleteCurtainModal({
     </div>
   );
 }
-

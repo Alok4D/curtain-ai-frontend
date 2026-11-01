@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Upload, ChevronDown, ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
+import { Upload, ChevronDown, ArrowLeft, Loader2, CheckCircle2, Loader } from "lucide-react";
 import { toast } from "sonner";
 import {
   TCurtainCategory,
@@ -19,7 +19,7 @@ export default function AddCurtainForm() {
 
   const [curtainName, setCurtainName] = useState("");
   const [category, setCategory] = useState<TCurtainCategory>("curtains");
-  const [fabricStyle, setFabricStyle] = useState("Premium Belgian Linen · Light Filtering");
+  const [fabricStyle, setFabricStyle] = useState("Premium Belgian Linen");
   const [price, setPrice] = useState<number>(180);
   const [inStock, setInStock] = useState<boolean>(true);
   const [imagePreview, setImagePreview] = useState<string>("");
@@ -226,7 +226,7 @@ export default function AddCurtainForm() {
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Premium Linen · Light filtering"
+                  placeholder=""
                   value={fabricStyle}
                   onChange={(e) => setFabricStyle(e.target.value)}
                   className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-[#D5D8D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3E4A3E] text-[#1C201D]"
@@ -281,7 +281,7 @@ export default function AddCurtainForm() {
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader className="w-4 h-4 animate-spin" />
                     <span>Saving to catalog...</span>
                   </>
                 ) : (
