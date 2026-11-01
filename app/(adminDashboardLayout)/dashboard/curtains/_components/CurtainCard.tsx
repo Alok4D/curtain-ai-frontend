@@ -15,7 +15,7 @@ export default function CurtainCard({ fabric, onDelete }: CurtainCardProps) {
   const fabricId = fabric.id || fabric._id;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden shadow-xs hover:shadow-md transition-all group flex flex-col justify-between font-['Urbanist',sans-serif]">
+    <div className="bg-white rounded-none border border-gray-200/80 overflow-hidden shadow-xs hover:shadow-md transition-all group flex flex-col justify-between font-['Urbanist',sans-serif]">
       {/* Image Preview with Category & Stock Status Badges */}
       <Link
         href={`/dashboard/curtains/${fabricId}`}
@@ -36,21 +36,8 @@ export default function CurtainCard({ fabric, onDelete }: CurtainCardProps) {
           </div>
         )}
 
-        {/* Category Pill */}
-        <span className="absolute top-2.5 left-2.5 bg-black/65 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded capitalize shadow-xs">
-          {fabric.category}
-        </span>
-
-        {/* In-Stock Pill */}
-        <span
-          className={`absolute top-2.5 right-2.5 text-[10px] font-bold px-2 py-0.5 rounded shadow-xs ${
-            fabric.inStock !== false
-              ? "bg-emerald-600 text-white"
-              : "bg-red-500 text-white"
-          }`}
-        >
-          {fabric.inStock !== false ? "In Stock" : "Out of Stock"}
-        </span>
+     
+     
       </Link>
 
       {/* Content Details */}
@@ -64,30 +51,8 @@ export default function CurtainCard({ fabric, onDelete }: CurtainCardProps) {
             >
               {fabric.name}
             </Link>
-            {fabric.price && (
-              <span className="text-[11px] font-bold text-[#004642] shrink-0 bg-[#004642]/10 px-1.5 py-0.5 rounded">
-                AED {fabric.price}/m
-              </span>
-            )}
-          </div>
 
-          <p className="text-[11px] text-gray-500 mt-1 truncate" title={fabric.material}>
-            {fabric.material || "Custom Tailored Drape"}
-          </p>
-        </div>
-
-        {/* Actions Footer */}
-        <div className="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between">
-          <Link
-            href="/select-curtains"
-            target="_blank"
-            className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#004642] hover:text-[#003431] hover:underline"
-            title="Preview on windows with AI Visualizer"
-          >
-            <Sparkles className="w-3 h-3 text-[#004642]" />
-            <span>AI Preview</span>
-          </Link>
-
+            
           <div className="flex items-center gap-1">
             {/* Dedicated Page Link for Edit */}
             <Link
@@ -108,7 +73,15 @@ export default function CurtainCard({ fabric, onDelete }: CurtainCardProps) {
               <Trash2 className="w-3.5 h-3.5" />
             </button>
           </div>
+        
+          </div>
+
+          <p className="text-[11px] text-gray-500 mt-1 truncate" title={fabric.material}>
+            {fabric.material || "Custom Tailored Drape"}
+          </p>
         </div>
+
+     
       </div>
     </div>
   );

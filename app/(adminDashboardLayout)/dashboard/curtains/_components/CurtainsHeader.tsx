@@ -15,23 +15,8 @@ export default function CurtainsHeader({
   totalCount,
 }: CurtainsHeaderProps) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-gray-200/80 shadow-xs font-['Urbanist',sans-serif]">
-      <div>
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-[#004642] bg-[#004642]/10 px-2.5 py-1 rounded-full">
-            Inventory &bull; AI Catalog
-          </span>
-          <span className="text-xs text-gray-500 font-medium">
-            {totalCount} total fabrics in studio
-          </span>
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-[#004642] tracking-tight mt-2">
-          Curtain &amp; Fabric Management
-        </h1>
-        <p className="text-xs sm:text-sm text-gray-500 mt-1 max-w-2xl">
-          Add, edit, or manage custom curtains, sheers, and rollers used by the AI Room Visualizer engine and Dubai customer studio.
-        </p>
-      </div>
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-['Urbanist',sans-serif]">
+  
 
       <div className="flex items-center gap-2.5 shrink-0">
         {totalCount === 0 && (
