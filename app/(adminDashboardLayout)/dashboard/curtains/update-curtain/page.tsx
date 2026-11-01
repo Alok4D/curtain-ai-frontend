@@ -202,10 +202,10 @@ function UpdateCurtainForm() {
           </div>
 
           {/* Current / Live Preview */}
-          {imagePreview ? (
+          {imagePreview && imagePreview.trim() !== "" ? (
             <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-neutral-100 border border-[#ECEAE4] group">
               <Image
-                src={imagePreview}
+                src={imagePreview.trim()}
                 alt={curtainName || "Curtain preview"}
                 fill
                 className="object-cover"

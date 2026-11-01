@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-
   /* config options here */
 
   async headers() {
@@ -33,11 +32,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "Curtain AI.ai",
+        hostname: "curtainz.ai",
       },
       {
         protocol: "https",
-        hostname: "Curtain AI-ae.b-cdn.net",
+        hostname: "curtainz-ae.b-cdn.net",
       },
       {
         protocol: "https",

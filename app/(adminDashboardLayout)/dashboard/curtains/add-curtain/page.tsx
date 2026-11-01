@@ -161,7 +161,7 @@ export default function AddCurtainForm() {
             </button>
 
             {/* Preview Box Card */}
-            {imagePreview && (
+            {imagePreview && imagePreview.trim() !== "" && (
               <div className="p-3.5 rounded-xl border border-[#ECEAE4] bg-[#FBF9F5] space-y-2.5 animate-in fade-in duration-150">
                 <span className="block text-[11px] font-medium text-[#6B716C]">
                   Live Preview

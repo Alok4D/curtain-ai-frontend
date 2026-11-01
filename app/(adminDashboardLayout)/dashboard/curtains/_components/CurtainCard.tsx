@@ -11,7 +11,8 @@ interface CurtainCardProps {
 }
 
 export default function CurtainCard({ fabric, onDelete }: CurtainCardProps) {
-  const imageUrl = fabric.display_image_url || fabric.image_url;
+  const rawUrl = fabric.display_image_url || fabric.image_url || "";
+  const imageUrl = typeof rawUrl === "string" && rawUrl.trim() !== "" ? rawUrl.trim() : null;
   const fabricId = fabric.id || fabric._id;
 
   return (
@@ -24,7 +25,7 @@ export default function CurtainCard({ fabric, onDelete }: CurtainCardProps) {
         {imageUrl ? (
           <Image
             src={imageUrl}
-            alt={fabric.name}
+            alt={fabric.name || "Curtain fabric"}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
             className="object-cover group-hover:scale-105 transition-transform duration-300"

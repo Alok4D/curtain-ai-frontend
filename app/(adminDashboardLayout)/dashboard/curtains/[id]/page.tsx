@@ -227,10 +227,10 @@ export default function SingleCurtainPage() {
           {/* Large Fabric Image Display */}
           <div className="bg-white rounded-2xl p-5 border border-gray-200/80 shadow-xs">
             <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 border border-gray-100">
-              {imageUrl ? (
+              {imageUrl && imageUrl.trim() !== "" ? (
                 <Image
-                  src={imageUrl}
-                  alt={curtain.name}
+                  src={imageUrl.trim()}
+                  alt={curtain?.name || "Curtain fabric"}
                   fill
                   priority
                   className="object-cover"

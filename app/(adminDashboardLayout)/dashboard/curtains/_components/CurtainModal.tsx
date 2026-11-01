@@ -175,10 +175,10 @@ export default function CurtainModal({
             />
 
             <div className="flex gap-4 items-center p-3 rounded-xl bg-gray-50 border border-gray-200/80">
-              {imagePreview ? (
+              {imagePreview && imagePreview.trim() !== "" ? (
                 <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-gray-200 shrink-0 bg-gray-100">
                   <Image
-                    src={imagePreview}
+                    src={imagePreview.trim()}
                     alt="Fabric Preview"
                     fill
                     className="object-cover"

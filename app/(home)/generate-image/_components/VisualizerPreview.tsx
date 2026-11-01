@@ -18,6 +18,11 @@ export function VisualizerPreview({
   progress,
   steps,
 }: VisualizerPreviewProps) {
+  const displaySrc =
+    (generatedImage && typeof generatedImage === "string" && generatedImage.trim() !== "" && generatedImage.trim()) ||
+    (roomImage && typeof roomImage === "string" && roomImage.trim() !== "" && roomImage.trim()) ||
+    null;
+
   return (
     <div
       className={`relative rounded-sm overflow-hidden bg-gray-900 transition-all duration-300 ${isGenerating ? "ai-generating-frame" : ""
@@ -25,17 +30,22 @@ export function VisualizerPreview({
     >
       <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] overflow-hidden select-none flex items-center justify-center">
         <div className="relative w-full h-full">
-          <Image
-            src={generatedImage || roomImage}
-            alt={generatedImage ? "AI Generated Curtain Room" : "Room preview"}
-            id="generated-image"
-            fill
-            priority
-            sizes="(max-width: 1024px) 100vw, 750px"
-            className="object-cover"
-          />
-
-
+          {displaySrc ? (
+            <Image
+              src={displaySrc}
+              alt={generatedImage ? "AI Generated Curtain Room" : "Room preview"}
+              id="generated-image"
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 750px"
+              className="object-cover"
+              unoptimized={displaySrc.startsWith("data:") || displaySrc.includes("cloudinary.com")}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-gray-400">
+              No preview available
+            </div>
+          )}
         </div>
 
         {/* AI Scanning / Processing Overlay (identical to Curtain AI.ai) */}

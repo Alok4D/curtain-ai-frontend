@@ -71,12 +71,15 @@ export default function SelectCurtainsPage() {
       return;
     }
 
+    const rawSrc = curtain.display_image_url || curtain.image_url || "";
+    const selectedImage =
+      typeof rawSrc === "string" && rawSrc.trim() !== ""
+        ? rawSrc.trim()
+        : "/images/collection/curtains-drapes.png";
+
     sessionStorage.setItem("selectedCurtain", (curtain.id || curtain._id || "").toString());
-    sessionStorage.setItem("selectedCurtainName", curtain.name);
-    sessionStorage.setItem(
-      "selectedCurtainImageUrl",
-      curtain.display_image_url || curtain.image_url
-    );
+    sessionStorage.setItem("selectedCurtainName", curtain.name || "Curtain");
+    sessionStorage.setItem("selectedCurtainImageUrl", selectedImage);
 
     router.push("/generate-image");
   };
@@ -184,7 +187,7 @@ export default function SelectCurtainsPage() {
           )}
 
           {/* Room Photo Banner (shows current photo thumbnail or prompt to upload) */}
-          {uploadedImageUrl ? (
+          {uploadedImageUrl && uploadedImageUrl.trim() !== "" ? (
             <div className="flex items-center justify-center gap-3 mb-6 bg-white py-2 px-4 rounded-xl max-w-xs mx-auto border border-gray-200 shadow-2xs">
               <div className="relative w-10 h-10 rounded-md overflow-hidden shrink-0 border border-gray-200">
                 <Image
@@ -192,6 +195,7 @@ export default function SelectCurtainsPage() {
                   alt="Your uploaded room"
                   fill
                   className="object-cover"
+                  unoptimized={uploadedImageUrl.startsWith("data:")}
                 />
               </div>
               <div className="text-left">
@@ -278,33 +282,41 @@ export default function SelectCurtainsPage() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 w-full mb-10"
             role="tabpanel"
           >
-            {currentList.map((curtain: any) => (
-              <button
-                key={curtain._id || curtain.id}
-                type="button"
-                onClick={() => handleSelectCurtain(curtain)}
-                className="curtain-option group cursor-pointer rounded-2xl border-2 border-gray-200 bg-white p-2.5 w-full transition-all duration-200 hover:border-[#004642] hover:shadow-md text-left"
-                aria-label={`Preview ${curtain.name} on your room`}
-              >
-                <div className="relative aspect-square bg-gray-100 rounded-xl overflow-hidden mb-2.5">
-                  <Image
-                    src={curtain.display_image_url || curtain.image_url}
-                    alt={curtain.name}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    unoptimized={(curtain.display_image_url || curtain.image_url)?.startsWith("data:")}
-                  />
-                  {/* Hover Slide-up Preview Bar matching Curtain AI.ai */}
-                  <span className="absolute inset-x-0 bottom-0 bg-[#004642] text-white text-xs font-semibold py-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-                    Preview on my room
+            {currentList.map((curtain: any) => {
+              const rawSrc = curtain.display_image_url || curtain.image_url || "";
+              const imageUrl =
+                typeof rawSrc === "string" && rawSrc.trim() !== ""
+                  ? rawSrc.trim()
+                  : "/images/collection/curtains-drapes.png";
+
+              return (
+                <button
+                  key={curtain._id || curtain.id}
+                  type="button"
+                  onClick={() => handleSelectCurtain(curtain)}
+                  className="curtain-option group cursor-pointer rounded-2xl border-2 border-gray-200 bg-white p-2.5 w-full transition-all duration-200 hover:border-[#004642] hover:shadow-md text-left"
+                  aria-label={`Preview ${curtain.name || "curtain"} on your room`}
+                >
+                  <div className="relative aspect-square bg-gray-100 rounded-xl overflow-hidden mb-2.5">
+                    <Image
+                      src={imageUrl}
+                      alt={curtain.name || "Curtain preview"}
+                      fill
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      unoptimized={imageUrl.startsWith("data:") || imageUrl.includes("cloudinary.com")}
+                    />
+                    {/* Hover Slide-up Preview Bar matching Curtain AI.ai */}
+                    <span className="absolute inset-x-0 bottom-0 bg-[#004642] text-white text-xs font-semibold py-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                      Preview on my room
+                    </span>
+                  </div>
+                  <span className="block font-medium text-sm text-center text-neutral-800 truncate">
+                    {curtain.name}
                   </span>
-                </div>
-                <span className="block font-medium text-sm text-center text-neutral-800 truncate">
-                  {curtain.name}
-                </span>
-              </button>
-            ))}
+                </button>
+              );
+            })}
           </div>
 
         </div>
