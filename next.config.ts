@@ -42,6 +42,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
+      {
+        protocol: "https",
+        hostname: "curtain%20ai-ae.b-cdn.net",
+      },
     ],
   },
 };

@@ -52,7 +52,14 @@ export default function CurtainManagementPage() {
         !q ||
         fabric.name.toLowerCase().includes(q) ||
         fabric.material?.toLowerCase().includes(q) ||
-        fabric.category.toLowerCase().includes(q);
+        fabric.fabric?.toLowerCase().includes(q) ||
+        fabric.pattern?.toLowerCase().includes(q) ||
+        fabric.texture?.toLowerCase().includes(q) ||
+        fabric.opacity?.toLowerCase().includes(q) ||
+        fabric.category.toLowerCase().includes(q) ||
+        fabric.colors?.some((c) => c.toLowerCase().includes(q)) ||
+        fabric.style?.some((s) => s.toLowerCase().includes(q)) ||
+        fabric.suitableRooms?.some((r) => r.toLowerCase().includes(q));
 
       return matchesTab && matchesSearch;
     });

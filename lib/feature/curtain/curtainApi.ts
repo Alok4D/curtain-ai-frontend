@@ -4,17 +4,49 @@ export type TCurtainCategory = 'curtains' | 'sheers' | 'rollers';
 
 export interface ICurtain {
   _id?: string;
-  id: number;
+  id?: number;
   name: string;
   category: TCurtainCategory;
-  image_url: string;
-  display_image_url: string;
+  colors?: string[];
+  fabric?: string;
+  pattern?: string;
+  style?: string[];
+  opacity?: string;
+  texture?: string;
+  suitableRooms?: string[];
+  images?: string[];
+  isActive?: boolean;
+  image_url?: string;
+  display_image_url?: string;
   material?: string;
-  price?: number;
   inStock?: boolean;
   isDeleted?: boolean;
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface RecommendedCurtainItem extends ICurtain {
+  matchScore?: number;
+  matchPercentage?: number;
+  specialistNote?: string;
+}
+
+export interface RecommendationResponseData {
+  roomSummary: string;
+  specialistAdvice: string;
+  primaryStyle: string;
+  detectedRoom: string;
+  recommendedCategories: string[];
+  recommendedColors: string[];
+  recommendedCurtains: RecommendedCurtainItem[];
+  allCurtainsCount: number;
+}
+
+export interface CurtainRecommendationResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: RecommendationResponseData;
 }
 
 export interface CurtainsResponse {
@@ -104,6 +136,17 @@ export const curtainApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Curtains'],
     }),
+
+    recommendCurtains: builder.mutation<
+      CurtainRecommendationResponse,
+      { roomImage: string }
+    >({
+      query: (body) => ({
+        url: '/curtains/recommend',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -114,5 +157,5 @@ export const {
   useUpdateCurtainMutation,
   useDeleteCurtainMutation,
   useSeedCurtainsMutation,
+  useRecommendCurtainsMutation,
 } = curtainApi;
-
