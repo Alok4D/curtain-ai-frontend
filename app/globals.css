@@ -154,7 +154,7 @@ button, a{
 
 
 /* ========================================================
-   Curtainz Hero Animations (Floating cards, arrow & reveal)
+   Curtain AI Hero Animations (Floating cards, arrow & reveal)
    ======================================================== */
 @keyframes hero-float {
   0%, 100% {
@@ -257,7 +257,7 @@ button, a{
 }
 
 /* ========================================================
-   Curtainz Hero CTA Animated Flowing Border & Hover
+   Curtain AI Hero CTA Animated Flowing Border & Hover
    ======================================================== */
 @keyframes flow-gradient {
   0%, 100% {
@@ -296,7 +296,7 @@ button, a{
 }
 
 /* ========================================================
-   Curtainz Interactive Before/After Comparison Slider
+   Curtain AI Interactive Before/After Comparison Slider
    ======================================================== */
 .slider-section {
   display: grid;

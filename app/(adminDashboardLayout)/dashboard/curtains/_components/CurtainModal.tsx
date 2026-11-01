@@ -55,7 +55,7 @@ export default function CurtainModal({
       setPrice(180);
       setInStock(true);
       const defaultSample =
-        "https://curtainz-ae.b-cdn.net/media/curtain_options/display/Generated_Image_September_04_2025_-_10_15PM.jpeg";
+        "https://Curtain AI-ae.b-cdn.net/media/curtain_options/display/Generated_Image_September_04_2025_-_10_15PM.jpeg";
       setImageUrl(defaultSample);
       setImagePreview(defaultSample);
     }

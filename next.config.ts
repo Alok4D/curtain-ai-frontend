@@ -33,11 +33,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "curtainz.ai",
+        hostname: "Curtain AI.ai",
       },
       {
         protocol: "https",
-        hostname: "curtainz-ae.b-cdn.net",
+        hostname: "Curtain AI-ae.b-cdn.net",
       },
       {
         protocol: "https",

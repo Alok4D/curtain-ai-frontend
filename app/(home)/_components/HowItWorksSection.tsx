@@ -24,7 +24,7 @@ const steps: StepItem[] = [
     description:
       "Browse real fabrics curtains, sheers and rollers from our Dubai collection.",
     image: "/images/how-it-works/step-2-choose-fabric.png",
-    alt: "Browsing curtain, sheer and blind fabrics on Curtainz visualizer",
+    alt: "Browsing curtain, sheer and blind fabrics on Curtain AI visualizer",
   },
   {
     step: 3,
@@ -92,7 +92,7 @@ export default function HowItWorksSection() {
           ))}
         </div>
 
-      
+
       </div>
     </section>
   );

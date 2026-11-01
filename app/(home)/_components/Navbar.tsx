@@ -40,7 +40,7 @@ export default function Navbar() {
           <Link
             className="flex-none rounded-md inline-flex items-center py-2 focus:outline-none focus:opacity-90 group"
             href="/"
-            aria-label="Curtainz home"
+            aria-label="Curtain AI home"
           >
             <div className="flex items-center gap-1.5 text-white">
               <span className="flex gap-0.5">
@@ -82,9 +82,8 @@ export default function Navbar() {
 
         {/* Navigation Links */}
         <div
-          className={`overflow-hidden transition-all duration-300 basis-full grow md:block ${
-            isOpen ? "block" : "hidden"
-          }`}
+          className={`overflow-hidden transition-all duration-300 basis-full grow md:block ${isOpen ? "block" : "hidden"
+            }`}
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-end gap-y-3 md:gap-y-0 py-3 md:py-0 md:ps-7">
             {navLinks.map((link) => (

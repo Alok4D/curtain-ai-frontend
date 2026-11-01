@@ -37,7 +37,7 @@ export function DashboardHeader() {
         {/* Mobile Spacer */}
         <div className="sm:hidden flex-1 pl-12">
           <span className="text-sm font-bold text-[#004642]">
-            Curtainz Studio
+            Curtain AI Studio
           </span>
         </div>
 
@@ -99,7 +99,7 @@ export function DashboardHeader() {
                 {user?.name || "Admin"}
               </p>
               <p className="text-[10px] text-gray-500 leading-tight flex items-center gap-1">
-                <span>{user?.location || "Curtainz Dubai"}</span>
+                <span>{user?.location || "Curtain AI Dubai"}</span>
               </p>
             </div>
           </Link>

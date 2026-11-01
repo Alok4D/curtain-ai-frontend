@@ -19,7 +19,7 @@ export default function HelpSidebarCard() {
       </p>
 
       <a
-        href="mailto:support@curtainz.ai"
+        href="mailto:support@Curtain AI.ai"
         className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#1C201D] hover:underline"
       >
         <span>Contact support</span>

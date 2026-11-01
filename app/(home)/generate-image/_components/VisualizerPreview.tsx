@@ -20,9 +20,8 @@ export function VisualizerPreview({
 }: VisualizerPreviewProps) {
   return (
     <div
-      className={`relative rounded-sm overflow-hidden bg-gray-900 transition-all duration-300 ${
-        isGenerating ? "ai-generating-frame" : ""
-      }`}
+      className={`relative rounded-sm overflow-hidden bg-gray-900 transition-all duration-300 ${isGenerating ? "ai-generating-frame" : ""
+        }`}
     >
       <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] overflow-hidden select-none flex items-center justify-center">
         <div className="relative w-full h-full">
@@ -36,10 +35,10 @@ export function VisualizerPreview({
             className="object-cover"
           />
 
-       
+
         </div>
 
-        {/* AI Scanning / Processing Overlay (identical to curtainz.ai) */}
+        {/* AI Scanning / Processing Overlay (identical to Curtain AI.ai) */}
         {isGenerating && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-brightness-90 z-30">
             {/* Sweeping scan beam */}

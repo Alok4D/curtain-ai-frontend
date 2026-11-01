@@ -17,7 +17,7 @@ const Footer = () => {
               <Link
                 href="/"
                 className="inline-flex items-center gap-2 mb-3.5 sm:mb-4 md:mb-5 group focus:outline-none"
-                aria-label="Curtainz home"
+                aria-label="Curtain AI home"
               >
                 <div className="flex items-center gap-1.5 text-white">
                   <span className="flex gap-0.5">
@@ -26,7 +26,7 @@ const Footer = () => {
                     <span className="w-1 h-5 bg-white rounded-sm inline-block" />
                   </span>
                   <span className="text-xl sm:text-2xl font-serif font-medium tracking-wide">
-                    Curtainz
+                    Curtain AI
                   </span>
                 </div>
               </Link>
@@ -142,7 +142,7 @@ const Footer = () => {
 
           {/* Bottom Bar: Copyright */}
           <div className="py-5 sm:py-6 md:py-7 flex flex-col items-center justify-center text-center gap-1.5 text-[11.5px] sm:text-[12.5px] text-[#b8ccc8]">
-            <div>© {currentYear} Curtainz. All rights reserved.</div>
+            <div>© {currentYear} Curtain AI. All rights reserved.</div>
           </div>
         </footer>
       </div>

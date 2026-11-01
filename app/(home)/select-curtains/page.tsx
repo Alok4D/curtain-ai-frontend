@@ -112,7 +112,7 @@ export default function SelectCurtainsPage() {
 
       <div className="container mx-auto px-4 py-4 md:py-6">
         <div className="max-w-6xl mx-auto">
-          
+
           {/* Progress Indicator */}
           <nav aria-label="Progress" className="flex justify-center mb-6 md:mb-8">
             <ol className="flex items-center gap-0">
@@ -257,11 +257,10 @@ export default function SelectCurtainsPage() {
                   role="tab"
                   aria-selected={activeTab === tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 md:flex-initial px-5 md:px-7 py-2.5 rounded-lg text-sm font-semibold capitalize transition-all cursor-pointer ${
-                    activeTab === tab
+                  className={`flex-1 md:flex-initial px-5 md:px-7 py-2.5 rounded-lg text-sm font-semibold capitalize transition-all cursor-pointer ${activeTab === tab
                       ? "bg-[#004642] text-white shadow-sm"
                       : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   {tab}
                 </button>
@@ -296,7 +295,7 @@ export default function SelectCurtainsPage() {
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                     unoptimized={(curtain.display_image_url || curtain.image_url)?.startsWith("data:")}
                   />
-                  {/* Hover Slide-up Preview Bar matching curtainz.ai */}
+                  {/* Hover Slide-up Preview Bar matching Curtain AI.ai */}
                   <span className="absolute inset-x-0 bottom-0 bg-[#004642] text-white text-xs font-semibold py-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
                     Preview on my room
                   </span>

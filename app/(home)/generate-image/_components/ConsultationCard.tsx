@@ -15,7 +15,7 @@ export function ConsultationCard({ isGenerated }: ConsultationCardProps) {
       </p>
       <div className="flex flex-col gap-2">
         <a
-          href="https://wa.me/+8801719277951?text=Hi%20Curtainz!%20I'd%20like%20to%20know%20more%20about%20your%20curtains."
+          href="https://wa.me/+8801719277951?text=Hi%20Curtain AI!%20I'd%20like%20to%20know%20more%20about%20your%20curtains."
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 bg-[#0E7367] text-white px-4 py-3 rounded-lg font-semibold hover:bg-[#0B5D54] text-sm transition-colors shadow-sm"

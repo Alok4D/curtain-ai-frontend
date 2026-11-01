@@ -68,8 +68,8 @@ export default function HeroSection() {
     >
       <div className="max-w-[1387px] mx-auto px-4 sm:px-4 md:px-6 lg:px-4 pt-24 pb-10 md:pt-36 md:pb-16">
         <div className="flex flex-col md:flex-row gap-10 lg:gap-12 items-center">
-          
-          {/* Left Column: Content & Upload CTA (1:1 identical to curtainz.ai) */}
+
+          {/* Left Column: Content & Upload CTA (1:1 identical to Curtain AI.ai) */}
           <div className="w-full md:w-1/2 text-left">
             <p className="text-xs md:text-sm font-semibold tracking-widest text-[#004642] uppercase">
               FREE AI VISUALIZER
@@ -96,9 +96,8 @@ export default function HeroSection() {
 
             {/* Upload Box with Animated Flowing Gradient Border */}
             <div
-              className={`flex flex-col items-center gap-4 w-full md:w-4/5 transition-all ${
-                isDragging ? "scale-[1.02]" : ""
-              }`}
+              className={`flex flex-col items-center gap-4 w-full md:w-4/5 transition-all ${isDragging ? "scale-[1.02]" : ""
+                }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
@@ -218,9 +217,9 @@ export default function HeroSection() {
             </ul>
           </div>
 
-          {/* Right Column: Dynamic Tilted Image Showcase (Exact 1:1 match with curtainz.ai) */}
+          {/* Right Column: Dynamic Tilted Image Showcase (Exact 1:1 match with Curtain AI.ai) */}
           <div className="w-full md:w-1/2 flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 pt-4 md:pt-0">
-            
+
             {/* Card 1: Before Image (Left Tilt & Floating Animation) */}
             <div className="relative rounded-xl transform rotate-[-6deg] hero-float">
               <div className="relative w-64 lg:w-72 h-80 lg:h-96 rounded-xl overflow-hidden shadow-xl">

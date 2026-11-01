@@ -5,6 +5,7 @@ import OurCollectionSection from "./_components/OurCollectionSection";
 import BeforeAfterSection from "./_components/BeforeAfterSection";
 import HowItWorksSection from "./_components/HowItWorksSection";
 import HeroSection from "./_components/HeroSection";
+import FinishingTouchSection from "./_components/FinishingTouchSection";
 
 export default function page() {
   return (
@@ -13,9 +14,11 @@ export default function page() {
       <HowItWorksSection />
       <BeforeAfterSection />
       <OurCollectionSection />
-      <WhyCurtainzSection />
-      <TestimonialsSection />
+
+     <FinishingTouchSection /> 
       <FaqSection />
+      {/* <WhyCurtainzSection /> */}
+      {/* <TestimonialsSection /> */}
     </>
   );
 }

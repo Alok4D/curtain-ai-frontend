@@ -1,4 +1,4 @@
-# 🛋️ Curtainz AI Studio - Frontend Application
+# 🛋️ Curtain AI AI Studio - Frontend Application
 
 A luxury, AI-powered virtual curtain fitting and interior drapery visualization studio. Built with **Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS, and Redux Toolkit (RTK Query)**, this platform allows homeowners and interior designers to visualize fabrics, drapes, sheers, and roller blinds directly on their actual room windows within seconds.
 
@@ -142,10 +142,10 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
 
 ## 🔑 Default Admin Credentials
 
-- **Email**: `admin@curtainz.ai`
+- **Email**: `admin@Curtain AI.ai`
 - **Password**: `admin123456`
 - **Dashboard URL**: [http://localhost:3000/dashboard/dashboard-overview](http://localhost:3000/dashboard/dashboard-overview)
 
 ---
 
-*Curtainz AI Studio — Empowering luxury home transformations through cutting-edge AI visualization.*
+*Curtain AI AI Studio — Empowering luxury home transformations through cutting-edge AI visualization.*

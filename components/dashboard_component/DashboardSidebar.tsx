@@ -21,7 +21,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
 import { logOut } from "@/lib/feature/auth/authSlice";
 
 export function DashboardSidebar() {
-  
+
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -105,7 +105,7 @@ export function DashboardSidebar() {
             </span>
             {!collapsed && (
               <span className="text-xl font-serif font-medium tracking-wide text-white">
-                Curtainz
+                Curtain AI
               </span>
             )}
           </div>
@@ -210,10 +210,10 @@ export function DashboardSidebar() {
             {!collapsed && (
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-semibold text-white truncate group-hover:text-emerald-200 transition-colors">
-                  {user?.name || "Curtainz Admin"}
+                  {user?.name || "Curtain AI Admin"}
                 </p>
                 <p className="text-[10px] text-emerald-200/70 truncate">
-                  {user?.email || "admin@curtainz.ai"}
+                  {user?.email || "admin@Curtain AI.ai"}
                 </p>
               </div>
             )}

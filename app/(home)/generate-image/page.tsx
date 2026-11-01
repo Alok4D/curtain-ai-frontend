@@ -35,7 +35,7 @@ export default function GenerateImagePage() {
   const [roomImage, setRoomImage] = useState<string>("/before_image.png");
   const [curtainName, setCurtainName] = useState<string>("Blue Lenin");
   const [curtainImage, setCurtainImage] = useState<string>(
-    "https://curtainz-ae.b-cdn.net/media/curtain_options/display/Generated_Image_September_04_2025_-_10_15PM.jpeg"
+    "https://Curtain AI-ae.b-cdn.net/media/curtain_options/display/Generated_Image_September_04_2025_-_10_15PM.jpeg"
   );
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
 

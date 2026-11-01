@@ -174,7 +174,7 @@ function LoginForm() {
       {/* Bottom Footnote Links */}
       <div className="text-center mt-6 space-y-2">
         <p className="text-xs text-[#5F6560]">
-          New to Curtainz?{" "}
+          New to Curtain AI?{" "}
           <Link href="/signup" className="font-semibold text-[#1C201D] hover:underline">
             Create an account
           </Link>
@@ -216,7 +216,7 @@ export default function LoginPage() {
               <span className="w-1 h-5 bg-white rounded-sm inline-block" />
             </span>
             <span className="text-xl sm:text-2xl font-serif font-medium tracking-wide">
-              Curtainz
+              Curtain AI
             </span>
           </div>
         </div>
@@ -264,7 +264,7 @@ export default function LoginPage() {
 
         {/* Legal Footer */}
         <div className="flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#8A908B] pt-10 mt-6 border-t border-[#EDEBE5]">
-          <span>&copy; 2026 Curtainz</span>
+          <span>&copy; 2026 Curtain AI</span>
           <div className="flex items-center gap-4 mt-2 sm:mt-0">
             <Link href="#privacy" className="hover:underline">
               Privacy policy

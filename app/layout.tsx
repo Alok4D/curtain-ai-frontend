@@ -28,7 +28,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Curtainz - AI-Powered Made-to-Measure Curtains",
+  title: "Curtain AI - AI-Powered Made-to-Measure Curtains",
   description: "Made-to-measure curtains, sheers and blinds in Dubai - previewed on your own windows with AI before you buy.",
 };
 

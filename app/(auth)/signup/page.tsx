@@ -75,7 +75,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#FBF9F5] font-sans antialiased text-[#2D312E]">
-      
+
       {/* Left Column: Visual Showcase Banner */}
       <div className="relative w-full lg:w-1/2 min-h-[500px] lg:min-h-screen flex flex-col justify-between p-8 sm:p-12 lg:p-16 overflow-hidden">
         {/* Background Image */}
@@ -99,7 +99,7 @@ export default function RegisterPage() {
               <span className="w-1 h-5 bg-white rounded-sm inline-block" />
             </span>
             <span className="text-xl sm:text-2xl font-serif font-medium tracking-wide">
-              Curtainz
+              Curtain AI
             </span>
           </div>
         </div>
@@ -129,7 +129,7 @@ export default function RegisterPage() {
 
       {/* Right Column: Registration Form */}
       <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-12 lg:p-16 xl:p-20">
-        
+
         {/* Top Link: Back to Home */}
         <div className="mb-8">
           <Link
@@ -326,7 +326,7 @@ export default function RegisterPage() {
 
         {/* Legal Footer */}
         <div className="flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#8A908B] pt-8 mt-6 border-t border-[#EDEBE5]">
-          <span>&copy; 2026 Curtainz</span>
+          <span>&copy; 2026 Curtain AI</span>
           <div className="flex items-center gap-4 mt-2 sm:mt-0">
             <Link href="#privacy" className="hover:underline">
               Privacy policy
