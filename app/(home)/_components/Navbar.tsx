@@ -13,6 +13,7 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+
   const [isOpen, setIsOpen] = useState(false);
 
   const handleNavClick = (
@@ -48,7 +49,7 @@ export default function Navbar() {
                 <span className="w-1 h-5 bg-white rounded-sm inline-block" />
               </span>
               <span className="text-xl sm:text-2xl font-serif font-medium tracking-wide">
-                Curtainz
+                Curtain AI
               </span>
             </div>
           </Link>

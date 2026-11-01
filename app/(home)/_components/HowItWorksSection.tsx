@@ -43,7 +43,7 @@ export default function HowItWorksSection() {
       aria-labelledby="how-heading"
       className="bg-gray-50 font-['Urbanist',sans-serif]"
     >
-      <div className="container mx-auto px-4 py-12 md:py-16">
+      <div className="w-full max-w-[1387px] mx-auto px-4 py-12 md:py-16">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs md:text-sm font-bold tracking-[0.15em] text-[#004642] uppercase">
