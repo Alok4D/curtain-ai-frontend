@@ -4,24 +4,34 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
+import { normalizeImageToJpeg } from "@/lib/utils";
 
 export default function HeroSection() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleFile = (file: File) => {
+  const handleFile = async (file: File) => {
     if (!file || !file.type.startsWith("image/")) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const dataUrl = e.target?.result as string;
+    try {
+      const dataUrl = await normalizeImageToJpeg(file);
       if (dataUrl) {
         sessionStorage.setItem("uploadedImageUrl", dataUrl);
         sessionStorage.setItem("roomImageId", Date.now().toString());
         router.push("/select-curtains");
       }
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target?.result as string;
+        if (dataUrl) {
+          sessionStorage.setItem("uploadedImageUrl", dataUrl);
+          sessionStorage.setItem("roomImageId", Date.now().toString());
+          router.push("/select-curtains");
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleBoxClick = () => {

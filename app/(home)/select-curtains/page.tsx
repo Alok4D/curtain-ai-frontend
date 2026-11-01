@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Check, Camera, Download, AlertCircle } from "lucide-react";
+import { normalizeImageToJpeg } from "@/lib/utils";
 import curtainData from "@/data/curtains.json";
 import { useGetAllCurtainsQuery } from "@/lib/feature/curtain/curtainApi";
 
@@ -36,21 +37,31 @@ export default function SelectCurtainsPage() {
     }
   }, []);
 
-  const handleRoomPhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRoomPhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !file.type.startsWith("image/")) return;
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const dataUrl = event.target?.result as string;
+    try {
+      const dataUrl = await normalizeImageToJpeg(file);
       if (dataUrl) {
         sessionStorage.setItem("uploadedImageUrl", dataUrl);
         sessionStorage.setItem("roomImageId", Date.now().toString());
         setUploadedImageUrl(dataUrl);
         setErrorMsg(null);
       }
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string;
+        if (dataUrl) {
+          sessionStorage.setItem("uploadedImageUrl", dataUrl);
+          sessionStorage.setItem("roomImageId", Date.now().toString());
+          setUploadedImageUrl(dataUrl);
+          setErrorMsg(null);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSelectCurtain = (curtain: CurtainItem | any) => {
