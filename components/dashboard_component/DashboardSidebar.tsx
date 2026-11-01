@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
 import { logOut } from "@/lib/feature/auth/authSlice";
 
 export function DashboardSidebar() {
+  
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -95,33 +96,19 @@ export function DashboardSidebar() {
           collapsed && "justify-center px-2 py-4"
         )}
       >
-        <Link href="/dashboard" className="flex items-center gap-2.5 group">
-          {/* Brand Logo with Leaf Flourish */}
-          <div className="w-9 h-9 rounded-sm bg-white/10 border border-white/20 flex items-center justify-center shrink-0 group-hover:bg-white/15 transition-colors">
-            <svg
-              className="w-5 h-6 text-white"
-              viewBox="0 0 26 30"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M4 19C4 11 10 4 19 2C19 9 14 17 5 19Z" fill="#a4df3b" />
-              <path
-                d="M9 24C11 18 16 12 23 11C21 18 16 23 10 25Z"
-                fill="#5eead4"
-                opacity="0.8"
-              />
-            </svg>
-          </div>
-          {!collapsed && (
-            <div className="flex flex-col">
-              <span className="text-lg font-bold tracking-tight text-white leading-tight">
+        <Link href="/dashboard" className="flex items-center gap-2 group">
+          <div className="flex items-center gap-1.5 text-white">
+            <span className="flex gap-0.5">
+              <span className="w-1 h-5 bg-white rounded-sm inline-block" />
+              <span className="w-1 h-5 bg-white rounded-sm inline-block" />
+              <span className="w-1 h-5 bg-white rounded-sm inline-block" />
+            </span>
+            {!collapsed && (
+              <span className="text-xl font-serif font-medium tracking-wide text-white">
                 Curtainz
               </span>
-              <span className="text-[10px] uppercase tracking-wider text-emerald-200 font-medium">
-                Admin Studio
-              </span>
-            </div>
-          )}
+            )}
+          </div>
         </Link>
 
         {/* Desktop Collapse Toggle */}
