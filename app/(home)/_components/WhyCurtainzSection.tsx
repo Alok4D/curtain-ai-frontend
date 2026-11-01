@@ -38,7 +38,7 @@ export default function WhyCurtainzSection() {
   return (
     <section
       id="about-us"
-      className="w-full bg-[#F9FAFB] py-16 md:py-24 scroll-mt-20 md:scroll-mt-24 font-['Urbanist',sans-serif]"
+      className="w-full bg-white py-16 md:py-24 scroll-mt-20 md:scroll-mt-24 font-['Urbanist',sans-serif]"
     >
       <div className="max-w-[1387px] mx-auto px-2 md:px-2 lg:px-4">
         

@@ -7,6 +7,7 @@ import { ArrowRight } from "lucide-react";
 import { normalizeImageToJpeg } from "@/lib/utils";
 
 export default function HeroSection() {
+
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -65,13 +66,13 @@ export default function HeroSection() {
       aria-labelledby="hero-heading"
       className="w-full bg-[#FFFFFF] font-['Urbanist',sans-serif] overflow-hidden"
     >
-      <div className="max-w-[1387px] mx-auto px-2 sm:px-4 lg:px-4 pt-24 pb-10 md:pt-36 md:pb-16">
+      <div className="max-w-[1387px] mx-auto px-4 sm:px-4 md:px-6 lg:px-4 pt-24 pb-10 md:pt-36 md:pb-16">
         <div className="flex flex-col md:flex-row gap-10 lg:gap-12 items-center">
           
           {/* Left Column: Content & Upload CTA (1:1 identical to curtainz.ai) */}
           <div className="w-full md:w-1/2 text-left">
             <p className="text-xs md:text-sm font-semibold tracking-widest text-[#004642] uppercase">
-              FREE AI VISUALIZER · DUBAI
+              FREE AI VISUALIZER
             </p>
 
             {/* H1 Heading with lime underline */}
@@ -212,7 +213,7 @@ export default function HeroSection() {
                 >
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
-                <span>Free home visits in Dubai</span>
+                <span>Free home visits in Bangladesh</span>
               </li>
             </ul>
           </div>

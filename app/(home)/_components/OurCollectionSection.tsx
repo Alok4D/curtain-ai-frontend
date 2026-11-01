@@ -64,6 +64,10 @@ const tabs: CollectionTab[] = [
         src: "/images/collection/motorized-blinds.png",
         alt: "Cordless motorised roller blinds aligned across a wide window",
       },
+       {
+        src: "/images/collection/zebra-blinds.png",
+        alt: "Pale grey zebra day-and-night blinds showing open and closed bands",
+      },
     ],
   },
 ];
@@ -75,7 +79,7 @@ export default function OurCollectionSection() {
     <section
       id="services"
       aria-labelledby="services-heading"
-      className="w-full bg-white scroll-mt-20 md:scroll-mt-24 font-['Urbanist',sans-serif]"
+      className="w-full bg-[#F9FAFB] scroll-mt-20 md:scroll-mt-24 font-['Urbanist',sans-serif]"
     >
       <div className="max-w-[1387px] mx-auto px-2 sm:px-4 lg:px-4 py-12 md:py-16">
         

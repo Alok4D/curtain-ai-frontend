@@ -11,7 +11,7 @@ export default function BeforeAfterSection() {
     <section
       id="ai-visualizer"
       aria-labelledby="compare-heading"
-      className="w-full bg-[#F9FAFB] py-12 md:py-16 scroll-mt-20 md:scroll-mt-24 font-['Urbanist',sans-serif]"
+      className="w-full bg-white py-12 md:py-16 scroll-mt-20 md:scroll-mt-24 font-['Urbanist',sans-serif]"
     >
       <div className="max-w-[1387px] mx-auto px-2 sm:px-4 lg:px-4">
         <div className="flex flex-col md:flex-row gap-10 items-center">
@@ -30,7 +30,7 @@ export default function BeforeAfterSection() {
             </h2>
 
             <p className="text-gray-600 text-base md:text-lg leading-relaxed mt-5">
-              Curtainz.ai understands your room&apos;s lighting, depth and window
+              Curtain AI understands your room&apos;s lighting, depth and window
               shape, so every preview looks like a real photograph — not a
               Photoshop mock-up. Compare fabrics side by side and choose with
               confidence.
@@ -65,7 +65,7 @@ export default function BeforeAfterSection() {
           <div className="w-full md:w-[55%] flex justify-center">
             <div className="slider-section">
               <div
-                className="slider-container rounded-sm shadow-xl"
+                className="slider-container"
                 style={{ ["--position" as string]: `${sliderPosition}%` }}
               >
                 <div className="image-container select-none">

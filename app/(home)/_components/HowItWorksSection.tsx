@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 
 interface StepItem {
   step: number;
@@ -23,7 +22,7 @@ const steps: StepItem[] = [
     step: 2,
     title: "Pick a style",
     description:
-      "Browse real fabrics — curtains, sheers and rollers — from our Dubai collection.",
+      "Browse real fabrics curtains, sheers and rollers from our Dubai collection.",
     image: "/images/how-it-works/step-2-choose-fabric.png",
     alt: "Browsing curtain, sheer and blind fabrics on Curtainz visualizer",
   },
@@ -93,16 +92,7 @@ export default function HowItWorksSection() {
           ))}
         </div>
 
-        {/* Action Button */}
-        <div className="flex justify-center mt-8">
-          <a
-            href="/#hero-heading"
-            className="bg-[#004642] hover:bg-[#003431] text-white font-semibold text-sm md:text-base px-6 py-3 rounded-lg inline-flex items-center gap-2 transition-colors duration-200 shadow-sm"
-          >
-            <span>Try it now — it&apos;s free</span>
-            <ArrowRight className="w-[18px] h-[18px] stroke-[2.2]" />
-          </a>
-        </div>
+      
       </div>
     </section>
   );
