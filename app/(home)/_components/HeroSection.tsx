@@ -66,8 +66,8 @@ export default function HeroSection() {
       aria-labelledby="hero-heading"
       className="w-full bg-[#FFFFFF] font-['Urbanist',sans-serif] overflow-hidden"
     >
-      <div className="max-w-[1387px] mx-auto px-4 sm:px-4 md:px-6 lg:px-4 pt-24 pb-10 md:pt-36 md:pb-16">
-        <div className="flex flex-col md:flex-row gap-10 lg:gap-12 items-center">
+      <div className="max-w-[1387px] mx-auto px-4 sm:px-4 md:px-6 lg:px-6 xl:px-4 pt-24 pb-10 md:pt-36 md:pb-16">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-4 lg:gap-8 xl:gap-12 items-center">
 
           {/* Left Column: Content & Upload CTA */}
           <div className="w-full md:w-1/2 text-left">
@@ -78,7 +78,7 @@ export default function HeroSection() {
             {/* H1 Heading with lime underline */}
             <h1
               id="hero-heading"
-              className="text-3xl md:text-4xl lg:text-[44px] font-bold text-[#004642] mt-3 leading-tight"
+              className="text-3xl md:text-3xl lg:text-[38px] xl:text-[44px] font-bold text-[#004642] mt-3 leading-tight"
             >
               See new curtains on{" "}
               <span className="underline decoration-[#d3c518] decoration-4 underline-offset-4">
@@ -88,7 +88,7 @@ export default function HeroSection() {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-gray-600 mt-5 text-base md:text-lg mb-8 leading-relaxed">
+            <p className="text-gray-600 mt-5 text-base md:text-sm lg:text-base xl:text-lg mb-8 leading-relaxed">
               Take a photo of your room, pick a fabric, and our AI shows you
               exactly how it will look — in about 20 seconds. Free, no sign-up
               needed.
@@ -96,7 +96,7 @@ export default function HeroSection() {
 
             {/* Upload Box with Animated Flowing Gradient Border */}
             <div
-              className={`flex flex-col items-center gap-4 w-full md:w-4/5 transition-all ${
+              className={`flex flex-col items-center gap-4 w-full md:w-full lg:w-[92%] xl:w-4/5 transition-all ${
                 isDragging ? "scale-[1.02]" : ""
               }`}
               onDragOver={handleDragOver}
@@ -114,11 +114,11 @@ export default function HeroSection() {
               <button
                 type="button"
                 onClick={handleBoxClick}
-                className="cta-button border-2 rounded-2xl px-6 sm:px-8 py-5 sm:py-6 text-black cursor-pointer w-full relative overflow-hidden gradient-border-flow"
+                className="cta-button border-2 rounded-2xl px-5 sm:px-8 md:px-5 lg:px-8 py-4 sm:py-6 md:py-4 lg:py-6 text-black cursor-pointer w-full relative overflow-hidden gradient-border-flow"
               >
-                <div className="flex items-center gap-4 sm:gap-5 justify-center">
+                <div className="flex items-center gap-3 sm:gap-5 md:gap-3.5 lg:gap-5 justify-center">
                   <svg
-                    className="w-7 h-7 shrink-0 text-black mb-0.5"
+                    className="w-6 h-6 sm:w-7 sm:h-7 shrink-0 text-black mb-0.5"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -130,10 +130,10 @@ export default function HeroSection() {
                     <circle cx="12" cy="13" r="3" />
                   </svg>
                   <div className="flex flex-col items-start text-left">
-                    <span className="text-base sm:text-lg font-semibold text-neutral-900 leading-tight">
+                    <span className="text-base sm:text-lg md:text-base lg:text-lg font-semibold text-neutral-900 leading-tight">
                       Upload your room photo
                     </span>
-                    <span className="text-xs sm:text-sm text-neutral-600 font-normal mt-0.5">
+                    <span className="text-xs sm:text-sm md:text-xs lg:text-sm text-neutral-600 font-normal mt-0.5">
                       Free AI preview in ~20 seconds
                     </span>
                   </div>
@@ -160,7 +160,7 @@ export default function HeroSection() {
             </div>
 
             {/* Benefits List */}
-            <ul className="flex flex-wrap gap-x-5 gap-y-2 mt-6 text-sm text-gray-500">
+            <ul className="flex flex-wrap gap-x-5 gap-y-2 mt-6 text-sm md:text-xs lg:text-sm text-gray-500">
               <li className="flex items-center gap-1.5">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -219,7 +219,7 @@ export default function HeroSection() {
 
             {/* ========================================================
                 Mobile-Only Interactive Comparison Slider
-                (Identical to curtainz.ai mobile hero — block md:hidden)
+                (Active only on mobile screens < md)
                ======================================================== */}
             <div className="w-full block md:hidden mt-8">
               <div className="slider-section">
@@ -359,77 +359,75 @@ export default function HeroSection() {
           </div>
 
           {/* ========================================================
-              Right Column: Desktop & Tablet Dynamic Tilted Showcase
-              (Exact 1:1 match with curtainz.ai — hidden on mobile,
-              displayed on md, lg, xl and 2xl screens)
+              Right Column: Tablet, Laptop & Desktop Dynamic Tilted Showcase
+              (Hidden on mobile; smartly scaled for tablet & laptop,
+               100% full original size on desktop >= 1280px)
              ======================================================== */}
-          <div className="w-full md:w-1/2 hidden md:block">
-            <div className="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 pt-4 md:pt-0">
+          <div className="w-full md:w-1/2 hidden md:flex items-center justify-center gap-2.5 md:gap-3 lg:gap-5 xl:gap-8 pt-4 md:pt-0">
 
-              {/* Card 1: Before Image (Left Tilt & Floating Animation) */}
-              <div className="relative rounded-xl transform rotate-[-6deg] hero-float">
-                <div className="relative w-64 lg:w-72 h-80 lg:h-96 rounded-xl overflow-hidden shadow-xl">
-                  <Image
-                    src="/before_image.png"
-                    alt="Living room before adding curtains"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 256px, 288px"
-                    className="w-64 lg:w-72 h-80 lg:h-96 object-cover rounded-xl shadow-xl"
-                  />
-                  {/* Before Badge */}
-                  <span className="absolute top-3 left-3 bg-white/90 text-gray-700 text-xs font-semibold px-2.5 py-1 rounded-full shadow select-none">
-                    Before
-                  </span>
-                </div>
+            {/* Card 1: Before Image (Left Tilt & Floating Animation) */}
+            <div className="relative rounded-xl transform rotate-[-3deg] lg:rotate-[-4deg] xl:rotate-[-6deg] hero-float shrink-0">
+              <div className="relative w-[150px] lg:w-[210px] xl:w-72 h-[200px] lg:h-[280px] xl:h-96 rounded-xl overflow-hidden shadow-xl">
+                <Image
+                  src="/before_image.png"
+                  alt="Living room before adding curtains"
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 150px, (max-width: 1280px) 210px, 288px"
+                  className="w-full h-full object-cover rounded-xl shadow-xl"
+                />
+                {/* Before Badge */}
+                <span className="absolute top-2 left-2 xl:top-3 xl:left-3 bg-white/90 text-gray-700 text-[10px] xl:text-xs font-semibold px-2 xl:px-2.5 py-0.5 xl:py-1 rounded-full shadow select-none">
+                  Before
+                </span>
               </div>
-
-              {/* Center Animated Arrow */}
-              <div className="text-[#004642] shrink-0 hero-arrow flex items-center justify-center">
-                <ArrowRight className="w-8 h-8 stroke-[2.2]" />
-              </div>
-
-              {/* Card 2: After Image (Right Tilt + Reveal Wipe Animation + Golden Glow Line + Lime Ring) */}
-              <div className="relative rounded-xl transform rotate-[6deg] hero-float hero-float-alt">
-                <div className="relative w-64 lg:w-72 h-80 lg:h-96 rounded-xl overflow-hidden shadow-xl ring-4 ring-[#d3c518]/70">
-                  {/* Base Before Image */}
-                  <Image
-                    src="/before_image.png"
-                    alt="Living room before adding curtains"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 256px, 288px"
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-
-                  {/* Animated Reveal After Image */}
-                  <Image
-                    src="/after_image.png"
-                    alt="Living room with AI-added curtains"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 256px, 288px"
-                    className="hero-reveal absolute inset-0 w-full h-full object-cover"
-                  />
-
-                  {/* Sweeping Reveal Glow Line */}
-                  <div className="hero-reveal-line" aria-hidden="true" />
-
-                  {/* AI Preview Badge with Sparkle */}
-                  <span className="absolute top-3 left-3 bg-[#004642] text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow flex items-center gap-1.5 z-10 select-none">
-                    <svg
-                      className="w-3.5 h-3.5 fill-[#d3c518] text-[#d3c518]"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
-                    </svg>
-                    <span>AI Preview</span>
-                  </span>
-                </div>
-              </div>
-
             </div>
+
+            {/* Center Animated Arrow */}
+            <div className="text-[#004642] shrink-0 hero-arrow flex items-center justify-center">
+              <ArrowRight className="w-5 h-5 lg:w-6 lg:h-6 xl:w-8 xl:h-8 stroke-[2.2]" />
+            </div>
+
+            {/* Card 2: After Image (Right Tilt + Reveal Wipe Animation + Golden Glow Line + Lime Ring) */}
+            <div className="relative rounded-xl transform rotate-[3deg] lg:rotate-[4deg] xl:rotate-[6deg] hero-float hero-float-alt shrink-0">
+              <div className="relative w-[150px] lg:w-[210px] xl:w-72 h-[200px] lg:h-[280px] xl:h-96 rounded-xl overflow-hidden shadow-xl ring-2 lg:ring-3 xl:ring-4 ring-[#d3c518]/70">
+                {/* Base Before Image */}
+                <Image
+                  src="/before_image.png"
+                  alt="Living room before adding curtains"
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 150px, (max-width: 1280px) 210px, 288px"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+
+                {/* Animated Reveal After Image */}
+                <Image
+                  src="/after_image.png"
+                  alt="Living room with AI-added curtains"
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 150px, (max-width: 1280px) 210px, 288px"
+                  className="hero-reveal absolute inset-0 w-full h-full object-cover"
+                />
+
+                {/* Sweeping Reveal Glow Line */}
+                <div className="hero-reveal-line" aria-hidden="true" />
+
+                {/* AI Preview Badge with Sparkle */}
+                <span className="absolute top-2 left-2 xl:top-3 xl:left-3 bg-[#004642] text-white text-[10px] xl:text-xs font-semibold px-2 xl:px-2.5 py-0.5 xl:py-1 rounded-full shadow flex items-center gap-1 xl:gap-1.5 z-10 select-none">
+                  <svg
+                    className="w-3 h-3 xl:w-3.5 xl:h-3.5 fill-[#d3c518] text-[#d3c518]"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
+                  </svg>
+                  <span>AI Preview</span>
+                </span>
+              </div>
+            </div>
+
           </div>
 
         </div>
