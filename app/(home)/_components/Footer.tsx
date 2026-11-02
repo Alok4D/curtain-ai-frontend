@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -19,12 +20,14 @@ const Footer = () => {
                 className="inline-flex items-center gap-2 mb-3.5 sm:mb-4 md:mb-5 group focus:outline-none"
                 aria-label="Curtain AI home"
               >
-                <div className="flex items-center gap-1.5 text-white">
-                  <span className="flex gap-0.5">
-                    <span className="w-1 h-5 bg-white rounded-sm inline-block" />
-                    <span className="w-1 h-5 bg-white rounded-sm inline-block" />
-                    <span className="w-1 h-5 bg-white rounded-sm inline-block" />
-                  </span>
+                <div className="flex items-center gap-2.5 text-white">
+                  <Image
+                    src="/nav-logo/Untitled-1.png"
+                    width={36}
+                    height={36}
+                    alt="Curtain AI logo"
+                    className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0"
+                  />
                   <span className="text-xl sm:text-2xl font-serif font-medium tracking-wide">
                     Curtain AI
                   </span>

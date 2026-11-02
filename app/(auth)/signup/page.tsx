@@ -93,11 +93,14 @@ export default function RegisterPage() {
         {/* Top Logo */}
         <div className="relative z-20 flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-white">
-            <span className="flex gap-0.5">
-              <span className="w-1 h-5 bg-white rounded-sm inline-block" />
-              <span className="w-1 h-5 bg-white rounded-sm inline-block" />
-              <span className="w-1 h-5 bg-white rounded-sm inline-block" />
-            </span>
+            <Image
+              src="/nav-logo/Untitled-1.png"
+              width={32}
+              height={32}
+              alt="Curtain AI Logo"
+              className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0"
+              priority
+            />
             <span className="text-xl sm:text-2xl font-serif font-medium tracking-wide">
               Curtain AI
             </span>
