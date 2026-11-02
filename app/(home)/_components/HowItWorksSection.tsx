@@ -39,8 +39,9 @@ const steps: StepItem[] = [
 export default function HowItWorksSection() {
   return (
     <section
+      id="how-it-works"
       aria-labelledby="how-heading"
-      className="bg-gray-50 font-['Urbanist',sans-serif]"
+      className="bg-gray-50 font-['Urbanist',sans-serif] scroll-mt-16 md:scroll-mt-20"
     >
       <div className="w-full max-w-[1387px] mx-auto px-4 py-12 md:py-16">
         {/* Section Header */}
@@ -91,8 +92,6 @@ export default function HowItWorksSection() {
             </div>
           ))}
         </div>
-
-
       </div>
     </section>
   );

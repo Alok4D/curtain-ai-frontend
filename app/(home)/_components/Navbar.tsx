@@ -7,8 +7,8 @@ import Image from "next/image";
 
 const navLinks = [
   { name: "About Us", href: "/#about-us" },
+  { name: "How it works", href: "/#how-it-works" },
   { name: "AI Visualizer", href: "/#ai-visualizer" },
-  { name: "FAQ", href: "/#faq" },
   { name: "Services", href: "/#services" },
 ];
 
@@ -78,8 +78,8 @@ export default function Navbar() {
             {/* Desktop CTA */}
             <Link
               className="hidden md:inline-flex items-center justify-center text-xs lg:text-sm font-bold tracking-wider py-2.5 px-5 bg-white text-neutral-900 rounded-sm hover:bg-neutral-100 active:scale-95 transition-all uppercase shadow-xs whitespace-nowrap"
-              href="/#book-visit"
-              onClick={(e) => handleNavClick(e, "/#book-visit")}
+              href="/select-curtains"
+              onClick={(e) => handleNavClick(e, "/select-curtains")}
             >
               Try your room
             </Link>
@@ -87,8 +87,8 @@ export default function Navbar() {
             {/* Mobile Mini CTA */}
             <Link
               className="md:hidden inline-flex items-center text-[11px] font-bold tracking-wider py-1.5 px-3 bg-white text-neutral-900 rounded-sm hover:bg-neutral-100 transition-colors uppercase whitespace-nowrap"
-              href="/#book-visit"
-              onClick={(e) => handleNavClick(e, "/#book-visit")}
+              href="/select-curtains"
+              onClick={(e) => handleNavClick(e, "/select-curtains")}
             >
               Try your room
             </Link>
@@ -125,8 +125,8 @@ export default function Navbar() {
 
             <div className="pt-3 mt-1 border-t border-white/10">
               <Link
-                href="/#book-visit"
-                onClick={(e) => handleNavClick(e, "/#book-visit")}
+                href="/select-curtains"
+                onClick={(e) => handleNavClick(e, "/select-curtains")}
                 className="flex items-center justify-center w-full py-3 px-4 rounded-md bg-white text-[#004642] font-bold text-sm uppercase tracking-wider hover:bg-emerald-50 active:scale-[0.98] transition-all shadow-md"
               >
                 Try your room
