@@ -33,7 +33,7 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 w-full bg-[#004642] font-['Urbanist',sans-serif] border-b border-emerald-900/40 shadow-xs">
-      <div className="max-w-[1387px] mx-auto w-full px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1387px] mx-auto w-full px-4 sm:px-6 lg:px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* 1. Left: Logo */}
           <div className="flex items-center justify-start shrink-0">
@@ -77,7 +77,7 @@ export default function Navbar() {
           <div className="flex items-center justify-end gap-x-3 shrink-0">
             {/* Desktop CTA */}
             <Link
-              className="hidden md:inline-flex items-center justify-center text-xs lg:text-sm font-bold tracking-wider py-2.5 px-5 bg-white text-neutral-900 rounded-sm hover:bg-neutral-100 active:scale-95 transition-all uppercase shadow-xs whitespace-nowrap"
+              className="hidden md:inline-flex items-center justify-center text-xs lg:text-sm font-bold tracking-wider py-2.5 px-5 bg-white text-neutral-900 rounded-sm hover:bg-neutral-100 active:scale-95 transition-all uppercase whitespace-nowrap"
               href="/select-curtains"
               onClick={(e) => handleNavClick(e, "/select-curtains")}
             >
@@ -86,7 +86,7 @@ export default function Navbar() {
 
             {/* Mobile Mini CTA */}
             <Link
-              className="md:hidden inline-flex items-center text-[11px] font-bold tracking-wider py-1.5 px-3 bg-white text-neutral-900 rounded-sm hover:bg-neutral-100 transition-colors uppercase whitespace-nowrap"
+              className="md:hidden inline-flex items-center text-[13px] font-medium tracking-wider py-1.5 px-3 bg-white text-neutral-900 rounded-sm hover:bg-neutral-100 transition-colors whitespace-nowrap"
               href="/select-curtains"
               onClick={(e) => handleNavClick(e, "/select-curtains")}
             >
@@ -97,7 +97,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 active:bg-white/25 text-white transition-colors cursor-pointer"
+              className="md:hidden w-9 h-9 flex items-center justify-center rounded-sm bg-white/10 hover:bg-white/20 active:bg-white/25 text-white transition-colors cursor-pointer"
               aria-label="Toggle navigation menu"
               aria-expanded={isOpen}
             >
