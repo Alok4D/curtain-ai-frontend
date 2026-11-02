@@ -73,7 +73,7 @@ export default function Navbar() {
           <div className="flex items-center justify-end gap-x-3 shrink-0">
             {/* Desktop CTA */}
             <Link
-              className="hidden md:inline-flex items-center justify-center text-xs lg:text-sm font-bold tracking-wider py-2.5 px-5 bg-white text-neutral-900 rounded-lg hover:bg-neutral-100 active:scale-95 transition-all uppercase shadow-xs whitespace-nowrap"
+              className="hidden md:inline-flex items-center justify-center text-xs lg:text-sm font-bold tracking-wider py-2.5 px-5 bg-white text-neutral-900 rounded-sm hover:bg-neutral-100 active:scale-95 transition-all uppercase shadow-xs whitespace-nowrap"
               href="/#book-visit"
               onClick={(e) => handleNavClick(e, "/#book-visit")}
             >
@@ -82,7 +82,7 @@ export default function Navbar() {
 
             {/* Mobile Mini CTA */}
             <Link
-              className="md:hidden inline-flex items-center text-[11px] font-bold tracking-wider py-1.5 px-3 bg-white text-neutral-900 rounded-md hover:bg-neutral-100 transition-colors uppercase whitespace-nowrap"
+              className="md:hidden inline-flex items-center text-[11px] font-bold tracking-wider py-1.5 px-3 bg-white text-neutral-900 rounded-sm hover:bg-neutral-100 transition-colors uppercase whitespace-nowrap"
               href="/#book-visit"
               onClick={(e) => handleNavClick(e, "/#book-visit")}
             >
@@ -123,7 +123,7 @@ export default function Navbar() {
               <Link
                 href="/#book-visit"
                 onClick={(e) => handleNavClick(e, "/#book-visit")}
-                className="flex items-center justify-center w-full py-3 px-4 rounded-xl bg-white text-[#004642] font-bold text-sm uppercase tracking-wider hover:bg-emerald-50 active:scale-[0.98] transition-all shadow-md"
+                className="flex items-center justify-center w-full py-3 px-4 rounded-md bg-white text-[#004642] font-bold text-sm uppercase tracking-wider hover:bg-emerald-50 active:scale-[0.98] transition-all shadow-md"
               >
                 Try your room
               </Link>
