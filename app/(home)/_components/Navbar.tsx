@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 const navLinks = [
   { name: "About Us", href: "/#about-us" },
@@ -42,12 +43,15 @@ export default function Navbar() {
               aria-label="Curtain AI home"
               onClick={() => setIsOpen(false)}
             >
-              <div className="flex items-center gap-1.5 text-white">
-                <span className="flex gap-0.5">
-                  <span className="w-1 h-5 bg-white rounded-sm inline-block" />
-                  <span className="w-1 h-5 bg-white rounded-sm inline-block" />
-                  <span className="w-1 h-5 bg-white rounded-sm inline-block" />
-                </span>
+              <div className="flex items-center gap-2.5 text-white">
+                <Image
+                  src="/nav-logo/Untitled-1.png"
+                  width={36}
+                  height={36}
+                  alt="Curtain AI logo"
+                  className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0"
+                  priority
+                />
                 <span className="text-xl sm:text-2xl font-serif font-medium tracking-wide">
                   Curtain AI
                 </span>
