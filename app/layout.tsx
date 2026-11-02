@@ -30,6 +30,13 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Curtain AI - AI-Powered Made-to-Measure Curtains",
   description: "Made-to-measure curtains, sheers and blinds in Dubai - previewed on your own windows with AI before you buy.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({
