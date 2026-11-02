@@ -13,7 +13,7 @@ export default function BeforeAfterSection() {
       aria-labelledby="compare-heading"
       className="w-full bg-white py-12 md:py-16 scroll-mt-20 md:scroll-mt-24 font-['Urbanist',sans-serif]"
     >
-      <div className="max-w-[1387px] mx-auto px-2 sm:px-4 lg:px-4">
+      <div className="max-w-[1387px] mx-auto px-4 sm:px-4 lg:px-4">
         <div className="flex flex-col md:flex-row gap-10 items-center">
           
           {/* Left Column: Heading, Description & CTA */}
