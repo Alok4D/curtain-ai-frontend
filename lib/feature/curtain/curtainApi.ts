@@ -49,6 +49,23 @@ export interface CurtainRecommendationResponse {
   data: RecommendationResponseData;
 }
 
+export interface CurtainSpecsAutoFillResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: {
+    name: string;
+    category: TCurtainCategory;
+    colors: string[];
+    fabric: string;
+    pattern: string;
+    opacity: string;
+    texture: string;
+    style: string[];
+    suitableRooms: string[];
+  };
+}
+
 export interface CurtainsResponse {
   statusCode: number;
   success: boolean;
@@ -147,6 +164,17 @@ export const curtainApi = baseApi.injectEndpoints({
         body,
       }),
     }),
+
+    autoFillCurtainSpecs: builder.mutation<
+      CurtainSpecsAutoFillResponse,
+      { image: string }
+    >({
+      query: (body) => ({
+        url: '/curtains/auto-fill-specs',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -158,4 +186,5 @@ export const {
   useDeleteCurtainMutation,
   useSeedCurtainsMutation,
   useRecommendCurtainsMutation,
+  useAutoFillCurtainSpecsMutation,
 } = curtainApi;

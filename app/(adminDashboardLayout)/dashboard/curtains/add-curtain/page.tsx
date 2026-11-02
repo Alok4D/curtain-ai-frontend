@@ -4,11 +4,23 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Upload, ChevronDown, ArrowLeft, Loader, Check, Plus, X } from "lucide-react";
+import {
+  Upload,
+  ChevronDown,
+  ArrowLeft,
+  Loader,
+  Check,
+  Plus,
+  X,
+  Sparkles,
+  Edit3,
+  Wand2,
+} from "lucide-react";
 import { toast } from "sonner";
 import {
   TCurtainCategory,
   useCreateCurtainMutation,
+  useAutoFillCurtainSpecsMutation,
 } from "@/lib/feature/curtain/curtainApi";
 
 const POPULAR_COLORS = [
@@ -53,7 +65,14 @@ export default function AddCurtainForm() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Entry Mode: 'ai' auto-fill vs 'manual' entry
+  const [entryMode, setEntryMode] = useState<"ai" | "manual">("ai");
+  const [hasAutoFilled, setHasAutoFilled] = useState<boolean>(false);
+
+  // RTK Query Mutations
   const [createCurtain, { isLoading }] = useCreateCurtainMutation();
+  const [autoFillSpecs, { isLoading: isAutoFilling }] =
+    useAutoFillCurtainSpecsMutation();
 
   // Basic Details
   const [curtainName, setCurtainName] = useState("");
@@ -70,8 +89,14 @@ export default function AddCurtainForm() {
   // Multi-value Fields
   const [colors, setColors] = useState<string[]>(["beige", "cream"]);
   const [colorInput, setColorInput] = useState("");
-  const [selectedStyles, setSelectedStyles] = useState<string[]>(["modern", "minimalist"]);
-  const [suitableRooms, setSuitableRooms] = useState<string[]>(["living-room", "bedroom"]);
+  const [selectedStyles, setSelectedStyles] = useState<string[]>([
+    "modern",
+    "minimalist",
+  ]);
+  const [suitableRooms, setSuitableRooms] = useState<string[]>([
+    "living-room",
+    "bedroom",
+  ]);
 
   // Images
   const [imagePreview, setImagePreview] = useState<string>("");
@@ -80,6 +105,56 @@ export default function AddCurtainForm() {
 
   const handleBrowseClick = () => {
     fileInputRef.current?.click();
+  };
+
+  // AI Auto-Fill Handler
+  const handleAutoFillWithAI = async (imgToAnalyze?: string) => {
+    const targetImage = imgToAnalyze || imagePreview;
+    if (!targetImage) {
+      toast.error("Please upload a primary curtain photo first.");
+      return;
+    }
+
+    const toastId = toast.loading("AI Vision is analyzing fabric and specs...");
+    try {
+      const res = await autoFillSpecs({ image: targetImage }).unwrap();
+
+      if (res?.success && res?.data) {
+        const d = res.data;
+        if (d.name) setCurtainName(d.name);
+        if (d.category) setCategory(d.category);
+        if (d.colors && Array.isArray(d.colors) && d.colors.length > 0) {
+          setColors(d.colors);
+        }
+        if (d.fabric) setFabric(d.fabric);
+        if (d.pattern) setPattern(d.pattern);
+        if (d.opacity) setOpacity(d.opacity);
+        if (d.texture) setTexture(d.texture);
+        if (d.style && Array.isArray(d.style) && d.style.length > 0) {
+          setSelectedStyles(d.style);
+        }
+        if (
+          d.suitableRooms &&
+          Array.isArray(d.suitableRooms) &&
+          d.suitableRooms.length > 0
+        ) {
+          setSuitableRooms(d.suitableRooms);
+        }
+
+        setHasAutoFilled(true);
+        toast.success("All curtain details extracted and auto-filled by AI!", {
+          id: toastId,
+        });
+      }
+    } catch (err: any) {
+      console.error("AI Auto-fill error:", err);
+      toast.error(
+        err?.data?.message ||
+          err?.message ||
+          "Could not auto-fill with AI. You can still fill fields manually.",
+        { id: toastId },
+      );
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +174,13 @@ export default function AddCurtainForm() {
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") {
-        setImagePreview(reader.result);
+        const dataUrl = reader.result;
+        setImagePreview(dataUrl);
+
+        // If in AI mode, automatically trigger AI auto-fill
+        if (entryMode === "ai") {
+          handleAutoFillWithAI(dataUrl);
+        }
       }
     };
     reader.readAsDataURL(file);
@@ -186,13 +267,18 @@ export default function AddCurtainForm() {
         material: `${fabric} · ${texture}`,
       }).unwrap();
 
-      toast.success(res?.message || "Curtain added successfully!", { id: toastId });
+      toast.success(res?.message || "Curtain added successfully!", {
+        id: toastId,
+      });
       router.push("/dashboard/curtains");
     } catch (err: any) {
       console.error("Add curtain error:", err);
-      toast.error(err?.data?.message || err?.message || "Failed to add curtain.", {
-        id: toastId,
-      });
+      toast.error(
+        err?.data?.message || err?.message || "Failed to add curtain.",
+        {
+          id: toastId,
+        },
+      );
     }
   };
 
@@ -217,13 +303,42 @@ export default function AddCurtainForm() {
               Add New Curtain
             </h1>
             <p className="mt-1 text-xs sm:text-sm text-[#737874]">
-              Configure complete product details, colors, fabric specs, room suitability, and images.
+              Configure complete product details, colors, fabric specs, room
+              suitability, and images.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Mode Switcher: AI Auto-fill vs Manual */}
+            <div className="inline-flex p-1 bg-[#F0F2EE] border border-[#D5D8D3] rounded-lg">
+              <button
+                type="button"
+                onClick={() => setEntryMode("ai")}
+                className={`px-3 py-1.5 text-xs font-bold rounded-md flex items-center gap-1.5 transition-all cursor-pointer ${
+                  entryMode === "ai"
+                    ? "bg-[#004642] text-white shadow-xs"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5 text-emerald-300" />
+                <span>AI Auto-Fill</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setEntryMode("manual")}
+                className={`px-3 py-1.5 text-xs font-bold rounded-md flex items-center gap-1.5 transition-all cursor-pointer ${
+                  entryMode === "manual"
+                    ? "bg-[#004642] text-white shadow-xs"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                <Edit3 className="w-3.5 h-3.5" />
+                <span>Manual Entry</span>
+              </button>
+            </div>
+
             <span
-              className={`text-xs font-bold px-3 py-1 border ${
+              className={`text-xs font-bold px-3 py-1.5 border ${
                 isActive
                   ? "bg-emerald-50 text-emerald-700 border-emerald-300"
                   : "bg-gray-100 text-gray-500 border-gray-300"
@@ -235,7 +350,10 @@ export default function AddCurtainForm() {
         </header>
 
         {/* Form Body Grid */}
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+        >
           {/* Left Column: Product Images */}
           <div className="lg:col-span-5 bg-white p-5 sm:p-6 border border-[#ECEAE4] space-y-5">
             <div className="flex items-center justify-between">
@@ -282,14 +400,14 @@ export default function AddCurtainForm() {
 
             {/* Primary Live Preview */}
             {imagePreview && imagePreview.trim() !== "" && (
-              <div className="p-3.5 border border-[#ECEAE4] bg-[#FBF9F5] space-y-2">
+              <div className="p-3.5 border border-[#ECEAE4] bg-[#FBF9F5] space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-[#004642] uppercase tracking-wider">
                     Primary Image Preview
                   </span>
                   <span className="text-[10px] text-gray-500">Ready</span>
                 </div>
-                <div className="relative w-full aspect-[16/9] overflow-hidden bg-neutral-200 border border-gray-200">
+                <div className="relative w-full aspect-[16/9] overflow-hidden bg-neutral-200 border border-gray-200 rounded-sm">
                   <Image
                     src={imagePreview}
                     alt="Curtain texture preview"
@@ -298,6 +416,49 @@ export default function AddCurtainForm() {
                     unoptimized
                   />
                 </div>
+
+                {/* AI Auto-Fill Card (Shown in AI Mode) */}
+                {entryMode === "ai" && (
+                  <div className="pt-2 border-t border-gray-200/60 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-[#004642]">
+                        <Sparkles className="w-4 h-4 text-emerald-600" />
+                        <span>AI Vision Assistant</span>
+                      </div>
+                      {hasAutoFilled && (
+                        <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">
+                          ✓ Filled
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-gray-600 leading-relaxed">
+                      AI analyzes fabric texture, weave, colors, opacity & room
+                      suitability to auto-fill the form on the right.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => handleAutoFillWithAI()}
+                      disabled={isAutoFilling}
+                      className="w-full py-2 px-3 bg-[#004642] hover:bg-[#003734] text-white text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs disabled:opacity-75"
+                    >
+                      {isAutoFilling ? (
+                        <>
+                          <Loader className="w-3.5 h-3.5 animate-spin text-white" />
+                          <span>AI Scanning Fabric & Specs...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Wand2 className="w-3.5 h-3.5 text-emerald-300" />
+                          <span>
+                            {hasAutoFilled
+                              ? "Re-scan & Auto-Fill with AI"
+                              : "Auto-Fill Specifications with AI"}
+                          </span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
@@ -331,7 +492,9 @@ export default function AddCurtainForm() {
                       key={idx}
                       className="flex items-center justify-between text-[11px] bg-gray-50 border border-gray-200 px-2.5 py-1.5"
                     >
-                      <span className="truncate max-w-[240px] text-gray-600">{img}</span>
+                      <span className="truncate max-w-[240px] text-gray-600">
+                        {img}
+                      </span>
                       <button
                         type="button"
                         onClick={() => removeAdditionalImage(img)}
@@ -348,6 +511,32 @@ export default function AddCurtainForm() {
 
           {/* Right Column: Full Specifications Form */}
           <div className="lg:col-span-7 bg-white p-6 sm:p-8 border border-[#ECEAE4] space-y-6">
+            {/* AI Status Notification in AI Mode */}
+            {entryMode === "ai" && isAutoFilling && (
+              <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center gap-2.5 text-xs text-emerald-900 font-semibold animate-pulse">
+                <Loader className="w-4 h-4 animate-spin text-[#004642] shrink-0" />
+                <span>
+                  AI Vision is inspecting the curtain texture & auto-populating
+                  specifications...
+                </span>
+              </div>
+            )}
+
+            {entryMode === "ai" && hasAutoFilled && !isAutoFilling && (
+              <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-lg flex items-start gap-2.5 text-xs text-emerald-900">
+                <Check className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5 stroke-[2.5]" />
+                <div className="space-y-0.5">
+                  <p className="font-bold">
+                    Specifications auto-filled by AI Vision
+                  </p>
+                  <p className="text-[11px] text-emerald-800">
+                    All specifications on the right have been populated. You can
+                    review and fine-tune any field below before publishing.
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Section 1: Basic Information */}
             <div>
               <h2 className="text-sm font-bold text-[#004642] uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">
@@ -378,12 +567,16 @@ export default function AddCurtainForm() {
                   <div className="relative">
                     <select
                       value={category}
-                      onChange={(e) => setCategory(e.target.value as TCurtainCategory)}
+                      onChange={(e) =>
+                        setCategory(e.target.value as TCurtainCategory)
+                      }
                       className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-[#D5D8D3] appearance-none focus:outline-none focus:ring-1 focus:ring-[#004642] text-[#1C201D] pr-9 cursor-pointer"
                     >
                       <option value="curtains">Curtains (Full Drapes)</option>
                       <option value="sheers">Sheers (Light Filtering)</option>
-                      <option value="rollers">Rollers (Blinds &amp; Blackout)</option>
+                      <option value="rollers">
+                        Rollers (Blinds &amp; Blackout)
+                      </option>
                     </select>
                     <ChevronDown className="w-4 h-4 text-[#737874] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
@@ -446,7 +639,9 @@ export default function AddCurtainForm() {
 
                   {/* Quick-add color suggestions */}
                   <div className="flex flex-wrap items-center gap-1.5 mt-2">
-                    <span className="text-[11px] text-gray-500">Quick add:</span>
+                    <span className="text-[11px] text-gray-500">
+                      Quick add:
+                    </span>
                     {POPULAR_COLORS.map((pc) => (
                       <button
                         key={pc}
@@ -559,7 +754,9 @@ export default function AddCurtainForm() {
                               : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                           }`}
                         >
-                          {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                          {isSelected && (
+                            <Check className="w-3 h-3 stroke-[3]" />
+                          )}
                           <span>{st}</span>
                         </button>
                       );
