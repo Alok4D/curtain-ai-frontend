@@ -41,13 +41,12 @@ export default function GenerateImagePage() {
 
   // Styling & Fitting preferences
   const [showPreferences, setShowPreferences] = useState<boolean>(false);
-  const [drapeLength, setDrapeLength] = useState<string>("just touching the floor");
-  const [drapePosition, setDrapePosition] = useState<string>(
-    "pulled open to the sides framing the window with natural daylight coming through"
-  );
-  const [curtainRod, setCurtainRod] = useState<string>(
-    "matte black minimalist curtain rod mounted just below the ceiling"
-  );
+  const [drapeLength, setDrapeLength] = useState<string>("Floor-skimming");
+  const [drapePosition, setDrapePosition] = useState<string>("Framing Sides");
+  const [curtainRod, setCurtainRod] = useState<string>("Matte Black");
+  const [headerStyle, setHeaderStyle] = useState<string>("Wave Header");
+  const [fabricOpacity, setFabricOpacity] = useState<string>("Auto");
+  const [pleatDensity, setPleatDensity] = useState<string>("Medium");
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -110,6 +109,9 @@ export default function GenerateImagePage() {
         drapeLength,
         drapePosition,
         curtainRod,
+        headerStyle,
+        fabricOpacity,
+        pleatDensity,
       }).unwrap();
 
       if (!result?.data?.imageUrl) {
@@ -306,6 +308,12 @@ export default function GenerateImagePage() {
                   setDrapePosition={setDrapePosition}
                   curtainRod={curtainRod}
                   setCurtainRod={setCurtainRod}
+                  headerStyle={headerStyle}
+                  setHeaderStyle={setHeaderStyle}
+                  fabricOpacity={fabricOpacity}
+                  setFabricOpacity={setFabricOpacity}
+                  pleatDensity={pleatDensity}
+                  setPleatDensity={setPleatDensity}
                   isGenerating={isGenerating}
                 />
 

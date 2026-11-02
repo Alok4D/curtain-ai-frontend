@@ -8,6 +8,9 @@ export interface GenerateVisualizerPayload {
   drapeLength?: string;
   drapePosition?: string;
   curtainRod?: string;
+  headerStyle?: string;
+  fabricOpacity?: string;
+  pleatDensity?: string;
 }
 
 export interface GenerateVisualizerResponse {
@@ -43,4 +46,3 @@ export const visualizerApi = baseApi.injectEndpoints({
 });
 
 export const { useGenerateCurtainPreviewMutation, useGetRecentVisualizationsQuery } = visualizerApi;
-
