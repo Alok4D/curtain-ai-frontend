@@ -10,6 +10,7 @@ export default function HeroSection() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [mobileSliderPos, setMobileSliderPos] = useState<number>(50);
 
   const handleFile = async (file: File) => {
     if (!file || !file.type.startsWith("image/")) return;
@@ -66,10 +67,10 @@ export default function HeroSection() {
       className="w-full bg-[#FFFFFF] font-['Urbanist',sans-serif] overflow-hidden"
     >
       <div className="max-w-[1387px] mx-auto px-4 sm:px-4 md:px-6 lg:px-4 pt-24 pb-10 md:pt-36 md:pb-16">
-        <div className="flex flex-col lg:flex-row gap-10 lg:gap-8 xl:gap-12 items-center">
+        <div className="flex flex-col md:flex-row gap-10 lg:gap-12 items-center">
 
-          {/* Left Column: Content & Upload CTA (1:1 identical to Curtain AI.ai on Desktop) */}
-          <div className="w-full lg:w-1/2 text-left">
+          {/* Left Column: Content & Upload CTA */}
+          <div className="w-full md:w-1/2 text-left">
             <p className="text-xs md:text-sm font-semibold tracking-widest text-[#004642] uppercase">
               FREE AI VISUALIZER
             </p>
@@ -215,74 +216,220 @@ export default function HeroSection() {
                 <span>Free home visits in Bangladesh</span>
               </li>
             </ul>
+
+            {/* ========================================================
+                Mobile-Only Interactive Comparison Slider
+                (Identical to curtainz.ai mobile hero — block md:hidden)
+               ======================================================== */}
+            <div className="w-full block md:hidden mt-8">
+              <div className="slider-section">
+                <div
+                  className="slider-container rounded-xl overflow-hidden shadow-md border border-gray-100"
+                  style={{ ["--position" as string]: `${mobileSliderPos}%` }}
+                >
+                  <div className="image-container select-none">
+                    {/* Before Badge */}
+                    <div className="absolute top-2 left-3 z-10 pointer-events-none">
+                      <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-sm text-xs font-medium bg-gray-700 text-white shadow-sm">
+                        Before
+                      </span>
+                    </div>
+
+                    {/* After Badge */}
+                    <div className="absolute top-2 right-3 z-10 pointer-events-none">
+                      <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-sm text-xs font-medium bg-[#004642] text-white shadow-sm">
+                        After
+                      </span>
+                    </div>
+
+                    {/* Base After Image */}
+                    <Image
+                      src="/after_image.png"
+                      alt="Room after curtain installation"
+                      width={1024}
+                      height={1024}
+                      priority
+                      className="slider-image pointer-events-none w-full h-auto block"
+                    />
+
+                    {/* Clipped Before Image Overlay */}
+                    <div
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        clipPath: `inset(0 ${100 - mobileSliderPos}% 0 0)`,
+                      }}
+                    >
+                      <Image
+                        src="/before_image.png"
+                        alt="Room before curtain installation"
+                        width={1024}
+                        height={1024}
+                        priority
+                        className="slider-image w-full h-auto block"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Range Slider for Touch & Drag */}
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={mobileSliderPos}
+                    onChange={(e) => setMobileSliderPos(Number(e.target.value))}
+                    aria-label="Percentage of before photo shown"
+                    className="slider"
+                  />
+
+                  {/* Central Dividing Line & Circular Handle */}
+                  <div
+                    className="slider-line"
+                    aria-hidden="true"
+                    style={{ left: `${mobileSliderPos}%` }}
+                  />
+                  <div
+                    className="slider-button"
+                    aria-hidden="true"
+                    style={{ left: `${mobileSliderPos}%` }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="30"
+                      height="30"
+                      fill="currentColor"
+                      viewBox="0 0 256 256"
+                      className="w-5 h-5 text-neutral-800"
+                    >
+                      <rect width="256" height="256" fill="none" />
+                      <line
+                        x1="128"
+                        y1="40"
+                        x2="128"
+                        y2="216"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="16"
+                      />
+                      <line
+                        x1="96"
+                        y1="128"
+                        x2="16"
+                        y2="128"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="16"
+                      />
+                      <polyline
+                        points="48 160 16 128 48 96"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="16"
+                      />
+                      <line
+                        x1="160"
+                        y1="128"
+                        x2="240"
+                        y2="128"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="16"
+                      />
+                      <polyline
+                        points="208 96 240 128 208 160"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="16"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
 
-          {/* Right Column: Dynamic Tilted Image Showcase (Exact 1:1 match with Curtain AI.ai on Desktop) */}
-          <div className="w-full lg:w-1/2 flex items-center justify-center gap-2 min-[390px]:gap-3 sm:gap-6 lg:gap-5 xl:gap-8 pt-4 lg:pt-0">
+          {/* ========================================================
+              Right Column: Desktop & Tablet Dynamic Tilted Showcase
+              (Exact 1:1 match with curtainz.ai — hidden on mobile,
+              displayed on md, lg, xl and 2xl screens)
+             ======================================================== */}
+          <div className="w-full md:w-1/2 hidden md:block">
+            <div className="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 pt-4 md:pt-0">
 
-            {/* Card 1: Before Image (Left Tilt & Floating Animation) */}
-            <div className="relative rounded-xl transform rotate-[-6deg] hero-float shrink-0">
-              <div className="relative w-[138px] min-[390px]:w-[150px] sm:w-56 md:w-60 lg:w-[215px] xl:w-72 h-[180px] min-[390px]:h-[200px] sm:h-72 md:h-80 lg:h-[285px] xl:h-96 rounded-xl overflow-hidden shadow-xl">
-                <Image
-                  src="/before_image.png"
-                  alt="Living room before adding curtains"
-                  fill
-                  priority
-                  sizes="(max-width: 640px) 150px, (max-width: 1024px) 240px, (max-width: 1280px) 215px, 288px"
-                  className="w-full h-full object-cover rounded-xl shadow-xl"
-                />
-                {/* Before Badge */}
-                <span className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-white/90 text-gray-700 text-[10px] sm:text-xs font-semibold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full shadow select-none">
-                  Before
-                </span>
+              {/* Card 1: Before Image (Left Tilt & Floating Animation) */}
+              <div className="relative rounded-xl transform rotate-[-6deg] hero-float">
+                <div className="relative w-64 lg:w-72 h-80 lg:h-96 rounded-xl overflow-hidden shadow-xl">
+                  <Image
+                    src="/before_image.png"
+                    alt="Living room before adding curtains"
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 256px, 288px"
+                    className="w-64 lg:w-72 h-80 lg:h-96 object-cover rounded-xl shadow-xl"
+                  />
+                  {/* Before Badge */}
+                  <span className="absolute top-3 left-3 bg-white/90 text-gray-700 text-xs font-semibold px-2.5 py-1 rounded-full shadow select-none">
+                    Before
+                  </span>
+                </div>
               </div>
-            </div>
 
-            {/* Center Animated Arrow */}
-            <div className="text-[#004642] shrink-0 hero-arrow flex items-center justify-center">
-              <ArrowRight className="w-5 h-5 sm:w-7 sm:h-7 lg:w-6 lg:h-6 xl:w-8 xl:h-8 stroke-[2.2]" />
-            </div>
-
-            {/* Card 2: After Image (Right Tilt + Reveal Wipe Animation + Golden Glow Line + Lime Ring) */}
-            <div className="relative rounded-xl transform rotate-[6deg] hero-float hero-float-alt shrink-0">
-              <div className="relative w-[138px] min-[390px]:w-[150px] sm:w-56 md:w-60 lg:w-[215px] xl:w-72 h-[180px] min-[390px]:h-[200px] sm:h-72 md:h-80 lg:h-[285px] xl:h-96 rounded-xl overflow-hidden shadow-xl ring-2 sm:ring-4 ring-[#d3c518]/70">
-                {/* Base Before Image */}
-                <Image
-                  src="/before_image.png"
-                  alt="Living room before adding curtains"
-                  fill
-                  priority
-                  sizes="(max-width: 640px) 150px, (max-width: 1024px) 240px, (max-width: 1280px) 215px, 288px"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-
-                {/* Animated Reveal After Image */}
-                <Image
-                  src="/after_image.png"
-                  alt="Living room with AI-added curtains"
-                  fill
-                  priority
-                  sizes="(max-width: 640px) 150px, (max-width: 1024px) 240px, (max-width: 1280px) 215px, 288px"
-                  className="hero-reveal absolute inset-0 w-full h-full object-cover"
-                />
-
-                {/* Sweeping Reveal Glow Line */}
-                <div className="hero-reveal-line" aria-hidden="true" />
-
-                {/* AI Preview Badge with Sparkle */}
-                <span className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-[#004642] text-white text-[10px] sm:text-xs font-semibold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full shadow flex items-center gap-1 sm:gap-1.5 z-10 select-none">
-                  <svg
-                    className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-[#d3c518] text-[#d3c518]"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
-                  </svg>
-                  <span>AI Preview</span>
-                </span>
+              {/* Center Animated Arrow */}
+              <div className="text-[#004642] shrink-0 hero-arrow flex items-center justify-center">
+                <ArrowRight className="w-8 h-8 stroke-[2.2]" />
               </div>
-            </div>
 
+              {/* Card 2: After Image (Right Tilt + Reveal Wipe Animation + Golden Glow Line + Lime Ring) */}
+              <div className="relative rounded-xl transform rotate-[6deg] hero-float hero-float-alt">
+                <div className="relative w-64 lg:w-72 h-80 lg:h-96 rounded-xl overflow-hidden shadow-xl ring-4 ring-[#d3c518]/70">
+                  {/* Base Before Image */}
+                  <Image
+                    src="/before_image.png"
+                    alt="Living room before adding curtains"
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 256px, 288px"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+
+                  {/* Animated Reveal After Image */}
+                  <Image
+                    src="/after_image.png"
+                    alt="Living room with AI-added curtains"
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 256px, 288px"
+                    className="hero-reveal absolute inset-0 w-full h-full object-cover"
+                  />
+
+                  {/* Sweeping Reveal Glow Line */}
+                  <div className="hero-reveal-line" aria-hidden="true" />
+
+                  {/* AI Preview Badge with Sparkle */}
+                  <span className="absolute top-3 left-3 bg-[#004642] text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow flex items-center gap-1.5 z-10 select-none">
+                    <svg
+                      className="w-3.5 h-3.5 fill-[#d3c518] text-[#d3c518]"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
+                    </svg>
+                    <span>AI Preview</span>
+                  </span>
+                </div>
+              </div>
+
+            </div>
           </div>
 
         </div>
