@@ -271,7 +271,7 @@ function UpdateCurtainForm() {
 
   return (
     <div className="font-['Urbanist',sans-serif] text-[#1C201D] pb-12">
-      <div className="max-w-6xl mx-auto space-y-6">
+      <div className="max-w-full mx-auto space-y-6">
         {/* Top Back Link */}
         <div>
           <Link
@@ -436,7 +436,7 @@ function UpdateCurtainForm() {
                 {/* Category */}
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-bold text-[#1C201D] mb-1">
-                    Category (Product-এর মূল ধরন) *
+                    Category  *
                   </label>
                   <div className="relative">
                     <select
@@ -464,7 +464,7 @@ function UpdateCurtainForm() {
                 {/* Colors (tags) */}
                 <div>
                   <label className="block text-xs font-bold text-[#1C201D] mb-1">
-                    Colors (Room-এর color-এর সঙ্গে match)
+                    Colors
                   </label>
                   <div className="flex flex-wrap items-center gap-1.5 mb-2">
                     {colors.map((col) => (
@@ -533,7 +533,7 @@ function UpdateCurtainForm() {
                   {/* Fabric */}
                   <div>
                     <label className="block text-xs font-bold text-[#1C201D] mb-1">
-                      Fabric (Fabric-এর ধরন)
+                      Fabric
                     </label>
                     <input
                       type="text"
@@ -561,7 +561,7 @@ function UpdateCurtainForm() {
                   {/* Opacity */}
                   <div>
                     <label className="block text-xs font-bold text-[#1C201D] mb-1">
-                      Opacity (Privacy ও light filtering)
+                      Opacity 
                     </label>
                     <div className="relative">
                       <select
@@ -582,7 +582,7 @@ function UpdateCurtainForm() {
                   {/* Texture */}
                   <div>
                     <label className="block text-xs font-bold text-[#1C201D] mb-1">
-                      Texture (Fabric-এর visual appearance)
+                      Texture 
                     </label>
                     <input
                       type="text"
@@ -606,7 +606,7 @@ function UpdateCurtainForm() {
                 {/* Style options */}
                 <div>
                   <label className="block text-xs font-bold text-[#1C201D] mb-1.5">
-                    Interior Style (Interior style-এর সঙ্গে match)
+                    Interior Style 
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {STYLE_OPTIONS.map((st) => {
@@ -633,7 +633,7 @@ function UpdateCurtainForm() {
                 {/* Suitable Rooms */}
                 <div>
                   <label className="block text-xs font-bold text-[#1C201D] mb-1.5">
-                    Suitable Rooms (কোন room-এ মানাবে)
+                    Suitable Rooms
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                     {ROOM_OPTIONS.map((room) => {
@@ -672,7 +672,7 @@ function UpdateCurtainForm() {
                   className="w-4 h-4 text-[#004642] rounded-none border-gray-300 accent-[#004642] cursor-pointer"
                 />
                 <span className="text-xs text-[#2D312E] font-bold">
-                  isActive (Product বর্তমানে available/displayable কি না)
+                  isActive 
                 </span>
               </label>
 
