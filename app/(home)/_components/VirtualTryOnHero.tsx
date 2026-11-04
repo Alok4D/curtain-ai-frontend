@@ -30,7 +30,7 @@ const VirtualTryOnHero = () => {
                 type="button"
                 className="inline-flex items-center border-2 border-black hover:border-[#004642] text-black bg-white font-semibold text-lg px-8 py-3 rounded-md hover:bg-[#004642] hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
-                Try frames now!
+                Try it now!
               </button>
             </div>
           </div>
