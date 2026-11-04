@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const VirtualTryOnHero = () => {
   return (
     <section className="bg-white py-16 sm:py-24">
@@ -26,12 +28,12 @@ const VirtualTryOnHero = () => {
               See how our curtains look in your room instantly. Upload a photo, choose any fabric, and watch the AI drape it perfectly over your window in seconds.
             </p>
             <div className="pt-2">
-              <button
-                type="button"
-                className="inline-flex items-center border-2 border-black hover:border-[#004642] text-black bg-white font-semibold text-lg px-8 py-3 rounded-md hover:bg-[#004642] hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              <Link
+                href="/live-try-on"
+                className="inline-flex items-center border-2 border-black hover:border-[#004642] text-black bg-white font-semibold text-lg px-8 py-3 rounded-md hover:bg-[#004642] hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black cursor-pointer"
               >
                 Try it now!
-              </button>
+              </Link>
             </div>
           </div>
         </div>
