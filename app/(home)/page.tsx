@@ -6,6 +6,7 @@ import BeforeAfterSection from "./_components/BeforeAfterSection";
 import HowItWorksSection from "./_components/HowItWorksSection";
 import HeroSection from "./_components/HeroSection";
 import FinishingTouchSection from "./_components/FinishingTouchSection";
+import VirtualTryOnHero from "./_components/VirtualTryOnHero";
 
 export default function page() {
   return (
@@ -15,7 +16,8 @@ export default function page() {
       <BeforeAfterSection />
       <OurCollectionSection />
 
-     <FinishingTouchSection /> 
+     {/* <FinishingTouchSection />  */}
+     <VirtualTryOnHero />
       <FaqSection />
       {/* <WhyCurtainzSection /> */}
       {/* <TestimonialsSection /> */}
