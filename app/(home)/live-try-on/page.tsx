@@ -2,9 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { ArrowLeft, RefreshCw, Sparkles, HelpCircle } from "lucide-react";
-import { QuadCorners } from "@/lib/ar-perspective";
+import { QuadCorners, Point2D } from "@/lib/ar-perspective";
 import curtainLocalData from "@/data/curtains.json";
 import { useGetAllCurtainsQuery } from "@/lib/feature/curtain/curtainApi";
 
@@ -20,7 +19,6 @@ import ArControlBar from "./_components/ArControlBar";
 import CaptureModal from "./_components/CaptureModal";
 
 export default function LiveTryOnPage() {
-  const router = useRouter();
   const rendererRef = useRef<CurtainArRendererHandle>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -43,7 +41,7 @@ export default function LiveTryOnPage() {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [showHelpGuide, setShowHelpGuide] = useState<boolean>(false);
 
-  // 4 Window Corner Pins
+  // 4 Window Corner Pins (Default percentage-based)
   const [corners, setCorners] = useState<QuadCorners>({
     topLeft: { x: 80, y: 80 },
     topRight: { x: 300, y: 80 },
@@ -51,20 +49,20 @@ export default function LiveTryOnPage() {
     bottomLeft: { x: 80, y: 420 },
   });
 
-  // Calculate default centered window frame
+  // Calculate default centered window frame based on container dimensions
   const calculateDefaultCorners = useCallback((): QuadCorners => {
     if (!containerRef.current) {
       return {
-        topLeft: { x: 60, y: 80 },
+        topLeft: { x: 80, y: 80 },
         topRight: { x: 320, y: 80 },
-        bottomRight: { x: 320, y: 460 },
-        bottomLeft: { x: 60, y: 460 },
+        bottomRight: { x: 320, y: 440 },
+        bottomLeft: { x: 80, y: 440 },
       };
     }
     const { width: w, height: h } = containerRef.current.getBoundingClientRect();
-    const marginX = w * 0.12;
-    const topY = h * 0.12;
-    const botY = h * 0.72;
+    const marginX = w * 0.18;
+    const topY = h * 0.14;
+    const botY = h * 0.68;
 
     return {
       topLeft: { x: Math.round(marginX), y: Math.round(topY) },
@@ -74,7 +72,7 @@ export default function LiveTryOnPage() {
     };
   }, []);
 
-  // Initialize and resize corners
+  // Initialize and resize corners proportionally
   useEffect(() => {
     const updateCorners = () => {
       setCorners(calculateDefaultCorners());
@@ -89,7 +87,7 @@ export default function LiveTryOnPage() {
   useEffect(() => {
     const list: CurtainOption[] = [];
 
-    // 1. Process local catalog (Prioritize close-up fabric texture image_url)
+    // 1. Process local catalog
     const cats: ("curtains" | "sheers" | "rollers")[] = ["curtains", "sheers", "rollers"];
     cats.forEach((cat) => {
       const items = (curtainLocalData as Record<string, any[]>)[cat] || [];
@@ -98,9 +96,9 @@ export default function LiveTryOnPage() {
           id: item.id || `local-${cat}-${item.name}`,
           name: item.name,
           category: cat,
-          image_url: item.image_url || item.display_image_url || "/Soft.png",
+          image_url: item.display_image_url || item.image_url || "/Soft.png",
           display_image_url: item.display_image_url,
-          fabric: item.fabric || "Premium Fabric",
+          fabric: item.fabric || "Textured Polyester Blend",
           price: "$85",
         });
       });
@@ -114,7 +112,7 @@ export default function LiveTryOnPage() {
           id: item._id || item.id,
           name: item.name,
           category: cat,
-          image_url: item.image_url || item.display_image_url || item.images?.[0] || "/Soft.png",
+          image_url: item.display_image_url || item.image_url || item.images?.[0] || "/Soft.png",
           price: "$95",
         });
       });
@@ -126,28 +124,11 @@ export default function LiveTryOnPage() {
     }
   }, [apiResponse]);
 
-  // Capture normal snapshot
   const handleCapture = () => {
     if (!rendererRef.current) return;
     const dataUrl = rendererRef.current.captureSnapshot();
     if (dataUrl) {
       setCapturedImage(dataUrl);
-    }
-  };
-
-  // Deep AI Room Generation
-  const handleGenerateWithAI = () => {
-    if (!rendererRef.current) return;
-    const dataUrl = rendererRef.current.captureSnapshot();
-    if (dataUrl && selectedCurtain) {
-      // Store current room photo & selected curtain in session for the AI visualizer
-      sessionStorage.setItem("uploadedImageUrl", dataUrl);
-      sessionStorage.setItem("selectedCurtainName", selectedCurtain.name);
-      sessionStorage.setItem("selectedCurtainImageUrl", selectedCurtain.image_url);
-      sessionStorage.removeItem("generatedImageUrl");
-
-      // Navigate to the full AI room generation page
-      router.push("/generate-image");
     }
   };
 
@@ -170,8 +151,11 @@ export default function LiveTryOnPage() {
       ref={containerRef}
       className="relative w-screen h-screen bg-black overflow-hidden select-none font-['Urbanist',sans-serif] flex flex-col justify-between"
     >
-      {/* 1. TOP AR CONTROLS HEADER */}
+      {/* ========================================================
+          1. TOP AR CONTROLS HEADER
+         ======================================================== */}
       <header className="absolute top-0 inset-x-0 z-30 flex items-center justify-between px-4 sm:px-6 py-3.5 bg-gradient-to-b from-black/80 via-black/40 to-transparent pointer-events-auto">
+        {/* Back / Exit Button */}
         <Link
           href="/"
           className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-black/50 hover:bg-black/80 backdrop-blur-md border border-white/20 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer"
@@ -181,7 +165,7 @@ export default function LiveTryOnPage() {
         </Link>
 
         {/* Live Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#004642]/85 backdrop-blur-md border border-white/20 text-white text-xs font-semibold shadow-md">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#004642]/80 backdrop-blur-md border border-white/20 text-white text-xs font-semibold shadow-md">
           <span className="w-2 h-2 rounded-full bg-[#d3c518] animate-pulse" />
           <span>Live Window Try-On</span>
         </div>
@@ -208,24 +192,29 @@ export default function LiveTryOnPage() {
         </div>
       </header>
 
-      {/* 2. INSTRUCTION HINT PILL */}
+      {/* ========================================================
+          2. INSTRUCTION HINT PILL (DISMISSIBLE)
+         ======================================================== */}
       {showHelpGuide && (
         <div className="absolute top-16 inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 max-w-md z-40 bg-neutral-900/95 backdrop-blur-md border border-[#d3c518]/50 text-white p-4 rounded-2xl shadow-2xl animate-in fade-in duration-200">
           <div className="flex items-start justify-between gap-3">
             <div>
               <h4 className="text-sm font-bold text-[#d3c518] mb-1.5">
-                How Live Try-On Works:
+                How to position your curtains:
               </h4>
               <ul className="text-xs text-neutral-300 space-y-1.5 list-disc pl-4">
-                <li>Point your camera towards your window.</li>
-                <li>The virtual curtains automatically appear on screen!</li>
-                <li>Tap any curtain below to see the color &amp; fabric change live.</li>
-                <li>Tap <strong>&apos;AI Makeover&apos;</strong> for deep photorealistic AI generation!</li>
+                <li>Point your camera at your room&apos;s window.</li>
+                <li>
+                  Drag the <strong>4 corner pins</strong> (Top Left, Top Right,
+                  Bottom Left, Bottom Right) to match your window frame.
+                </li>
+                <li>Tap any curtain below to see it change live.</li>
+                <li>Tap the camera shutter button to save a high-res photo.</li>
               </ul>
             </div>
             <button
               onClick={() => setShowHelpGuide(false)}
-              className="text-white/60 hover:text-white text-xs font-bold px-2 py-1 bg-white/10 rounded cursor-pointer"
+              className="text-white/60 hover:text-white text-xs font-bold px-2 py-1 bg-white/10 rounded"
             >
               Got it
             </button>
@@ -233,7 +222,9 @@ export default function LiveTryOnPage() {
         </div>
       )}
 
-      {/* 3. MAIN AR VIEWPORT */}
+      {/* ========================================================
+          3. MAIN AR VIEWPORT (CAMERA + PERSPECTIVE RENDERER + PINS)
+         ======================================================== */}
       <div className="relative w-full h-full flex-1 overflow-hidden">
         {/* Live Camera Feed */}
         <LiveCameraView
@@ -243,19 +234,18 @@ export default function LiveTryOnPage() {
           onUseFallbackImage={handleUseFallbackImage}
         />
 
-        {/* Real-time Curtain Drapes Renderer */}
+        {/* Real-time Perspective Curtain Overlay Canvas */}
         <CurtainArRenderer
           ref={rendererRef}
           videoElement={videoElement}
           fallbackImageUrl={fallbackImageUrl}
-          fabricTextureUrl={selectedCurtain?.image_url || "/Soft.png"}
+          curtainImageUrl={selectedCurtain?.image_url || "/Soft.png"}
           corners={corners}
           opacity={opacity}
           category={activeCategory}
-          curtainName={selectedCurtain?.name}
         />
 
-        {/* 4-Corner Pinning Grid */}
+        {/* Interactive 4-Corner Pinning Grid (Touch & Mouse Drag) */}
         <WindowPinOverlay
           corners={corners}
           onChangeCorners={(newCorners) => setCorners(newCorners)}
@@ -264,13 +254,14 @@ export default function LiveTryOnPage() {
         />
       </div>
 
-      {/* 4. BOTTOM CONTROLS & CURTAIN SWATCH CAROUSEL */}
-      <div className="relative z-30 flex flex-col w-full bg-gradient-to-t from-black via-black/85 to-transparent pt-2">
-        {/* Floating Controls Bar */}
+      {/* ========================================================
+          4. BOTTOM CONTROLS & CURTAIN SWATCH CAROUSEL
+         ======================================================== */}
+      <div className="relative z-30 flex flex-col w-full bg-gradient-to-t from-black via-black/80 to-transparent pt-3">
+        {/* Floating Controls Bar (Shutter, Pins, Opacity) */}
         <div className="px-4 pb-2 flex justify-center">
           <ArControlBar
             onCapture={handleCapture}
-            onGenerateWithAI={handleGenerateWithAI}
             showPins={showPins}
             onTogglePins={() => setShowPins(!showPins)}
             onAutoFitWindow={handleResetPins}
@@ -279,7 +270,7 @@ export default function LiveTryOnPage() {
           />
         </div>
 
-        {/* Swatch Carousel */}
+        {/* Real Curtains Swatch Carousel */}
         <CurtainSwatchTray
           curtains={allCurtains}
           selectedCurtain={selectedCurtain}
@@ -289,7 +280,9 @@ export default function LiveTryOnPage() {
         />
       </div>
 
-      {/* 5. SNAPSHOT CAPTURED MODAL */}
+      {/* ========================================================
+          5. SNAPSHOT CAPTURED MODAL
+         ======================================================== */}
       {capturedImage && (
         <CaptureModal
           imageUrl={capturedImage}
@@ -300,3 +293,4 @@ export default function LiveTryOnPage() {
     </div>
   );
 }
+
