@@ -174,7 +174,7 @@ export default function GenerateImagePage() {
       <ConfettiCanvas ref={confettiRef} />
 
       <div className="container mx-auto px-4 py-4 md:py-6">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           {/* Progress Stepper */}
           <VisualizerStepper />
 
@@ -232,7 +232,7 @@ export default function GenerateImagePage() {
                   type="button"
                   onClick={handleGenerate}
                   disabled={isGenerating}
-                  className="w-full py-3.5 px-4 bg-[#004642] hover:bg-[#003431] text-white font-semibold rounded-lg flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer disabled:opacity-75"
+                  className="w-full py-3.5 px-4 bg-[#004642] hover:bg-[#003431] text-white font-semibold rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-75"
                 >
                   {isGenerating ? (
                     <span className="inline-flex items-center gap-2">
@@ -264,7 +264,7 @@ export default function GenerateImagePage() {
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-[#d3c518]" />
+                     
                       <span>Generate AI Image</span>
                     </span>
                   )}

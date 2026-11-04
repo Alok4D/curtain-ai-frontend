@@ -140,7 +140,7 @@ export const RoomPhotoPreview: React.FC<RoomPhotoPreviewProps> = ({
           type="button"
           onClick={onGetBestCurtains}
           disabled={isLoading}
-          className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[#004642] text-white font-semibold text-sm sm:text-base hover:bg-[#003835] active:scale-95 transition-all shadow-md cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
+          className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-md bg-[#004642] text-white font-medium text-sm sm:text-base hover:bg-[#003835] active:scale-95 transition-all cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
         >
           {isLoading ? (
             <span className="inline-flex items-center gap-2">
@@ -167,7 +167,7 @@ export const RoomPhotoPreview: React.FC<RoomPhotoPreviewProps> = ({
             </span>
           ) : (
             <>
-              <Sparkles className="w-4 h-4 text-emerald-300" />
+             
               <span>Get Best Curtains</span>
             </>
           )}
