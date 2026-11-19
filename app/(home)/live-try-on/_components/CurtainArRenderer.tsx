@@ -173,4 +173,3 @@ const CurtainArRenderer = forwardRef<CurtainArRendererHandle, CurtainArRendererP
 );
 
 export default CurtainArRenderer;
-
